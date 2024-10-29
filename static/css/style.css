@@ -1,0 +1,165 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  background-color: #ffffff;
+}
+
+/* Navigation */
+.nav {
+  background-color: #ffffff;
+  padding: 28px;
+}
+
+.nav a {
+  color: #006B5F;
+  text-decoration: none;
+  margin-right: 40px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Banner */
+.banner {
+  background: linear-gradient(90deg, #006B5F 35%, #48C9B0 65%);
+  padding: 40px 20px;
+  position: relative;
+  overflow: visible;
+  border-radius: 20px;
+  margin-right: 28px;
+  margin-left:28px;
+}
+
+.banner h1 {
+  color: white;
+  font-family: 'Poppins',sans-serif;
+  font-size: 38px;
+  font-weight: 700;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.banner-image {
+  position: absolute;
+  right: -40px;
+  top: 45%;
+  transform: translateY(-52%);
+  width: 350px;
+  height: auto;
+  
+}
+
+/* Surahs Section */
+.surahs-section {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.surahs-heading {
+  color: #006B5F;
+  text-align: center;
+  padding: 20px 0;
+  margin: 0;
+  border-bottom: 2px solid #006B5F;
+  margin-bottom: 30px;
+}
+
+.surahs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+@media (min-width: 768px) {
+  .surahs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .surahs-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.surah-card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.surah-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.surah-number {
+  background: #4DB6AC;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.surah-arabic {
+  color: #006B5F;
+  font-size: 24px;
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.surah-english {
+  color: #666;
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.surah-info {
+  color: #999;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.revelation-place {
+  background: #E8F5E9;
+  color: #2E7D32;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #006B5F;
+  font-size: 18px;
+  grid-column: 1 / -1;
+}
+
+.error {
+  text-align: center;
+  padding: 40px;
+  color: #ff0000;
+  font-size: 16px;
+  grid-column: 1 / -1;
+  background: #fff0f0;
+  border-radius: 8px;
+  margin: 20px;
+}

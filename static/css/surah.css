@@ -1,0 +1,284 @@
+/* Enhanced Surah Page Styles */
+.surah-banner {
+    box-shadow: 0 10px 30px rgba(0, 107, 95, 0.2);
+    transition: all 0.3s ease;
+    background: linear-gradient(90deg, #006B5F 35%, #48C9B0 65%);
+    padding: 40px 20px;
+    position: relative;
+    overflow: visible;
+    border-radius: 20px;
+    margin-right: 28px;
+    margin-left:28px;
+}
+
+.surah-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+    background-size: cover;
+    mix-blend-mode: overlay;
+}
+
+.surah-title {
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0;
+    padding-left: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    animation: slideIn 0.8s ease-out;
+}
+
+/* Audio Player Styles */
+.audio-player {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 400px;
+    margin-left: 20px;
+}
+
+.play-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.play-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.play-button svg {
+    width: 24px;
+    height: 24px;
+    fill: #006B5F;
+}
+
+.audio-progress {
+    flex-grow: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+}
+
+.progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: white;
+    border-radius: 2px;
+    transition: width 0.1s linear;
+}
+
+.time-display {
+    color: white;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    min-width: 50px;
+    text-align: center;
+}
+/*surah's display*/
+
+.surah-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.verses-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    animation: fadeIn 1s ease-out;
+}
+
+.verse {
+    position: relative;
+    margin-bottom: 35px;
+    padding: 25px 25px 25px 60px;
+    border-bottom: 1px solid rgba(0, 107, 95, 0.1);
+    transition: all 0.3s ease;
+}
+
+.verse:hover {
+    background: rgba(72, 201, 176, 0.05);
+    transform: translateX(10px);
+    border-radius: 15px;
+}
+
+.verse:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.arabic-text {
+    font-size: 36px;
+    line-height: 2.2;
+    text-align: right;
+    margin-bottom: 15px;
+    color: #006B5F;
+    font-family: "Scheherazade New", "Traditional Arabic", "Amiri", serif;
+    transition: all 0.3s ease;
+}
+
+.verse:hover .arabic-text {
+    color: #48C9B0;
+}
+
+.verse-number {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 107, 95, 0.2);
+    transition: all 0.3s ease;
+}
+
+.verse:hover .verse-number {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 107, 95, 0.3);
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scroll Bar Styling */
+.verses-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.verses-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.verses-container::-webkit-scrollbar-thumb {
+    background: #48C9B0;
+    border-radius: 4px;
+}
+
+.verses-container::-webkit-scrollbar-thumb:hover {
+    background: #006B5F;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .surah-banner {
+        margin: 15px;
+        padding: 30px 15px;
+    }
+
+    .surah-title {
+        font-size: 32px;
+        padding-left: 10px;
+    }
+
+    .audio-player {
+        margin: 15px;
+        padding: 10px;
+    }
+
+    .play-button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .play-button svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .surah-container {
+        padding: 0 15px;
+    }
+
+    .verses-container {
+        padding: 25px;
+    }
+
+    .arabic-text {
+        font-size: 28px;
+        line-height: 2;
+    }
+
+    .verse {
+        padding: 20px 15px 20px 45px;
+        margin-bottom: 25px;
+    }
+
+    .verse-number {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        left: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .surah-title {
+        font-size: 28px;
+    }
+
+    .arabic-text {
+        font-size: 24px;
+    }
+
+    .time-display {
+        font-size: 12px;
+        min-width: 40px;
+    }
+}

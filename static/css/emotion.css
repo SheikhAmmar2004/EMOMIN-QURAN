@@ -1,0 +1,52 @@
+.emotion-container {
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: 0 auto;
+}
+.detect_emotions-heading{
+  color: #006B5F;
+  text-align: center;
+  padding: 20px 0;
+  margin: 0;
+  border-bottom: 2px solid #006B5F;
+  margin-bottom: 30px;
+}
+
+#videoContainer {
+  width: 640px;
+  height: 480px;
+  border: 3px solid #006B5F;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+#videoFeed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#detectedEmotion {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #006B5F;
+}
+
+#popup {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px;
+  background-color: #006B5F;
+  color: white;
+  border-radius: 5px;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.3s;
+}

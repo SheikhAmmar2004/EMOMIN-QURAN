@@ -1,0 +1,77 @@
+.emotions-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.emotions-heading {
+    color: #006B5F;
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+    border-bottom: 2px solid #006B5F;
+    margin-bottom: 30px;
+}
+
+.emotions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.emotion-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.emotion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.emotion-icon {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+.emotion-card:hover .emotion-icon {
+    transform: scale(1.1);
+}
+
+.emotion-card p {
+    color: #006D5B;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0 0 0;
+}
+
+@media (max-width: 768px) {
+    .emotions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .emotion-icon {
+        width: 80px;
+        height: 80px;
+    }
+
+    .emotion-card p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .emotions-grid {
+        grid-template-columns: 1fr;
+    }
+}
