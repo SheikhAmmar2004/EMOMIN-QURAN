@@ -1,83 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMOMIN QURAN</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/surah.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <nav class="nav">
-        <a href="{{ url_for('index') }}">HOME</a>
-        <a href="{{ url_for('detect_emotion') }}" id="detectEmotionBtn">DETECT EMOTION</a>
-        <a href="{{ url_for('select_emotion') }}">SELECT EMOTION</a>
-    </nav>
+{% extends "base.html" %}
 
-    <div class="banner surah-banner" data-surah-number="{{ surah.number }}">
-        <h1 class="surah-title">{{ surah.surahNameArabic }}</h1>
-        <div class="audio-player">
-            <button class="play-button" id="playButton" aria-label="Play/Pause">
-                <svg viewBox="0 0 24 24" id="playIcon">
-                    <path d="M8 5v14l11-7z"/>
-                </svg>
-                <svg viewBox="0 0 24 24" id="pauseIcon" style="display: none;">
-                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                </svg>
-            </button>
-            <div class="audio-progress" id="progressBar">
-                <div class="progress-bar" id="progress"></div>
-            </div>
-            <div class="time-display" id="timeDisplay">0:00</div>
-        </div>
-        <img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
-    </div>
-    
-    <div class="surah-container">
-        <div class="verses-container">
-            {% for verse in surah.arabic1 %}
-            <div class="verse">
-                <div class="arabic-text">{{ verse }}</div>
-                <div class="verse-number">{{ loop.index }}</div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/surah.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+{% endblock %}
 
-    <script src="{{ url_for('static', filename='js/audio-player.js') }}"></script>
-    <script>
-        // Add smooth scroll behavior
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', e => {
-                e.preventDefault();
-                const href = link.getAttribute('href');
-                document.querySelector(href).scrollIntoView({
-                    behavior: 'smooth'
-                });
+{% block banner_class %}surah-banner{% endblock %}
+
+{% block banner_content %}
+<div class="surah-banner2" data-surah-number="{{ surah.number }}">
+    <h1 class="surah-title">{{ surah.surahNameArabic }}</h1>
+    <img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="audio-player">
+    <button class="play-button" id="playButton" aria-label="Play/Pause">
+        <svg viewBox="0 0 24 24" id="playIcon">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg viewBox="0 0 24 24" id="pauseIcon" style="display: none;">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+    </button>
+    <div class="audio-progress" id="progressBar">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+    <div class="time-display" id="timeDisplay">0:00</div>
+</div>
+
+<div class="surah-container">
+    <div class="verses-container">
+        {% for verse in surah.arabic1 %}
+        <div class="verse">
+            <div class="arabic-text">{{ verse }}</div>
+            <div class="verse-number">{{ loop.index }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/audio-player.js') }}"></script>
+<script>
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const href = link.getAttribute('href');
+            document.querySelector(href).scrollIntoView({
+                behavior: 'smooth'
             });
         });
+    });
 
-        // Add intersection observer for fade-in effect
-        const observer = new IntersectionObserver(
-            entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
+    const observer = new IntersectionObserver(
+        entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        },
+        { threshold: 0.1 }
+    );
 
-        document.querySelectorAll('.verse').forEach(verse => {
-            verse.style.opacity = '0';
-            verse.style.transform = 'translateY(20px)';
-            observer.observe(verse);
-        });
-    </script>
-</body>
-</html>
+    document.querySelectorAll('.verse').forEach(verse => {
+        verse.style.opacity = '0';
+        verse.style.transform = 'translateY(20px)';
+        observer.observe(verse);
+    });
+</script>
+{% endblock %}

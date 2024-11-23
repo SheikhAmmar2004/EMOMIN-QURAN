@@ -1,3 +1,7 @@
+body, html {
+  overflow-x: hidden;
+}
+
 .emotion-container {
   max-width: 1200px;
   display: flex;
@@ -5,14 +9,18 @@
   align-items: center;
   padding: 20px;
   margin: 0 auto;
+  min-height: calc(100vh - 400px);
 }
-.detect_emotions-heading{
+
+.detect_emotions-heading {
   color: #006B5F;
   text-align: center;
   padding: 20px 0;
   margin: 0;
   border-bottom: 2px solid #006B5F;
   margin-bottom: 30px;
+ /* width: 100%;
+  font-size: 2rem;*/
 }
 
 #videoContainer {
@@ -22,6 +30,12 @@
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 107, 95, 0.2);
+  transition: transform 0.3s ease;
+}
+
+#videoContainer:hover {
+  transform: scale(1.02);
 }
 
 #videoFeed {
@@ -35,6 +49,11 @@
   font-weight: bold;
   margin-top: 20px;
   color: #006B5F;
+  text-align: center;
+  padding: 15px;
+  background: rgba(0, 107, 95, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 #popup {
@@ -42,11 +61,47 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  padding: 15px;
+  padding: 15px 25px;
   background-color: #006B5F;
   color: white;
-  border-radius: 5px;
+  border-radius: 8px;
   z-index: 1000;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: opacity 0.3s, transform 0.3s;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .emotion-container {
+      padding: 15px;
+  }
+
+  .detect_emotions-heading {
+      font-size: 1.75rem;
+      padding: 15px 0;
+  }
+
+  #videoContainer {
+      width: 100%;
+      max-width: 480px;
+      height: auto;
+      aspect-ratio: 4/3;
+  }
+}
+
+@media (max-width: 480px) {
+  .detect_emotions-heading {
+      font-size: 1.5rem;
+  }
+
+  #detectedEmotion {
+      font-size: 20px;
+      padding: 12px;
+  }
+
+  #popup {
+      left: 20px;
+      right: 20px;
+      text-align: center;
+  }
 }

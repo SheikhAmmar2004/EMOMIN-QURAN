@@ -1,35 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EMOMIN QURAN</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/emotion.css') }}">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
-<body>
-  <nav class="nav">
-    <a href="{{ url_for('index') }}">HOME</a>
-    <a href="{{ url_for('detect_emotion') }}">DETECT EMOTION</a>
-    <a href="{{ url_for('select_emotion') }}">SELECT EMOTION</a>
-  </nav>
+{% extends "base.html" %}
 
-  <div class="banner">
-    <h1>EMOMIN QURAN</h1>
-    <img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
-  </div>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/emotion.css') }}">
+{% endblock %}
 
-  <div class="emotion-container">
-    <h2 class="detect_emotions-heading">Detecting Emotion...</h1>
+{% block content %}
+<div class="emotion-container">
+    <h2 class="detect_emotions-heading">Detecting Emotion...</h2>
     <div id="videoContainer">
-      <img id="videoFeed" src="" alt="Video Feed">
+        <img id="videoFeed" src="" alt="Video Feed">
     </div>
     <div id="detectedEmotion"></div>
     <div id="popup"></div>
-  </div>
+</div>
+{% endblock %}
 
-  <script src="{{ url_for('static', filename='js/emotion.js') }}"></script>
-</body>
-</html>
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/emotion.js') }}"></script>
+{% endblock %}

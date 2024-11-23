@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EMOMIN QURAN{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/homeicon.png') }}" alt="Home" class="nav-icon">HOME</a>
+        <a href="{{ url_for('detect_emotion') }}" id="detectEmotionBtn">
+            <img src="{{ url_for('static', filename='images/faceidicon.png') }}" alt="Scan" class="nav-icon">SCAN MY MOOD</a>
+        <a href="{{ url_for('select_emotion') }}">
+            <img src="{{ url_for('static', filename='images/chooseicon.png') }}" alt="Select Mood" class="nav-icon">SELECT YOUR MOOD</a>
+    </nav>
+
+    <!-- Banner -->
+    <div class="banner {% block banner_class %}{% endblock %}">
+        {% block banner_content %}
+        <h1>EMOMIN QURAN</h1>
+        <img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
+        {% endblock %}
+    </div>
+
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About EMOMIN QURAN</h3>
+                <p>An innovative platform combining emotional intelligence with Quranic guidance to provide personalized spiritual support. Our mission is to help you find solace and guidance through the divine words of the Quran, tailored to your emotional state.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('detect_emotion') }}">Emotion Detection</a></li>
+                    <li><a href="{{ url_for('select_emotion') }}">Select Emotion</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>API References</h3>
+                <ul class="footer-links">
+                    <li><a href="https://quranapi.pages.dev" target="_blank">Quran API</a></li>
+                    <li><a href="https://api.quran.com" target="_blank">Quran.com API</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 EMOMIN QURAN. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

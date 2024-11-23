@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let isPlaying = false;
 
     // Get the surah number from the data attribute
-    const surahNumber = document.querySelector('.surah-banner').dataset.surahNumber;
+    const surahNumber = document.querySelector('.surah-banner2').dataset.surahNumber;
     const audioUrl = `https://api.quran.com/api/v4/chapter_recitations/7/${surahNumber}`;
 
     // Fetch audio URL

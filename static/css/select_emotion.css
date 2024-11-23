@@ -1,3 +1,7 @@
+body, html {
+    overflow-x: hidden;
+}
+
 .emotions-section {
     max-width: 1200px;
     margin: 0 auto;
@@ -11,11 +15,12 @@
     margin: 0;
     border-bottom: 2px solid #006B5F;
     margin-bottom: 30px;
+    /*font-size: 2rem;*/
 }
 
 .emotions-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     padding: 20px;
 }
@@ -25,14 +30,18 @@
     border-radius: 10px;
     padding: 15px;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .emotion-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 .emotion-icon {
@@ -40,6 +49,8 @@
     height: 100px;
     margin-bottom: 10px;
     transition: transform 0.3s ease;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .emotion-card:hover .emotion-icon {
@@ -51,14 +62,29 @@
     font-size: 18px;
     font-weight: bold;
     margin: 10px 0 0 0;
+    transition: color 0.3s ease;
 }
 
-@media (max-width: 768px) {
-    .emotions-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+.emotion-card:hover p {
+    color: #48C9B0;
+}
+
+.emotion-card.selected {
+    border: 2px solid #006B5F;
+    transform: scale(1.05);
+}
+/* Styles for medium-sized screens (tablets) and larger */
+@media (min-width: 768px) {
+   /* .emotions-section {
         padding: 15px;
     }
+
+    .emotions-heading {
+        font-size: 1.75rem;
+        padding: 15px 0;
+    }
+
+    
 
     .emotion-icon {
         width: 80px;
@@ -68,10 +94,37 @@
     .emotion-card p {
         font-size: 16px;
     }
+        */
+    .emotions-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        padding: 15px;
+    }
 }
 
+/* Styles for small screens (mobile) */
 @media (max-width: 480px) {
+   /* .emotions-heading {
+        font-size: 1.5rem;
+    }
+
+    .emotion-card {
+        padding: 15px;
+    }
+    */
     .emotions-grid {
+        display: grid;
         grid-template-columns: 1fr;
+        gap: 15px;
+        max-width: 280px;
+        margin: 0 auto;
+    }
+}
+
+/* Styles for large screens (desktops) */
+@media (min-width: 1024px) {
+    .emotions-grid {
+        grid-template-columns: repeat(5, 1fr);
     }
 }
