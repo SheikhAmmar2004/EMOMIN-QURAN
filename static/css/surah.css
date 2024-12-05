@@ -7,6 +7,16 @@ body, html {
     box-shadow: 0 10px 30px rgba(0, 107, 95, 0.2);
     transition: all 0.3s ease;
 }
+.banner-image2{
+    position: absolute;
+    right: -2.5rem;
+    top: 50%;
+    transform: translateY(-52%);
+    width: 21.875rem;
+    height: auto;
+    max-width: 40%;
+    z-index: 0;
+}
 
 .surah-banner::before {
     content: '';
@@ -222,6 +232,13 @@ body, html {
         padding-left: 0;
         text-align: center;
     }
+    .banner-image2{
+        right:-1rem;
+        top:60px;
+        width: 60%;
+        size: 100%;
+       
+    }
 
     .audio-player {
         margin: 20px 15px;
@@ -286,4 +303,14 @@ body, html {
         padding: 15px 10px 15px 40px;
         margin-bottom: 20px;
     }
+    .banner-image2{
+        width: 50%;
+    }
+}
+@media (max-width: 390px) {
+    .surah-title {
+        font-size: 1.375rem;
+        padding-left: 0;  }
+    
+    
 }

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="surahs-section">
+    <h2 class="surahs-heading">Recommended Surahs for {{ emotion|title }} Emotion</h2>
+    <div id="surahsGrid" class="surahs-grid">
+        <!-- Surahs will be loaded here dynamically -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const API_URL = 'https://api.quran.com/api/v4/chapters';
+const recommendedSurahs = JSON.parse('{{ recommended_surahs|safe }}');
+
+async function fetchRecommendedSurahs() {
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        const allSurahs = data.chapters;
+        
+        // Filter only recommended surahs
+        const filteredSurahs = allSurahs.filter(surah => 
+            recommendedSurahs.includes(surah.id)
+        );
+
+        return filteredSurahs;
+    } catch (error) {
+        console.error('Error fetching surahs:', error);
+        throw error;
+    }
+}
+
+function createSurahCard(surah) {
+    return `
+        <div class="surah-card" onclick="window.location.href='/surah/${surah.id}'">
+            <div class="surah-number">${surah.id}</div>
+            <div class="surah-arabic">${surah.name_arabic}</div>
+            <div class="surah-english">${surah.name_simple}</div>
+            <div class="surah-info">${surah.translated_name.name} (${surah.verses_count})</div>
+            <div class="revelation-place">${surah.revelation_place}</div>
+        </div>
+    `;
+}
+
+async function initializeRecommendations() {
+    const surahsGrid = document.getElementById('surahsGrid');
+    surahsGrid.innerHTML = '<div class="loading">Loading Recommended Surahs...</div>';
+    
+    try {
+        const surahs = await fetchRecommendedSurahs();
+        const surahsHTML = surahs.map(surah => createSurahCard(surah)).join('');
+        surahsGrid.innerHTML = surahsHTML;
+    } catch (error) {
+        surahsGrid.innerHTML = `
+            <div class="error">
+                Failed to load recommendations. Please try again later.<br>
+                Error: ${error.message}
+            </div>
+        `;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', initializeRecommendations);
+</script>
+{% endblock %}

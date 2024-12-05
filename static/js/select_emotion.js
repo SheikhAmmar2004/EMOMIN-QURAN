@@ -23,10 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add selection to clicked card
             card.classList.add('selected');
             
-            // Handle the emotion selection
-            console.log(`Selected emotion: ${emotion}`);
-            // You can add your logic here to handle the selected emotion
-            // For example: window.location.href = `/verses/${emotion}`;
+            // Redirect to recommendations page for the selected emotion
+            window.location.href = `/recommendations/${emotion}`;
         });
     });
 });

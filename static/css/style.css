@@ -126,6 +126,11 @@ html {
     grid-template-columns: repeat(5, 1fr);
   }
 }
+@media(max-width:480px){
+  .surahs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 .surah-card {
   background: white;
@@ -392,45 +397,58 @@ html {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .nav {
-      padding: 1rem;
-      justify-content: center;
+  .nav a {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.4rem;
   }
 
   .banner {
-      margin: 1rem;
-      padding: 2rem 1rem;
-      flex-direction: column;
-      text-align: center;
+    margin: 1.25rem;
+    margin-top: 90px;
+    padding: 2rem 1rem;
+    text-align: center;
+    overflow: visible;
   }
 
   .banner h1 {
-      font-size: 1.75rem;
-      padding-left: 0;
+    font-size: 1.375rem;
+    padding-left: 0;
   }
 
   .banner-image {
-      position: relative;
-      right: auto;
-      top: auto;
-      transform: none;
-      width: 60%;
-      margin-top: 1.5rem;
+    right:-1rem;
+    top:55px;
+    width: 60%;
+    size: 100%;
   }
 }
 
 @media (max-width: 480px) {
+  /* Override only if styles differ for max-width: 480px */
+  .banner-image {
+    top:60px;
+  }
+}
+@media (max-width: 390px) {
   .nav a {
-      font-size: 0.875rem;
-      padding: 0.4rem 0.8rem;
+    font-size: 0.5rem; /* Reduce font size further */
+    padding: 0.2rem 0.4rem;
+  }
+
+  .banner {
+    margin: 1.25rem;
+    margin-top: 90px;
+    padding: 2rem 1rem;
+    text-align: center;
+    overflow: visible;
   }
 
   .banner h1 {
-      font-size: 1.5rem;
-  }
+    font-size: 1.375rem;
+    padding-left: 0;  }
 
-  .banner-image {
-      width: 80%;
+  .banner-image{
+    top: 60px;
   }
 }
 
