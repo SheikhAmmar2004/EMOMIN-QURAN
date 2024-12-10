@@ -19,9 +19,8 @@ SURAH_RECOMMENDATIONS = {
     'surprise': [1, 112, 113, 114]  # Default recommendations
 }
 
-# Variable to store the last detected emotion and its timestamp
+# Variable to store the last detected emotion
 last_detected_emotion = None
-emotion_detection_start_time = None
 
 def get_recommendations(emotion):
     """
@@ -36,36 +35,35 @@ def generate_frames():
     Capture video frames from the webcam and process each frame to detect emotion.
     The function yields frames as JPEG images to be displayed on the web page.
     """
-    global last_detected_emotion, emotion_detection_start_time
-    
-    # Reset emotion state when starting new detection
-    last_detected_emotion = None
-    emotion_detection_start_time = time.time()
-    
+    global last_detected_emotion
+
     # Open the default camera
     cap = cv2.VideoCapture(0)
-    
-    # Wait for camera to initialize
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    cap.set(cv2.CAP_PROP_FPS, 15)    
+
+    # Give the camera some time to initialize
     time.sleep(1)
-    
+
     while True:
         # Read a frame from the camera
         success, frame = cap.read()
         if not success:
             break
-        else:
-            # Only start emotion detection after initial delay
-            if time.time() - emotion_detection_start_time > 2:
-                # Get the detected emotion for the current frame
-                emotion = get_emotion(frame)
-                if emotion:
-                    last_detected_emotion = emotion
+       
+        frame = cv2.resize(frame, (640, 480))
+        # Detect emotion from the current frame
+        emotion = get_emotion(frame)
+        if emotion:
+            last_detected_emotion = emotion
             
-            # Encode the frame as JPEG for display in the browser
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        # Encode the frame as JPEG
+        ret, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
+        frame = buffer.tobytes()
+        
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 # Route for the main page
 @app.route('/')
@@ -75,10 +73,8 @@ def index():
 # Route for the emotion detection page
 @app.route('/detect-emotion')
 def detect_emotion():
-    global last_detected_emotion, emotion_detection_start_time
-    # Reset emotion state when accessing the detection page
+    global last_detected_emotion
     last_detected_emotion = None
-    emotion_detection_start_time = None
     return render_template('detect_emotion.html')
 
 # Route for the emotion selection page

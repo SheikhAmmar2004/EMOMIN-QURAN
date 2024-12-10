@@ -7,11 +7,23 @@
 {% block content %}
 <div class="emotion-container">
     <h2 class="detect_emotions-heading">Detecting Emotion...</h2>
+    <div id="statusMessage" class="status-message info"></div>
+
     <div id="videoContainer">
         <img id="videoFeed" src="" alt="Video Feed">
+        <div id="loadingSpinner" class="hidden"></div>
     </div>
-    <div id="detectedEmotion"></div>
+   <div id="detectedEmotion"></div>
     <div id="popup"></div>
+    <div id="confirmationDialog" class="hidden">
+        <h3>Emotion Detected!</h3>
+        <p>We detected that you're feeling: <strong id="detectedEmotionText"></strong></p>
+        <div class="dialog-buttons">
+          <button id="continueBtn" class="dialog-button primary">Continue</button>
+          <button id="retryBtn" class="dialog-button secondary">Retry</button>
+          <button id="manualBtn" class="dialog-button secondary">Select Manually</button>
+        </div>
+      </div>
 </div>
 {% endblock %}
 

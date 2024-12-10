@@ -19,8 +19,6 @@ body, html {
   margin: 0;
   border-bottom: 2px solid #006B5F;
   margin-bottom: 30px;
- /* width: 100%;
-  font-size: 2rem;*/
 }
 
 #videoContainer {
@@ -32,10 +30,7 @@ body, html {
   margin-bottom: 20px;
   box-shadow: 0 4px 15px rgba(0, 107, 95, 0.2);
   transition: transform 0.3s ease;
-}
-
-#videoContainer:hover {
-  transform: scale(1.02);
+  position: relative;
 }
 
 #videoFeed {
@@ -43,18 +38,50 @@ body, html {
   height: 100%;
   object-fit: cover;
 }
-
-#detectedEmotion {
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 20px;
-  color: #006B5F;
-  text-align: center;
-  padding: 15px;
-  background: rgba(0, 107, 95, 0.1);
-  border-radius: 8px;
-  transition: all 0.3s ease;
+#loadingSpinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #006B5F;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+#loadingSpinner.hidden {
+  display: none;
+}
+.status-message {
+  margin: 15px 0;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 500;
+  text-align: center;
+  max-width: 600px;
+}
+
+.status-message.info {
+  background-color: rgba(0, 107, 95, 0.1);
+  color: #006B5F;
+}
+
+.status-message.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+
 
 #popup {
   display: none;
@@ -69,6 +96,55 @@ body, html {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   transition: opacity 0.3s, transform 0.3s;
   font-weight: 500;
+}
+#confirmationDialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+#confirmationDialog.hidden {
+  display: none;
+}
+
+.dialog-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.dialog-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dialog-button.primary {
+  background: #006B5F;
+  color: white;
+}
+
+.dialog-button.secondary {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.dialog-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 768px) {
@@ -87,16 +163,18 @@ body, html {
       height: auto;
       aspect-ratio: 4/3;
   }
+  .dialog-buttons {
+    flex-direction: column;
+  }
+  
+  .dialog-button {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
   .detect_emotions-heading {
       font-size: 1.5rem;
-  }
-
-  #detectedEmotion {
-      font-size: 20px;
-      padding: 12px;
   }
 
   #popup {
