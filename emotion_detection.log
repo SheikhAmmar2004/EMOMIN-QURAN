@@ -17566,3 +17566,137 @@ INFO:werkzeug:127.0.0.1 - - [10/Dec/2024 22:06:57] "[36mGET /static/images/face
 INFO:werkzeug:127.0.0.1 - - [10/Dec/2024 22:06:57] "[36mGET /static/images/chooseicon.png HTTP/1.1[0m" 304 -
 INFO:werkzeug:127.0.0.1 - - [10/Dec/2024 22:06:57] "[36mGET /static/images/quran-icon.png HTTP/1.1[0m" 304 -
 INFO:werkzeug:127.0.0.1 - - [10/Dec/2024 22:06:57] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 108-408-612
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:53] "GET /select-emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:54] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:54] "[36mGET /static/images/quran-icon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:54] "[36mGET /static/images/homeicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:54] "[36mGET /static/js/select_emotion.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:54] "[36mGET /static/images/happy.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:54] "[36mGET /static/css/select_emotion.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:54] "[36mGET /static/images/faceidicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:54] "[36mGET /static/images/chooseicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:55] "[36mGET /static/images/fear.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:55] "[36mGET /static/images/neutral.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:55] "[36mGET /static/images/sad.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:55] "[36mGET /static/images/angry.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:55] "[36mGET /static/images/disgust.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:55] "[36mGET /static/images/surprise.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:56] "GET /static/images/happy.gif HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:56] "GET /recommendations/happy HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:56] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:56] "[36mGET /static/images/homeicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:56] "[36mGET /static/images/faceidicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:56] "[36mGET /static/images/chooseicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:57] "[36mGET /static/images/quran-icon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:58] "GET /detect-emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:58] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:58] "GET /static/css/emotion.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:58] "[36mGET /static/images/homeicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:58] "GET /static/js/emotion.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:58] "[36mGET /static/images/faceidicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:58] "[36mGET /static/images/chooseicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:09:59] "[36mGET /static/images/quran-icon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:26] "GET /video_feed HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:28] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:29] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:30] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:31] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:32] "GET /get_emotion HTTP/1.1" 200 -
+INFO:root:Final emotion: happy
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:33] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:34] "GET /get_emotion HTTP/1.1" 200 -
+INFO:root:Final emotion: sad
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:35] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:36] "GET /get_emotion HTTP/1.1" 200 -
+INFO:root:Final emotion: sad
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:37] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:38] "GET /get_emotion HTTP/1.1" 200 -
+INFO:root:Final emotion: happy
+INFO:root:Final emotion: happy
+INFO:root:Final emotion: happy
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:43] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:43] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:44] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:44] "GET /get_emotion HTTP/1.1" 200 -
+INFO:root:Final emotion: happy
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:47] "GET /recommendations/happy HTTP/1.1" 200 -
+INFO:root:Final emotion: happy
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:47] "[36mGET /static/images/chooseicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:47] "[36mGET /static/images/homeicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:47] "[36mGET /static/images/faceidicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:47] "[36mGET /static/images/quran-icon.png HTTP/1.1[0m" 304 -
+INFO:root:Final emotion: happy
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:56] "GET /surah/1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:56] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:56] "[36mGET /static/images/homeicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:56] "[36mGET /static/images/faceidicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:56] "GET /static/css/surah.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:56] "[36mGET /static/images/chooseicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:56] "[36mGET /static/images/quran-icon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:10:56] "[36mGET /static/js/audio-player.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 108-408-612
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 108-408-612
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:17] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:19] "[36mGET /static/images/quran-icon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:19] "[36mGET /static/images/chooseicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:19] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:19] "[36mGET /static/images/homeicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:20] "[36mGET /static/images/faceidicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:26] "GET /detect-emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:26] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:26] "[36mGET /static/css/emotion.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:26] "[36mGET /static/images/homeicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:26] "[36mGET /static/images/faceidicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:26] "[36mGET /static/images/chooseicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:26] "[36mGET /static/js/emotion.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:27] "[36mGET /static/images/quran-icon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:58] "GET /video_feed HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:29:59] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:00] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:01] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:02] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:03] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:04] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:05] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:06] "GET /get_emotion HTTP/1.1" 200 -
+INFO:root:Final emotion: sad
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:07] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:08] "GET /get_emotion HTTP/1.1" 200 -
+INFO:root:Final emotion: sad
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:09] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:10] "GET /get_emotion HTTP/1.1" 200 -
+INFO:root:Final emotion: sad
+INFO:root:Final emotion: sad
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:14] "GET /get_emotion HTTP/1.1" 200 -
+INFO:root:Final emotion: happy
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:15] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:15] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:16] "GET /get_emotion HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:16] "GET /get_emotion HTTP/1.1" 200 -
+INFO:root:Final emotion: happy
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:18] "GET /recommendations/happy HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:19] "[36mGET /static/images/homeicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:19] "[36mGET /static/images/faceidicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:19] "[36mGET /static/images/chooseicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [12/Dec/2024 00:30:19] "[36mGET /static/images/quran-icon.png HTTP/1.1[0m" 304 -
+INFO:root:Final emotion: happy
+INFO:root:Final emotion: neutral
