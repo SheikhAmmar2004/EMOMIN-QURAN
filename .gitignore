@@ -1,0 +1,18 @@
+# Ignore Python compiled files
+__pycache__/
+*.py[cod]
+
+# Ignore log files
+*.log
+
+# Ignore VS Code settings
+.vscode/
+settings.json
+
+# Ignore system-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore unnecessary Git attributes file
+.gitattributes
+
