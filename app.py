@@ -1,22 +1,23 @@
-from flask import Flask, render_template, Response, jsonify, redirect, url_for, json
+from flask import Flask, render_template, Response, request, jsonify
 import cv2
 from emotion import get_emotion
-import requests
-import os
+import base64
+import numpy as np
 import time
+import requests
+import json
 
-# Initialize the Flask application
 app = Flask(__name__)
 
 # Dictionary mapping emotions to their recommended surahs
 SURAH_RECOMMENDATIONS = {
-    'happy': [1, 108, 104, 107, 59, 112, 13],  # Surah numbers for happiness
+    'happy': [1, 108, 104, 107, 59, 112, 13],
     'sad': [107, 2, 113, 103, 93, 12, 105, 36, 1, 55, 18, 112, 114],
     'fear': [113, 114, 1, 55, 56, 77, 19, 59, 67, 18, 13, 17, 24, 5, 9, 33],
     'angry': [111, 18, 1],
     'disgust': [19],
-    'neutral': [1, 112, 113, 114],  # Default recommendations
-    'surprise': [1, 112, 113, 114]  # Default recommendations
+    'neutral': [1, 112, 113, 114],
+    'surprise': [1, 112, 113, 114]
 }
 
 # Variable to store the last detected emotion
@@ -25,45 +26,10 @@ last_detected_emotion = None
 def get_recommendations(emotion):
     """
     Get recommended surahs for a given emotion.
-    Returns a list of surah IDs.
     """
     emotion = emotion.lower()
     return SURAH_RECOMMENDATIONS.get(emotion, SURAH_RECOMMENDATIONS['neutral'])
 
-def generate_frames():
-    """
-    Capture video frames from the webcam and process each frame to detect emotion.
-    The function yields frames as JPEG images to be displayed on the web page.
-    """
-    global last_detected_emotion
-
-    # Open the default camera
-    cap = cv2.VideoCapture(0)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-    cap.set(cv2.CAP_PROP_FPS, 15)    
-
-    # Give the camera some time to initialize
-    time.sleep(1)
-
-    while True:
-        # Read a frame from the camera
-        success, frame = cap.read()
-        if not success:
-            break
-       
-        frame = cv2.resize(frame, (640, 480))
-        # Detect emotion from the current frame
-        emotion = get_emotion(frame)
-        if emotion:
-            last_detected_emotion = emotion
-            
-        # Encode the frame as JPEG
-        ret, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
-        frame = buffer.tobytes()
-        
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 # Route for the main page
 @app.route('/')
@@ -86,9 +52,11 @@ def select_emotion():
 @app.route('/recommendations/<emotion>')
 def show_recommendations(emotion):
     recommended_surahs = get_recommendations(emotion)
-    return render_template('recommendations.html', 
-                         emotion=emotion,
-                         recommended_surahs=json.dumps(recommended_surahs))
+    return render_template(
+        'recommendations.html', 
+        emotion=emotion, 
+        recommended_surahs=json.dumps(recommended_surahs)
+    )
 
 # Route to display a specific Surah with its audio
 @app.route('/surah/<int:surah_id>')
@@ -98,27 +66,44 @@ def show_surah(surah_id):
         response.raise_for_status()
         surah_data = response.json()
         surah_data['number'] = surah_id
-        
+
         audio_response = requests.get(f'https://api.quran.com/api/v4/chapter_recitations/7/{surah_id}')
         if audio_response.status_code == 200:
             audio_data = audio_response.json()
             surah_data['audio_url'] = audio_data.get('audio_file', {}).get('audio_url', '')
-        
+
         return render_template('surah.html', surah=surah_data)
     except Exception as e:
         print("Error:", str(e))
         return f"Error loading surah: {str(e)}", 500
 
-# Route to provide a video feed of emotion detection in real-time
-@app.route('/video_feed')
-def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-# Route to get the current detected emotion
-@app.route('/get_emotion')
-def get_current_emotion():
+@app.route('/get_emotion', methods=['POST'])
+def get_emotion_endpoint():
+    """
+    Receive base64 image data, decode it, detect emotion, and return the result.
+    """
     global last_detected_emotion
-    return jsonify({'emotion': last_detected_emotion})
+    try:
+        data = request.json
+        image_data = data.get("image")
+        if not image_data:
+            return jsonify({"error": "No image data received"}), 400
+
+        # Decode the base64 image
+        image_data = base64.b64decode(image_data.split(",")[1])
+        np_image = np.frombuffer(image_data, np.uint8)
+        frame = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
+
+        # Detect emotion
+        emotion = get_emotion(frame)
+        if emotion:
+            last_detected_emotion = emotion
+            return jsonify({"emotion": emotion}), 200
+        else:
+            return jsonify({"error": "Could not detect emotion"}), 500
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

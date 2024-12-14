@@ -44,15 +44,15 @@ function handleManualSelection() {
 }
 
 // Function to check lighting conditions
-function checkLighting(imageElement) {
+function checkLighting(videoElement) {
     const canvas = document.createElement('canvas');
-    canvas.width = imageElement.width; // Use the img element's width
-    canvas.height = imageElement.height; // Use the img element's height
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
     const ctx = canvas.getContext('2d');
     
-    // Draw the current image on the canvas
-    ctx.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
-
+    // Draw the current frame from the video
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
     let brightness = 0;
@@ -63,6 +63,19 @@ function checkLighting(imageElement) {
 
     const averageBrightness = brightness / (data.length / 4); // Average brightness
     return averageBrightness;
+}
+
+// Function to capture a frame from the video
+function captureFrame(videoElement) {
+    const canvas = document.getElementById("canvasElement");
+    const ctx = canvas.getContext('2d');
+
+    // Draw the current frame from the video onto the canvas
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+    // Capture the image data as base64
+    const imageData = canvas.toDataURL('image/jpeg'); // Get image as base64
+    return imageData;
 }
 
 // Function to display the detected emotion and show popup if changed
@@ -103,40 +116,47 @@ function showPopup(message) {
 
 // Function to start the emotion detection process
 function startDetection() {
-    const videoFeed = document.getElementById("videoFeed");
+    const videoElement = document.getElementById("videoElement");
     const loadingSpinner = document.getElementById('loadingSpinner');
     try {
         // Show loading state
         loadingSpinner.classList.remove('hidden');
         showStatusMessage('Starting camera...');
-    
-        videoFeed.style.display = "block";
-        videoFeed.src = "/video_feed";
-    
-        // Wait for video feed to be ready
-        videoFeed.onload = () => {
-            console.log("Camera initialized!");
-            isInitialized = true;
-            showStatusMessage('Camera ready. Please keep your face centered.');
-            loadingSpinner.classList.add('hidden');
-            startEmotionPolling();
-             // Check lighting conditions periodically
-            setInterval(() => {
-                const brightness = checkLighting(videoFeed);
-                if (brightness < 50) {
-                    showStatusMessage('Low lighting detected. Please move to a brighter area.', 'warning');
-                } else {
-                    showStatusMessage('Lighting conditions are good.', 'info');
-                 }
-            }, 3000);
 
-        };
+        // Access the camera and display the feed
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                // Set the video element to use the camera stream
+                videoElement.srcObject = stream;
+                videoElement.play();
 
-       
+                // Wait for the video feed to be ready
+                videoElement.onloadedmetadata = () => {
+                    console.log("Camera initialized!");
+                    isInitialized = true;
+                    showStatusMessage('Camera ready. Please keep your face centered.');
+                    loadingSpinner.classList.add('hidden');
+                    startEmotionPolling();
+                    // Check lighting conditions periodically
+                    setInterval(() => {
+                        const brightness = checkLighting(videoElement);
+                        if (brightness < 50) {
+                            showStatusMessage('Low lighting detected. Please move to a brighter area.', 'warning');
+                        } else {
+                            showStatusMessage('Lighting conditions are good.', 'info');
+                        }
+                    }, 3000);
+                };
+            })
+            .catch(error => {
+                loadingSpinner.classList.add('hidden');
+                showStatusMessage('Failed to access camera. Please check permissions.', 'error');
+                console.error('Camera error:', error);
+            });
     } catch (error) {
         loadingSpinner.classList.add('hidden');
         showStatusMessage('Failed to access camera. Please check permissions.', 'error');
-        console.error('Camera error:', error);
+        console.error('Error:', error);
     }
 }
 
@@ -144,15 +164,24 @@ function startDetection() {
 function startEmotionPolling() {
     setInterval(() => {
         if (!isInitialized || !isPolling) return; // Don't poll until initialized
-        
-        fetch('/get_emotion')
-            .then(response => response.json())
-            .then(data => {
-                if (data.emotion) {
-                    showEmotion(data.emotion);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+
+        // Capture frame and send to backend
+        const imageData = captureFrame(document.getElementById("videoElement"));
+
+        fetch('/get_emotion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ image: imageData }) // Send the frame as base64
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.emotion) {
+                showEmotion(data.emotion);
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }, 1000); // Poll every second
 }
 

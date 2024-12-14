@@ -10,20 +10,24 @@
     <div id="statusMessage" class="status-message info"></div>
 
     <div id="videoContainer">
-        <img id="videoFeed" src="" alt="Video Feed">
+        <!-- Video element to display the live camera feed -->
+        <video id="videoElement" width="640" height="480" autoplay playsinline></video>
+        <canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
         <div id="loadingSpinner" class="hidden"></div>
     </div>
-   <div id="detectedEmotion"></div>
+
+    <div id="detectedEmotion"></div>
     <div id="popup"></div>
+
     <div id="confirmationDialog" class="hidden">
         <h3>Emotion Detected!</h3>
         <p>We detected that you're feeling: <strong id="detectedEmotionText"></strong></p>
         <div class="dialog-buttons">
-          <button id="continueBtn" class="dialog-button primary">Continue</button>
-          <button id="retryBtn" class="dialog-button secondary">Retry</button>
-          <button id="manualBtn" class="dialog-button secondary">Select Manually</button>
+            <button id="continueBtn" class="dialog-button primary">Continue</button>
+            <button id="retryBtn" class="dialog-button secondary">Retry</button>
+            <button id="manualBtn" class="dialog-button secondary">Select Manually</button>
         </div>
-      </div>
+    </div>
 </div>
 {% endblock %}
 

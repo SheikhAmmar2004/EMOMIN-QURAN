@@ -2,6 +2,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/surah.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
 {% endblock %}
 
@@ -10,7 +11,7 @@
 {% block banner_content %}
 <div class="surah-banner2" data-surah-number="{{ surah.number }}">
     <h1 class="surah-title">{{ surah.surahNameArabic }}</h1>
-    <img class="banner-image2" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
+    <img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
 </div>
 {% endblock %}
 

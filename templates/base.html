@@ -15,7 +15,7 @@
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='images/homeicon.png') }}" alt="Home" class="nav-icon">HOME</a>
         <a href="{{ url_for('detect_emotion') }}" id="detectEmotionBtn">
-            <img src="{{ url_for('static', filename='images/faceidicon.png') }}" alt="Scan" class="nav-icon">SCAN MY MOOD</a>
+            <img src="{{ url_for('static', filename='images/faceidicon.png') }}" alt="Scan" class="nav-icon">SCAN YOUR MOOD</a>
         <a href="{{ url_for('select_emotion') }}">
             <img src="{{ url_for('static', filename='images/chooseicon.png') }}" alt="Select Mood" class="nav-icon">SELECT YOUR MOOD</a>
     </nav>
@@ -42,8 +42,8 @@
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
                     <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('detect_emotion') }}">Emotion Detection</a></li>
-                    <li><a href="{{ url_for('select_emotion') }}">Select Emotion</a></li>
+                    <li><a href="{{ url_for('detect_emotion') }}">Scan your mood</a></li>
+                    <li><a href="{{ url_for('select_emotion') }}">Select your mood</a></li>
                 </ul>
             </div>
             <div class="footer-section">
