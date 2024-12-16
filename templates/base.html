@@ -14,17 +14,17 @@
     <!-- Navigation -->
     <nav class="nav">
         <a href="{{ url_for('index') }}">
-            <img src="{{ url_for('static', filename='images/homeicon.png') }}" alt="Home" class="nav-icon">HOME</a>
+            <img src="{{ url_for('static', filename='images/homeicon.png') }}" alt="Home" class="nav-icon">Home</a>
         <a href="{{ url_for('detect_emotion') }}" id="detectEmotionBtn">
-            <img src="{{ url_for('static', filename='images/faceidicon.png') }}" alt="Scan" class="nav-icon">SCAN YOUR MOOD</a>
+            <img src="{{ url_for('static', filename='images/faceidicon.png') }}" alt="Scan" class="nav-icon">Scan your mood</a>
         <a href="{{ url_for('select_emotion') }}">
-            <img src="{{ url_for('static', filename='images/chooseicon.png') }}" alt="Select Mood" class="nav-icon">SELECT YOUR MOOD</a>
+            <img src="{{ url_for('static', filename='images/chooseicon.png') }}" alt="Select Mood" class="nav-icon">Select your mood</a>
     </nav>
 
     <!-- Banner -->
     <div class="banner {% block banner_class %}{% endblock %}">
         {% block banner_content %}
-        <h1>EMOMIN QURAN</h1>
+        <h1>Emomin Quran</h1>
         <img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
         {% endblock %}
     </div>
@@ -36,7 +36,7 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>About EMOMIN QURAN</h3>
+                <h3>About Emomin Quran</h3>
                 <p>An innovative platform combining emotional intelligence with Quranic guidance to provide personalized spiritual support. Our mission is to help you find solace and guidance through the divine words of the Quran, tailored to your emotional state.</p>
             </div>
             <div class="footer-section">
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 EMOMIN QURAN. All rights reserved.</p>
+            <p>&copy; 2024 Emomin Quran. All rights reserved.</p>
         </div>
     </footer>
 

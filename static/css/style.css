@@ -301,7 +301,7 @@ html {
 }
 
 .footer-section:hover h3::after {
-  width: 80px;
+  width: 100px;
 }
 
 .footer-section p {
