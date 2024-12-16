@@ -3,6 +3,12 @@
 {% block content %}
 <div class="surahs-section">
     <h2 class="surahs-heading">Surahs</h2>
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input type="text" id="surahSearch" placeholder="Search surah by name..." class="search-input">
+            <div id="searchSuggestions" class="search-suggestions"></div>
+        </div>
+    </div>
     <div id="surahsGrid" class="surahs-grid">
         <!-- Surahs will be loaded here dynamically -->
     </div>

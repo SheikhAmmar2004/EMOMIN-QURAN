@@ -11,13 +11,50 @@ app = Flask(__name__)
 
 # Dictionary mapping emotions to their recommended surahs
 SURAH_RECOMMENDATIONS = {
-    'happy': [1, 108, 104, 107, 59, 112, 13],
-    'sad': [107, 2, 113, 103, 93, 12, 105, 36, 1, 55, 18, 112, 114],
-    'fear': [113, 114, 1, 55, 56, 77, 19, 59, 67, 18, 13, 17, 24, 5, 9, 33],
-    'angry': [111, 18, 1],
-    'disgust': [19],
-    'neutral': [1, 112, 113, 114],
-    'surprise': [1, 112, 113, 114]
+     # Happy - These Surahs relate to feelings of joy, positive emotions, and uplifting the mood
+    "happy": [108, 104, 93, 103, 1],  # Al-Kauthar (108), Al-Humazah (104), Al-Duha (93), Al-Asr (103), Al-Fatiha (1)
+    # Justification: These Surahs reflect happiness and positive feelings. **Al-Kauthar (108)** brings joy, **Al-Humazah (104)** brings emotional reflection that uplifts, **Al-Duha (93)** lifts sadness into joy, **Al-Asr (103)** uplifts emotionally, and **Al-Fatiha (1)** promotes joy.
+
+    # Sad - These Surahs focus on sadness, depression, and emotional stability or relief
+    "sad": [2, 113, 114, 109, 5],  # Al-Baqarah (2), Al-Falaq (113), Al-Nas (114), Al-Kafirun (109), Al-Ma'idah (5)
+    # Justification: These Surahs focus on improving emotional well-being. **Al-Baqarah (2)** brings relief from sadness, **Al-Falaq (113)** and **Al-Nas (114)** provide peace, **Al-Kafirun (109)** addresses emotional relief, and **Al-Ma'idah (5)** helps relieve mild stress.
+
+    # Angry - Surahs that help reduce anger and emotional tension, promoting patience
+    "angry": [111, 1, 18, 77],  # Al-Masad (111), Al-Fatiha (1), Al-Kahf (18), Al-Mursalat (77)
+    # Justification: These Surahs focus on reducing emotional tension. **Al-Masad (111)** reduces anger, **Al-Fatiha (1)** calms the mind, **Al-Kahf (18)** promotes patience, and **Al-Mursalat (77)** reduces stress and brings peace.
+
+    # Fear - Surahs that address fear, anxiety, and help with emotional stability and peace
+    "fear": [113, 55, 56, 24, 3],  # Al-Falaq (113), Al-Rehman (55), Al-Waqiah (56), An-Nur (24), Al-Imran (3)
+    # Justification: These Surahs address fear and anxiety by promoting calmness. **Al-Falaq (113)** reduces fear, **Al-Rehman (55)** brings peace and comfort, **Al-Waqiah (56)** provides balance, **An-Nur (24)** offers emotional stability, and **Al-Imran (3)** strengthens the believer.
+
+    # Disgust - Surahs related to guilt, shame, self-reflection, emotional clarity, and relief
+    "disgust": [19, 104, 1, 67],  # Maryam (19), Al-Humazah (104), Al-Fatiha (1), Al-Mulk (67)
+    # Justification: These Surahs address internal conflicts, guilt, and emotional instability. **Maryam (19)** helps with guilt relief, **Al-Humazah (104)** promotes self-reflection, **Al-Fatiha (1)** brings clarity, and **Al-Mulk (67)** helps with emotional relief.
+
+    # Neutral - Surahs that are associated with calmness, balance, and emotional neutrality
+    "neutral": [112, 13, 11, 18, 1],  # Al-Ikhlas (112), Al-Ra'ad (13), Hud (11), Al-Kahf (18), Al-Fatiha (1)
+    # Justification: These Surahs bring emotional neutrality and stability. **Al-Ikhlas (112)** promotes calmness, **Al-Ra'ad (13)** creates balance, **Hud (11)** helps focus and calm, **Al-Kahf (18)** relieves anxiety, and **Al-Fatiha (1)** brings emotional stability.
+
+    # Surprise - These Surahs may help with shock, astonishment, or unexpected emotions
+    "surprise": [1, 55, 18, 77],  # Al-Fatiha (1), Al-Rehman (55), Al-Kahf (18), Al-Mursalat (77)
+    # Justification: These Surahs offer emotional stability and calming effects that help with unexpected emotions. **Al-Fatiha (1)** provides a stable foundation, **Al-Rehman (55)** offers comfort, **Al-Kahf (18)** helps with anxiety, and **Al-Mursalat (77)** provides peace and calmness.
+
+    # Depressed - Surahs that uplift depression and sadness, help with emotional stability
+    "depressed": [1, 36, 93, 112, 114],  # Al-Fatiha (1), Az-Zumar (36), Al-Duha (93), Al-Ikhlas (112), Al-Nas (114)
+    # Justification: These Surahs bring relief from depressive states. **Al-Duha (93)** lifts sadness to joy, **Al-Fatiha (1)** offers emotional stability, **Al-Nas (114)** brings calmness, and **Az-Zumar (36)** provides emotional relief.
+
+    # Anxiety - Surahs that help with anxiety and mental stress relief
+    "anxiety": [2, 18, 24, 55, 56, 11],  # Al-Baqarah (2), Al-Kahf (18), An-Nur (24), Al-Rehman (55), Al-Waqiah (56), Hud (11)
+    # Justification: These Surahs provide comfort and reduce anxiety. **Al-Kahf (18)** and **An-Nur (24)** are particularly focused on mental stability, **Al-Rehman (55)** brings relaxation, and **Al-Waqiah (56)** provides peace.
+
+    # Stress - Surahs related to stress relief, calmness, and emotional stability
+    "stress": [13, 5, 10, 17, 77],  # Al-Ra'ad (13), Al-Ma'idah (5), Yunus (10), Al-Isra (17), Al-Mursalat (77)
+    # Justification: These Surahs help relieve stress and bring emotional calmness. **Al-Ra'ad (13)** and **Al-Ma'idah (5)** specifically deal with stress relief and promote emotional balance.
+
+    # Pain - Surahs related to pain relief and comfort during difficult times
+    "pain": [19],  # Maryam (19) - Specifically linked to pain relief (labor pain, etc.)
+    # Justification: **Maryam (19)** is directly associated with alleviating pain, particularly in the context of labor and difficult situations.
+
 }
 
 # Variable to store the last detected emotion

@@ -79,6 +79,20 @@ html {
   margin: 0;
   padding-left: 1.25rem;
   z-index: 1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: slideIn 0.8s ease-out;
+}
+/* Animations */
+@keyframes slideIn {
+  from {
+      opacity: 0;
+      transform: translateY(-20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
 }
 
 .banner-image {
@@ -465,5 +479,188 @@ html {
 
   .banner h1 {
       color: #000;
+  }
+}
+/* Existing styles remain the same */
+
+/* Search Container Styles */
+.search-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 30px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 20px;
+  border: 2px solid #006B5F;
+  border-radius: 25px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: white;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 107, 95, 0.2);
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.suggestion-item {
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.2s;
+}
+
+.suggestion-item:hover,
+.suggestion-item:active { /* For touch devices */
+  background-color: #f0f9f8;
+}
+
+.suggestion-number {
+  flex-shrink: 0;
+  background: #4DB6AC;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.suggestion-text {
+  flex-grow: 1;
+  min-width: 0; /* Prevents text from overflowing */
+}
+
+.suggestion-name {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestion-translation {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes highlightPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 107, 95, 0.2);
+    border: 2px solid #006B5F;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+}
+
+.surah-card {
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  -webkit-tap-highlight-color: transparent; /* Removes tap highlight on iOS */
+}
+
+.surah-card.highlight {
+  animation: highlightPulse 1.5s ease-in-out;
+  background-color: #f0f9f8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .search-container {
+    max-width: 450px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    max-width: 400px;
+    padding: 0 15px;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    padding: 10px 15px;
+    font-size: 15px;
+  }
+
+  .suggestion-item {
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-container {
+    max-width: 100%;
+    padding: 0 12px;
+    margin-bottom: 15px;
+  }
+  
+  .search-input {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .suggestion-item {
+    padding: 8px 12px;
+  }
+
+  .suggestion-number {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+
+  .suggestion-name {
+    font-size: 14px;
+  }
+
+  .suggestion-translation {
+    font-size: 11px;
   }
 }
