@@ -46,6 +46,17 @@
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/audio-player.js') }}"></script>
 <script>
+    const autoPlayEnabled = localStorage.getItem('autoPlayEnabled') === 'true';
+    const fromDetection = new URLSearchParams(window.location.search).get('from_detection') === 'true';
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-play audio only if both auto-play is enabled AND we came from emotion detection
+        if (autoPlayEnabled && fromDetection) {
+            const playButton = document.getElementById('playButton');
+            playButton.click(); // Simulate click to start playing
+        }
+    });
+
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', e => {
             e.preventDefault();

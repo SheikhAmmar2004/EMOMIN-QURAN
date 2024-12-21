@@ -85,14 +85,17 @@ def detect_emotion():
 def select_emotion():
     return render_template('select_emotion.html')
 
-# Route for emotion-based recommendations
+# Route for emotion-based recommendations# Update the show_recommendations route
 @app.route('/recommendations/<emotion>')
 def show_recommendations(emotion):
     recommended_surahs = get_recommendations(emotion)
+    # Add from_detection parameter to indicate if coming from emotion detection
+    from_detection = request.args.get('from_detection', 'false')
     return render_template(
         'recommendations.html', 
         emotion=emotion, 
-        recommended_surahs=json.dumps(recommended_surahs)
+        recommended_surahs=json.dumps(recommended_surahs),
+        from_detection=from_detection
     )
 
 # Route to display a specific Surah with its audio

@@ -4,6 +4,8 @@ let isInitialized = false;
 let confidenceCount = 0;
 let isPolling = true; // Track polling state
 const CONFIDENCE_THRESHOLD = 3; // Number of consistent detections needed before redirecting
+let autoPlayEnabled = localStorage.getItem('autoPlayEnabled') === 'true';
+
 
 // Function to show status messages
 function showStatusMessage(message, type = 'info') {
@@ -26,9 +28,17 @@ function hideConfirmationDialog() {
     dialog.classList.add('hidden');
 }
 
-// Function to handle the continue action
+// Function to handle the continue action// Update the handleContinue function
 function handleContinue() {
-    window.location.href = `/recommendations/${lastEmotion}`;
+    // Ensure autoPlayEnabled is set in localStorage before redirecting
+    localStorage.setItem('autoPlayEnabled', autoPlayEnabled);
+    window.location.href = `/recommendations/${lastEmotion}?from_detection=true`;
+}
+// Add toggle function for auto-play
+function toggleAutoPlay() {
+    const autoPlaySwitch = document.getElementById('autoPlaySwitch');
+    autoPlayEnabled = autoPlaySwitch.checked;
+    localStorage.setItem('autoPlayEnabled', autoPlayEnabled);
 }
 
 // Function to handle the retry action
@@ -191,4 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('continueBtn').addEventListener('click', handleContinue);
     document.getElementById('retryBtn').addEventListener('click', handleRetry);
     document.getElementById('manualBtn').addEventListener('click', handleManualSelection);
+
+    // Set up auto-play switch
+    const autoPlaySwitch = document.getElementById('autoPlaySwitch');
+    autoPlaySwitch.checked = autoPlayEnabled;
+    autoPlaySwitch.addEventListener('change', toggleAutoPlay);
 });
