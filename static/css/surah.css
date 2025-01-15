@@ -48,23 +48,23 @@ body, html {
     background: white;
     border-radius: 20px;
     border: none;
-    padding: 15px;
+    padding: 8px;
     display: flex;
     align-items: center;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     gap: 15px;
     width: 200px;
     position: fixed; /* Fixed position for scrolling */
-    bottom: 300px; /* Position at the bottom */
-    left: 91%; /* Center horizontally */
+    bottom: 10px; /* Position at the bottom */
+    left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Center alignment */
     z-index: 1000; /* Ensure it stays above other elements */
 }
 
 
 .play-button {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: white;
     border: none;
@@ -244,15 +244,6 @@ body, html {
        
     }
 
-    .audio-player {
-        margin: 20px 15px;
-        padding: 10px;
-        
-        left:50%;
-        bottom:0px;
-        
-    }
-
     .play-button {
         width: 40px;
         height: 40px;
@@ -314,26 +305,11 @@ body, html {
     .banner-image2{
         width: 50%;
     }
-    .audio-player{
-        left:50%;
-        bottom:0px;
-    }
+    
 }
 @media (max-width: 390px) {
     .surah-title {
         font-size: 1.375rem;
         padding-left: 0; 
-     }
-
-    .audio-player{
-        left:50%;
-        bottom:0px;
-    }
-    
-}
-@media(max-width:1280px){
-    .audio-player{
-        left:50%;
-        bottom:0px;
-    }
+     }   
 }

@@ -75,56 +75,31 @@ body, html {
 }
 /* Styles for medium-sized screens (tablets) and larger */
 @media (min-width: 768px) {
-   /* .emotions-section {
-        padding: 15px;
-    }
-
-    .emotions-heading {
-        font-size: 1.75rem;
-        padding: 15px 0;
-    }
-
-    
-
-    .emotion-icon {
-        width: 80px;
-        height: 80px;
-    }
-
-    .emotion-card p {
-        font-size: 16px;
-    }
-        */
     .emotions-grid {
-        display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-        padding: 15px;
     }
 }
-
-/* Styles for small screens (mobile) */
-@media (max-width: 480px) {
-   /* .emotions-heading {
-        font-size: 1.5rem;
-    }
-
-    .emotion-card {
-        padding: 15px;
-    }
-    */
-    .emotions-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        max-width: 280px;
-        margin: 0 auto;
-    }
-}
-
-/* Styles for large screens (desktops) */
 @media (min-width: 1024px) {
     .emotions-grid {
         grid-template-columns: repeat(5, 1fr);
+    }
+}
+@media (max-width: 768px) {
+    .emotions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+/* Styles for small screens (mobile) */
+@media (max-width: 374px) {
+    .emotions-grid {
+        grid-template-columns: repeat(1, 1fr);
+    } 
+}
+
+/* Styles for large screens (desktops) */
+
+@media (max-width:374px) {
+    .emotions-grid {
+        grid-template-columns: repeat(1, 1fr);
     }
 }

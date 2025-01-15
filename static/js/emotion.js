@@ -96,7 +96,7 @@ function showEmotion(emotion) {
         // Reset confidence count when emotion changes
         confidenceCount = 0;
         lastEmotion = emotion;
-        showPopup(`Emotion detected: ${emotion}`);
+       // showPopup(`Emotion detected: ${emotion}`);
     } else {
         // Increment confidence count for consistent emotions
         confidenceCount++;
@@ -197,6 +197,15 @@ function startEmotionPolling() {
 
 // Start detection when the page loads
 document.addEventListener('DOMContentLoaded', () => {
+    const targetElement = document.getElementById('detectEmotionHeading');
+    if (targetElement) {
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition  - 60; 
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    }
     startDetection();
     document.getElementById('continueBtn').addEventListener('click', handleContinue);
     document.getElementById('retryBtn').addEventListener('click', handleRetry);
