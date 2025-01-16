@@ -1,14 +1,16 @@
-{% extends "base.html" %}
+{% extends "base.html" %} <!-- Extending the base template -->
 
 {% block extra_css %}
+<!-- Include additional CSS files and fonts specific to the Surah page -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/surah.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
 {% endblock %}
 
-{% block banner_class %}surah-banner{% endblock %}
+{% block banner_class %}surah-banner{% endblock %} <!-- Defining a custom class for the banner -->
 
 {% block banner_content %}
+<!-- Banner content displaying the Surah name in Arabic and a Quran icon -->
 <div class="surah-banner2" data-surah-number="{{ surah.number }}">
     <h1 class="surah-title">{{ surah.surahNameArabic }}</h1>
     <img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
@@ -16,7 +18,9 @@
 {% endblock %}
 
 {% block content %}
+<!-- Audio player and Surah verses section -->
 <div class="audio-player">
+    <!-- Play/Pause button with SVG icons -->
     <button class="play-button" id="playButton" aria-label="Play/Pause">
         <svg viewBox="0 0 24 24" id="playIcon">
             <path d="M8 5v14l11-7z"/>
@@ -25,15 +29,19 @@
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
     </button>
+    <!-- Audio progress bar -->
     <div class="audio-progress" id="progressBar">
         <div class="progress-bar" id="progress"></div>
     </div>
+    <!-- Current audio time display -->
     <div class="time-display" id="timeDisplay">0:00</div>
 </div>
 
+<!-- Container displaying Surah verses -->
 <div class="surah-container">
     <div class="verses-container">
         {% for verse in surah.arabic1 %}
+        <!-- Each verse with its text and number -->
         <div class="verse">
             <div class="arabic-text">{{ verse }}</div>
             <div class="verse-number">{{ loop.index }}</div>
@@ -44,19 +52,21 @@
 {% endblock %}
 
 {% block scripts %}
+<!-- JavaScript for handling audio player functionality and animations -->
 <script src="{{ url_for('static', filename='js/audio-player.js') }}"></script>
 <script>
-    const autoPlayEnabled = localStorage.getItem('autoPlayEnabled') === 'true';
-    const fromDetection = new URLSearchParams(window.location.search).get('from_detection') === 'true';
-    
+    const autoPlayEnabled = localStorage.getItem('autoPlayEnabled') === 'true'; // Check if auto-play is enabled
+    const fromDetection = new URLSearchParams(window.location.search).get('from_detection') === 'true'; // Check if navigated from emotion detection
+
     document.addEventListener('DOMContentLoaded', function() {
-        // Auto-play audio only if both auto-play is enabled AND we came from emotion detection
+        // Auto-play audio only if auto-play is enabled and user came from emotion detection
         if (autoPlayEnabled && fromDetection) {
             const playButton = document.getElementById('playButton');
-            playButton.click(); // Simulate click to start playing
+            playButton.click(); // Start audio playback
         }
     });
 
+    // Smooth scrolling for navigation links
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', e => {
             e.preventDefault();
@@ -67,22 +77,24 @@
         });
     });
 
+    // Intersection Observer for animating verse elements on scroll
     const observer = new IntersectionObserver(
         entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.opacity = '1'; // Make verse visible
+                    entry.target.style.transform = 'translateY(0)'; // Reset position
                 }
             });
         },
-        { threshold: 0.1 }
+        { threshold: 0.1 } // Trigger animation when 10% of the element is visible
     );
 
+    // Initial setup for verse elements
     document.querySelectorAll('.verse').forEach(verse => {
-        verse.style.opacity = '0';
-        verse.style.transform = 'translateY(20px)';
-        observer.observe(verse);
+        verse.style.opacity = '0'; // Hide verse initially
+        verse.style.transform = 'translateY(20px)'; // Move verse down initially
+        observer.observe(verse); // Observe each verse for animations
     });
 </script>
 {% endblock %}

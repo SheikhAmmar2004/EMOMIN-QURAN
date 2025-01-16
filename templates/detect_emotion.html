@@ -1,20 +1,31 @@
-{% extends "base.html" %}
+{% extends "base.html" %} <!-- Extending the base template -->
 
 {% block extra_css %}
+<!-- Including a CSS file specific to the Emotion Detection page -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/emotion.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="emotion-container">
+    <!-- Heading for the emotion detection section -->
     <h2 class="detect_emotions-heading" id="detectEmotionHeading">Detecting Emotion</h2>
+
+    <!-- Area to display status messages -->
     <div id="statusMessage" class="status-message info"></div>
 
+    <!-- Container for the live camera feed and associated elements -->
     <div id="videoContainer">
         <!-- Video element to display the live camera feed -->
         <video id="videoElement" width="640" height="480" autoplay playsinline></video>
+        
+        <!-- Hidden canvas used for processing the video feed -->
         <canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
+        
+        <!-- Loading spinner to indicate processing -->
         <div id="loadingSpinner" class="hidden"></div>
     </div>
+
+    <!-- Toggle switch for enabling or disabling auto-play functionality -->
     <div class="toggle-container">
         <label class="toggle-switch">
             <input type="checkbox" id="autoPlaySwitch">
@@ -23,12 +34,18 @@
         <span class="toggle-label">Enable Auto-Play</span>
     </div>       
 
+    <!-- Section to display the detected emotion -->
     <div id="detectedEmotion"></div>
+
+    <!-- Popup container for additional interactions -->
     <div id="popup"></div>
 
+    <!-- Dialog for confirmation when an emotion is detected -->
     <div id="confirmationDialog" class="hidden">
         <h3>Emotion Detected!</h3>
         <p>We detected that you're feeling: <strong id="detectedEmotionText"></strong></p>
+        
+        <!-- Buttons for user action -->
         <div class="dialog-buttons">
             <button id="continueBtn" class="dialog-button primary">Continue</button>
             <button id="retryBtn" class="dialog-button secondary">Retry</button>
@@ -39,5 +56,6 @@
 {% endblock %}
 
 {% block scripts %}
+<!-- Including JavaScript file for handling emotion detection functionality -->
 <script src="{{ url_for('static', filename='js/emotion.js') }}"></script>
 {% endblock %}

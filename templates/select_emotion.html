@@ -1,53 +1,103 @@
-{% extends "base.html" %}
+{% extends "base.html" %} <!-- Extending the base template -->
 
 {% block extra_css %}
+<!-- Including a CSS file specific to the Select Emotion page -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/select_emotion.css') }}">
 {% endblock %}
 
 {% block content %}
+<!-- Main section for displaying emotions and feelings -->
 <div class="emotions-section">
+    <!-- Heading for the Emotions section -->
     <h2 class="emotions-heading">Emotions</h2>
+    
+    <!-- Grid container for emotion cards -->
     <div class="emotions-grid">
+        <!-- Individual emotion card for 'Happy' -->
         <div class="emotion-card" data-emotion="happy">
-            <img src="{{ url_for('static', filename='images/happy.jpg') }}" data-static="{{ url_for('static', filename='images/happy.jpg') }}" data-gif="{{ url_for('static', filename='images/happy.gif') }}" alt="Happy" class="emotion-icon">
+            <img src="{{ url_for('static', filename='images/happy.jpg') }}" 
+                 data-static="{{ url_for('static', filename='images/happy.jpg') }}" 
+                 data-gif="{{ url_for('static', filename='images/happy.gif') }}" 
+                 alt="Happy" class="emotion-icon">
             <p>Happy</p>
         </div>
+        
+        <!-- Individual emotion card for 'Sad' -->
         <div class="emotion-card" data-emotion="sad">
-            <img src="{{ url_for('static', filename='images/sad.jpg') }}" data-static="{{ url_for('static', filename='images/sad.jpg') }}" data-gif="{{ url_for('static', filename='images/sad.gif') }}" alt="Sad" class="emotion-icon">
+            <img src="{{ url_for('static', filename='images/sad.jpg') }}" 
+                 data-static="{{ url_for('static', filename='images/sad.jpg') }}" 
+                 data-gif="{{ url_for('static', filename='images/sad.gif') }}" 
+                 alt="Sad" class="emotion-icon">
             <p>Sad</p>
         </div>
+        
+        <!-- Individual emotion card for 'Angry' -->
         <div class="emotion-card" data-emotion="angry">
-            <img src="{{ url_for('static', filename='images/angry.jpg') }}" data-static="{{ url_for('static', filename='images/angry.jpg') }}" data-gif="{{ url_for('static', filename='images/angry.gif') }}" alt="Angry" class="emotion-icon">
+            <img src="{{ url_for('static', filename='images/angry.jpg') }}" 
+                 data-static="{{ url_for('static', filename='images/angry.jpg') }}" 
+                 data-gif="{{ url_for('static', filename='images/angry.gif') }}" 
+                 alt="Angry" class="emotion-icon">
             <p>Angry</p>
         </div>
+        
+        <!-- Individual emotion card for 'Disgust' -->
         <div class="emotion-card" data-emotion="disgust">
-            <img src="{{ url_for('static', filename='images/disgust.jpg') }}" data-static="{{ url_for('static', filename='images/disgust.jpg') }}" data-gif="{{ url_for('static', filename='images/disgust.gif') }}" alt="Disgust" class="emotion-icon">
+            <img src="{{ url_for('static', filename='images/disgust.jpg') }}" 
+                 data-static="{{ url_for('static', filename='images/disgust.jpg') }}" 
+                 data-gif="{{ url_for('static', filename='images/disgust.gif') }}" 
+                 alt="Disgust" class="emotion-icon">
             <p>Disgust</p>
         </div>
+        
+        <!-- Individual emotion card for 'Surprise' -->
         <div class="emotion-card" data-emotion="surprise">
-            <img src="{{ url_for('static', filename='images/surprise.jpg') }}" data-static="{{ url_for('static', filename='images/surprise.jpg') }}" data-gif="{{ url_for('static', filename='images/surprise.gif') }}" alt="Surprise" class="emotion-icon">
+            <img src="{{ url_for('static', filename='images/surprise.jpg') }}" 
+                 data-static="{{ url_for('static', filename='images/surprise.jpg') }}" 
+                 data-gif="{{ url_for('static', filename='images/surprise.gif') }}" 
+                 alt="Surprise" class="emotion-icon">
             <p>Surprise</p>
         </div>
+        
+        <!-- Individual emotion card for 'Fear' -->
         <div class="emotion-card" data-emotion="fear">
-            <img src="{{ url_for('static', filename='images/fear.jpg') }}" data-static="{{ url_for('static', filename='images/fear.jpg') }}" data-gif="{{ url_for('static', filename='images/fear.gif') }}" alt="Fear" class="emotion-icon">
+            <img src="{{ url_for('static', filename='images/fear.jpg') }}" 
+                 data-static="{{ url_for('static', filename='images/fear.jpg') }}" 
+                 data-gif="{{ url_for('static', filename='images/fear.gif') }}" 
+                 alt="Fear" class="emotion-icon">
             <p>Fear</p>
         </div>
+        
+        <!-- Individual emotion card for 'Neutral' -->
         <div class="emotion-card" data-emotion="neutral">
-            <img src="{{ url_for('static', filename='images/neutral.jpg') }}" data-static="{{ url_for('static', filename='images/neutral.jpg') }}" data-gif="{{ url_for('static', filename='images/neutral.gif') }}" alt="Neutral" class="emotion-icon">
+            <img src="{{ url_for('static', filename='images/neutral.jpg') }}" 
+                 data-static="{{ url_for('static', filename='images/neutral.jpg') }}" 
+                 data-gif="{{ url_for('static', filename='images/neutral.gif') }}" 
+                 alt="Neutral" class="emotion-icon">
             <p>Neutral</p>
         </div>
     </div>
+    
+    <!-- Heading for the Feelings section -->
     <h2 class="emotions-heading">Feelings</h2>
+    
+    <!-- Grid container for feeling cards -->
     <div class="emotions-grid">
+        <!-- Individual feeling card for 'Depression' -->
         <div class="emotion-card" data-emotion="depressed">
             <p>Depression</p>
         </div>
+        
+        <!-- Individual feeling card for 'Anxiety' -->
         <div class="emotion-card" data-emotion="anxiety">
             <p>Anxiety</p>
         </div>
+        
+        <!-- Individual feeling card for 'Stress' -->
         <div class="emotion-card" data-emotion="stress">
             <p>Stress</p>
         </div>
+        
+        <!-- Individual feeling card for 'Pain' -->
         <div class="emotion-card" data-emotion="pain">
             <p>Pain</p>
         </div>
@@ -56,5 +106,6 @@
 {% endblock %}
 
 {% block scripts %}
+<!-- Including JavaScript file for emotion selection functionality -->
 <script src="{{ url_for('static', filename='js/select_emotion.js') }}"></script>
 {% endblock %}
