@@ -313,3 +313,490 @@ body, html {
         padding-left: 0; 
      }   
 }
+/* Previous CSS remains unchanged until the navigation menu section */
+
+/* Navigation Menu */
+.surah-nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 12px 0;
+    margin-top: 12px;
+}
+
+.nav-container {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    padding: 3px;
+    display: flex;
+    gap: 3px;
+    box-shadow: 
+        0 2px 8px rgba(0, 107, 95, 0.08),
+        0 0 1px rgba(0, 107, 95, 0.1);
+    max-width: 360px;
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.nav-container::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: calc(33.33% - 3px);
+    height: calc(100% - 6px);
+    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+    border-radius: 50px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 2px 8px rgba(0, 107, 95, 0.2);
+    z-index: 0;
+}
+
+.nav-container[data-active="translation"]::before {
+    transform: translateX(100%);
+}
+
+.nav-container[data-active="audio"]::before {
+    transform: translateX(200%);
+}
+
+.nav-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 8px;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    color: #006B5F;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.2px;
+}
+
+.nav-button svg {
+    width: 14px;
+    height: 14px;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    stroke-width: 2.2;
+}
+
+.nav-button.active {
+    color: white;
+    font-weight: 600;
+    transform: scale(1.02);
+}
+
+.nav-button.active svg {
+    color: white;
+    transform: scale(1.1);
+}
+
+.nav-button:not(.active):hover {
+    color: #48C9B0;
+}
+
+.nav-button:not(.active):hover svg {
+    transform: scale(1.1);
+    color: #48C9B0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .nav-container {
+        width: 95%;
+        padding: 2.5px;
+        max-width: 340px;
+    }
+
+    .nav-button {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+    }
+
+    .nav-button svg {
+        width: 13px;
+        height: 13px;
+    }
+
+    .nav-container::before {
+        top: 2.5px;
+        left: 2.5px;
+        width: calc(33.33% - 2.5px);
+        height: calc(100% - 5px);
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-container {
+        max-width: 320px;
+    }
+
+    .nav-button {
+        padding: 4px 6px;
+        font-size: 0.7rem;
+        gap: 3px;
+    }
+
+    .nav-button svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+/* Previous CSS remains unchanged after these additions */
+
+/* Previous CSS remains unchanged */
+
+/* Previous CSS remains unchanged */
+
+/* Translation Selector */
+.translation-selector {
+    width: 100%;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    margin: 8px auto;
+    max-width: 800px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 107, 95, 0.08);
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+.current-translation {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #006B5F;
+    font-size: 0.85rem;
+    line-height: 1.2;
+}
+
+.current-translation span {
+    font-weight: 600;
+    display: inline-block;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.change-translation {
+    background: transparent;
+    border: 1px solid #48C9B0;
+    color: #006B5F;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.change-translation:hover {
+    background: #48C9B0;
+    color: white;
+}
+
+/* Responsive adjustments for translation selector */
+@media (max-width: 768px) {
+    .translation-selector {
+        width: 95%;
+        padding: 6px 12px;
+    }
+
+    .current-translation {
+        font-size: 0.8rem;
+        gap: 4px;
+    }
+
+    .current-translation span {
+        max-width: 160px;
+    }
+
+    .change-translation {
+        padding: 3px 10px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .translation-selector {
+        padding: 6px 10px;
+    }
+
+    .current-translation {
+        font-size: 0.75rem;
+        gap: 3px;
+    }
+
+    .current-translation span {
+        max-width: 120px;
+    }
+
+    .change-translation {
+        padding: 3px 8px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .translation-selector {
+        padding: 5px 8px;
+    }
+
+    .current-translation {
+        font-size: 0.7rem;
+    }
+
+    .current-translation span {
+        max-width: 100px;
+    }
+
+    .change-translation {
+        padding: 2px 6px;
+        font-size: 0.65rem;
+    }
+}
+
+/* Modal Styles */
+/* Rest of the CSS remains unchanged */
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease-out;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 107, 95, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    color: #006B5F;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.close-modal {
+    background: transparent;
+    border: none;
+    color: #48C9B0;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    background: rgba(72, 201, 176, 0.1);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: calc(80vh - 130px);
+}
+
+.translations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.loading {
+    text-align: center;
+    color: #006B5F;
+    padding: 20px;
+    font-size: 0.9rem;
+}
+
+.error-message {
+    color: #e53e3e;
+    padding: 20px;
+    text-align: center;
+}
+
+.error-message p {
+    margin: 8px 0;
+}
+
+.translation-category {
+    border-bottom: 1px solid rgba(0, 107, 95, 0.1);
+    padding-bottom: 16px;
+}
+
+.translation-category:last-child {
+    border-bottom: none;
+}
+
+.category-title {
+    color: #006B5F;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.translation-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.translation-option:hover {
+    background: rgba(72, 201, 176, 0.05);
+}
+
+.translation-checkbox {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #48C9B0;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.translation-checkbox:checked {
+    background: #48C9B0;
+}
+
+.translation-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.translation-info {
+    flex: 1;
+}
+
+.translator-name {
+    font-size: 0.85rem;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.translation-language {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+/* Rest of the CSS remains unchanged */
+/* Add these styles to your existing CSS */
+.verse-translation {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4A5568;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(72, 201, 176, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #48C9B0;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.translation-error {
+    background: #FEE2E2;
+    color: #DC2626;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive styles for translations */
+@media (max-width: 768px) {
+    .verse-translation {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+        margin-top: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .verse-translation {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.6rem;
+        margin-top: 0.6rem;
+    }
+}

@@ -1,16 +1,14 @@
-{% extends "base.html" %} <!-- Extending the base template -->
+{% extends "base.html" %}
 
 {% block extra_css %}
-<!-- Include additional CSS files and fonts specific to the Surah page -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/surah.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
 {% endblock %}
 
-{% block banner_class %}surah-banner{% endblock %} <!-- Defining a custom class for the banner -->
+{% block banner_class %}surah-banner{% endblock %}
 
 {% block banner_content %}
-<!-- Banner content displaying the Surah name in Arabic and a Quran icon -->
 <div class="surah-banner2" data-surah-number="{{ surah.number }}">
     <h1 class="surah-title">{{ surah.surahNameArabic }}</h1>
     <img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
@@ -18,9 +16,51 @@
 {% endblock %}
 
 {% block content %}
-<!-- Audio player and Surah verses section -->
+<!-- Navigation Menu -->
+<div class="surah-nav">
+    <div class="nav-container" data-active="reading">
+        <button class="nav-button active" data-view="reading">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            Reading
+        </button>
+        <button class="nav-button" data-view="translation">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>
+            Translation
+        </button>
+        <button class="nav-button" data-view="audio">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6L8 10H4V14H8L12 18V6Z"></path><path d="M17 7C17 7 19 9 19 12C19 15 17 17 17 17"></path><path d="M15.5 10.5C15.5 10.5 16.5 11.5 16.5 12C16.5 12.5 15.5 13.5 15.5 13.5"></path></svg>
+            Audio Translation
+        </button>
+    </div>
+</div>
+
+<!-- Translation Selector -->
+<div class="translation-selector" style="display: none;">
+    <div class="current-translation">
+        Translation by <span id="currentTranslator">Ahmed Raza Khan</span>
+    </div>
+    <button class="change-translation" id="changeTranslation">Change</button>
+</div>
+
+<!-- Translation Modal -->
+<div class="modal-overlay" id="translationModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Select Translation</h3>
+            <button class="close-modal" id="closeModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="translations-list" id="translationsList">
+                <div class="loading">Loading translations...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Audio Player -->
 <div class="audio-player">
-    <!-- Play/Pause button with SVG icons -->
     <button class="play-button" id="playButton" aria-label="Play/Pause">
         <svg viewBox="0 0 24 24" id="playIcon">
             <path d="M8 5v14l11-7z"/>
@@ -29,21 +69,18 @@
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
     </button>
-    <!-- Audio progress bar -->
     <div class="audio-progress" id="progressBar">
         <div class="progress-bar" id="progress"></div>
     </div>
-    <!-- Current audio time display -->
     <div class="time-display" id="timeDisplay">0:00</div>
 </div>
 
-<!-- Container displaying Surah verses -->
 <div class="surah-container">
     <div class="verses-container">
         {% for verse in surah.arabic1 %}
-        <!-- Each verse with its text and number -->
-        <div class="verse">
+        <div class="verse" data-verse-number="{{ loop.index }}">
             <div class="arabic-text">{{ verse }}</div>
+            <div class="verse-translation"></div>
             <div class="verse-number">{{ loop.index }}</div>
         </div>
         {% endfor %}
@@ -52,17 +89,231 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- JavaScript for handling audio player functionality and animations -->
 <script src="{{ url_for('static', filename='js/audio-player.js') }}"></script>
 <script>
-    const autoPlayEnabled = localStorage.getItem('autoPlayEnabled') === 'true'; // Check if auto-play is enabled
-    const fromDetection = new URLSearchParams(window.location.search).get('from_detection') === 'true'; // Check if navigated from emotion detection
+    const autoPlayEnabled = localStorage.getItem('autoPlayEnabled') === 'true';
+    const fromDetection = new URLSearchParams(window.location.search).get('from_detection') === 'true';
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Auto-play audio only if auto-play is enabled and user came from emotion detection
+        // Auto-play functionality
         if (autoPlayEnabled && fromDetection) {
             const playButton = document.getElementById('playButton');
-            playButton.click(); // Start audio playback
+            playButton.click();
+        }
+
+        // Navigation functionality
+        const navContainer = document.querySelector('.nav-container');
+        const navButtons = document.querySelectorAll('.nav-button');
+        const translationSelector = document.querySelector('.translation-selector');
+        const verseTranslations = document.querySelectorAll('.verse-translation');
+        
+        function toggleTranslationVisibility(show) {
+            if (show) {
+                translationSelector.style.display = 'flex';
+                translationSelector.style.opacity = '0';
+                setTimeout(() => {
+                    translationSelector.style.opacity = '1';
+                }, 10);
+            } else {
+                translationSelector.style.opacity = '0';
+                setTimeout(() => {
+                    translationSelector.style.display = 'none';
+                }, 300);
+            }
+
+            verseTranslations.forEach(translation => {
+                if (show) {
+                    translation.style.display = 'block';
+                    translation.style.opacity = '0';
+                    setTimeout(() => {
+                        translation.style.opacity = '1';
+                    }, 10);
+                } else {
+                    translation.style.opacity = '0';
+                    setTimeout(() => {
+                        translation.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+        
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const view = button.dataset.view;
+                navContainer.dataset.active = view;
+                
+                // Toggle translation visibility based on view
+                const showTranslation = view === 'translation' || view === 'audio';
+                toggleTranslationVisibility(showTranslation);
+                
+                // If switching to translation view, load translation if not already loaded
+                if (showTranslation && currentTranslationId) {
+                    fetchAndDisplayTranslation(currentTranslationId);
+                }
+            });
+        });
+
+        // Translation Modal functionality
+        const modal = document.getElementById('translationModal');
+        const changeBtn = document.getElementById('changeTranslation');
+        const closeBtn = document.getElementById('closeModal');
+        const translationsList = document.getElementById('translationsList');
+        const currentTranslator = document.getElementById('currentTranslator');
+        let translations = null;
+        let currentTranslationId = localStorage.getItem('selectedTranslationId') || 'ur.ahmedraza';
+
+        // Function to fetch and display translations for the current surah
+        async function fetchAndDisplayTranslation(translationId) {
+            try {
+                const surahNumber = document.querySelector('.surah-banner2').dataset.surahNumber;
+                const response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/${translationId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.code === 200 && data.data && data.data.ayahs) {
+                    data.data.ayahs.forEach(ayah => {
+                        const verseElement = document.querySelector(`.verse[data-verse-number="${ayah.numberInSurah}"]`);
+                        if (verseElement) {
+                            const translationElement = verseElement.querySelector('.verse-translation');
+                            translationElement.textContent = ayah.text;
+                            // Only show if in translation or audio view
+                            const currentView = navContainer.dataset.active;
+                            translationElement.style.display = 
+                                (currentView === 'translation' || currentView === 'audio') ? 'block' : 'none';
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching translation:', error);
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'translation-error';
+                errorDiv.textContent = 'Failed to load translation. Please try again.';
+                document.querySelector('.verses-container').prepend(errorDiv);
+                setTimeout(() => errorDiv.remove(), 3000);
+            }
+        }
+
+        // Load initial translation if in translation or audio view
+        if (currentTranslationId) {
+            const currentView = navContainer.dataset.active;
+            if (currentView === 'translation' || currentView === 'audio') {
+                fetchAndDisplayTranslation(currentTranslationId);
+            }
+        }
+
+        // Open modal and load translations if not already loaded
+        changeBtn.addEventListener('click', async () => {
+            modal.classList.add('active');
+            if (!translations) {
+                await loadTranslations();
+            }
+        });
+
+        // Close modal
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // Load translations from API
+        async function loadTranslations() {
+            try {
+                translationsList.innerHTML = '<div class="loading">Loading translations...</div>';
+
+                const response = await fetch('https://api.alquran.cloud/v1/edition');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                translations = await response.json();
+                
+                // Clear loading message
+                translationsList.innerHTML = '';
+
+                // Create a map to categorize translations by language
+                const languages = {};
+
+                // Categorize translations by language
+                translations.data.forEach(translation => {
+                    if (translation.format === 'text' && translation.type === 'translation') {
+                        if (!languages[translation.language]) {
+                            languages[translation.language] = [];
+                        }
+                        languages[translation.language].push(translation);
+                    }
+                });
+
+                // Sort languages alphabetically
+                const sortedLanguages = Object.keys(languages).sort();
+
+                // Add translations to modal, grouped by language
+                sortedLanguages.forEach(language => {
+                    const languageGroup = languages[language];
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'translation-category';
+                    
+                    categoryDiv.innerHTML = `
+                        <div class="category-title">${language}</div>
+                        ${languageGroup.map(translation => `
+                            <label class="translation-option">
+                                <input type="radio" name="translation" class="translation-checkbox" 
+                                       value="${translation.identifier}" 
+                                       ${currentTranslationId === translation.identifier ? 'checked' : ''}>
+                                <div class="translation-info">
+                                    <div class="translator-name">${translation.name || 'Unknown translator'}</div>
+                                </div>
+                            </label>
+                        `).join('')}
+                    `;
+
+                    translationsList.appendChild(categoryDiv);
+                });
+
+                // Add event listeners to radio buttons
+                document.querySelectorAll('input[name="translation"]').forEach(radio => {
+                    radio.addEventListener('change', async function() {
+                        const selectedTranslation = translations.data.find(t => t.identifier === this.value);
+                        if (selectedTranslation) {
+                            currentTranslator.textContent = selectedTranslation.name;
+                            currentTranslationId = selectedTranslation.identifier;
+                            localStorage.setItem('selectedTranslationId', currentTranslationId);
+                            
+                            // Clear existing translations
+                            document.querySelectorAll('.verse-translation').forEach(el => {
+                                el.textContent = '';
+                                el.style.display = 'none';
+                            });
+                            
+                            // Fetch and display new translation
+                            await fetchAndDisplayTranslation(currentTranslationId);
+                            modal.classList.remove('active');
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Error loading translations:', error);
+                translationsList.innerHTML = `
+                    <div class="error-message">
+                        <p>Error loading translations. Please try again later.</p>
+                        <p>Error details: ${error.message}</p>
+                    </div>
+                `;
+            }
         }
     });
 
@@ -77,24 +328,19 @@
         });
     });
 
-    // Intersection Observer for animating verse elements on scroll
-    const observer = new IntersectionObserver(
-        entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1'; // Make verse visible
-                    entry.target.style.transform = 'translateY(0)'; // Reset position
-                }
-            });
-        },
-        { threshold: 0.1 } // Trigger animation when 10% of the element is visible
-    );
+    // Intersection Observer for verse animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            } else {
+                entry.target.classList.remove('visible');
+            }
+        });
+    });
 
-    // Initial setup for verse elements
     document.querySelectorAll('.verse').forEach(verse => {
-        verse.style.opacity = '0'; // Hide verse initially
-        verse.style.transform = 'translateY(20px)'; // Move verse down initially
-        observer.observe(verse); // Observe each verse for animations
+        observer.observe(verse);
     });
 </script>
 {% endblock %}

@@ -107,7 +107,7 @@ def show_surah(surah_id):
         surah_data = response.json()
         surah_data['number'] = surah_id
 
-        audio_response = requests.get(f'https://api.quran.com/api/v4/chapter_recitations/7/{surah_id}')
+        audio_response = requests.get(f'https://api.alquran.cloud/v1/surah/{surah_id}/ar.alafasy')
         if audio_response.status_code == 200:
             audio_data = audio_response.json()
             surah_data['audio_url'] = audio_data.get('audio_file', {}).get('audio_url', '')
