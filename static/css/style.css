@@ -2,25 +2,23 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
   font-size: 16px;
-  background-color: #ffffff;
+  background-color: #fdfffe;
   overflow-x: hidden;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
-
 html {
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
-
-/* Navigation */
+/* Islamic-themed Navigation */
 .nav {
   background-color: #ffffff;
-  padding: 0.85rem;
+  padding: 1px;
   position: fixed;
   top: 0;
   z-index: 1000;
@@ -31,30 +29,162 @@ html {
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+  transition: top 0.3s;
 }
 
-.nav a {
+.nav-container2 {
+  max-width: 1200px;
+  margin-left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-nav {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.menu-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.nav-brand {
+  position: relative;
+  padding: 0.5rem;
+}
+
+.nav-logo {
+  width: 65px;
+  height: 60px;
+  margin-right:50px;
+  margin-left: 50px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-menu {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
   display: flex; /* Ensure icon and text are aligned in one row */
   align-items: center;
   gap: 0.5rem; /* Add space between icon and text */
-  color: #006B5F;
+  color: #666;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 0.9375rem;
   padding: 0.5rem 1rem;
+  margin-right: 2rem;
   border-radius: 0.5rem;
   transition: all 0.3s ease;
 }
 
-.nav a:hover {
-  background-color: rgba(0, 107, 95, 0.1);
-  transform: translateY(-2px);
-}
 
 .nav-icon {
-  width: 1.3rem; /* Adjust icon size */
+  width: 1.3rem;
   height: 1.3rem;
+  padding-top: 0.2rem;
+  transition: transform 0.3s ease;
 }
+
+.nav-link:hover {
+  background-color: rgba(0, 107, 95, 0.1);
+  transform: translateY(-2px);
+  transform: scale(1.05);
+}
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+  .nav-container {
+      padding: 0.5rem 1rem;
+  }
+
+  .mobile-nav {
+      display: flex;
+      width: 100%;
+      justify-content: flex-start;
+      align-items: center;
+  }
+
+  .menu-toggle {
+      display: block;
+  }
+
+  .nav-menu {
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 240px;
+      height: 100vh;
+      background: white;
+      flex-direction: column;
+      padding: 1rem .5rem;
+      gap: .8rem;
+      transition: transform 0.3s ease-in-out;
+      z-index: 1001;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+      
+      /* Align items to the left */
+      display: flex;
+      align-items: flex-start;
+  }
+
+  .nav-open .nav-menu {
+      transform: translateX(280px);
+  }
+
+  .nav-link {
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    width:80%;
+    /* Align text to the left */
+    text-align: left;
+  }
+
+  .menu-open .mobile-menu-overlay {
+      display: block;
+      opacity: 1;
+  }
+
+
+  .menu-open {
+      overflow: hidden;
+  }
+  .nav-logo{
+    width: 65px;
+    height: 60px;
+    margin-left: 90px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Rest of your existing CSS remains the same */
 
 
 /* Banner */
@@ -144,6 +274,9 @@ html {
   .surahs-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .menu-icon{
+    display: block;
+  }
 }
 @media(max-width:374px){
   .surahs-grid {
@@ -159,6 +292,7 @@ html {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  font-weight: 400;
 }
 
 .surah-card:hover {
@@ -390,7 +524,7 @@ html {
 /* Responsive Design */
 @media (max-width: 768px) {
   .nav a {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     padding: 0.2rem 0.4rem;
   }
 
@@ -413,6 +547,7 @@ html {
     width: 60%;
     size: 100%;
   }
+
 }
 
 @media (max-width: 480px) {

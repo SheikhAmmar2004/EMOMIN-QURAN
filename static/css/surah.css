@@ -463,15 +463,12 @@ body, html {
 .translation-selector {
     width: 100%;
     display: none;
-    justify-content: space-between;
     align-items: center;
-    padding: 8px 20px;
-    background: rgba(255, 255, 255, 0.9);
+    padding-left: 20px;
+    padding-right: 20px;
     backdrop-filter: blur(10px);
-    margin: 8px auto;
+    margin: 1px auto;
     max-width: 800px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 107, 95, 0.08);
     opacity: 0;
     transition: opacity 0.3s ease-out;
 }
@@ -481,11 +478,12 @@ body, html {
     gap: 6px;
     color: #006B5F;
     font-size: 0.85rem;
+    font-weight: 400;
     line-height: 1.2;
 }
 
 .current-translation span {
-    font-weight: 600;
+    font-weight: 500;
     display: inline-block;
     max-width: 200px;
     white-space: nowrap;
@@ -495,8 +493,7 @@ body, html {
 
 .change-translation {
     background: transparent;
-    border: 1px solid #48C9B0;
-    color: #006B5F;
+    color: #48C9B0;
     padding: 4px 12px;
     border-radius: 8px;
     font-size: 0.75rem;
@@ -506,10 +503,7 @@ body, html {
     flex-shrink: 0;
 }
 
-.change-translation:hover {
-    background: #48C9B0;
-    color: white;
-}
+
 
 /* Responsive adjustments for translation selector */
 @media (max-width: 768px) {
@@ -798,5 +792,275 @@ body, html {
         font-size: 0.85rem;
         padding: 0.3rem 0.6rem;
         margin-top: 0.6rem;
+    }
+}
+/* Add these styles to your existing CSS */
+
+/* Qari Selector */
+.qari-selector {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-top: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+    backdrop-filter: blur(10px);
+    margin: 1px auto;
+    max-width: 800px;
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.current-qari {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #006B5F;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    font-weight: 400;
+}
+
+.current-qari span {
+    font-weight: 500;
+    display: inline-block;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.change-qari {
+    background: transparent;
+    color: #48C9B0;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+
+/* Qari list styles */
+.qari-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.qari-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid rgba(0, 107, 95, 0.1);
+}
+
+.qari-option:hover {
+    background: rgba(72, 201, 176, 0.05);
+    border-color: #48C9B0;
+}
+
+.qari-option.selected {
+    background: rgba(72, 201, 176, 0.1);
+    border-color: #48C9B0;
+}
+
+.qari-info {
+    flex: 1;
+}
+
+.qari-name {
+    font-size: 0.9rem;
+    color: #006B5F;
+    margin-bottom: 2px;
+    font-weight: 500;
+}
+
+/* Responsive styles for qari selector */
+@media (max-width: 768px) {
+    .qari-selector {
+        width: 95%;
+        padding: 6px 12px;
+    }
+
+    .current-qari {
+        font-size: 0.8rem;
+        gap: 4px;
+    }
+
+    .current-qari span {
+        max-width: 160px;
+    }
+
+    .change-qari {
+        padding: 3px 10px;
+        font-size: 0.7rem;
+    }
+
+    .qari-name {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .qari-selector {
+        padding: 6px 10px;
+    }
+
+    .current-qari {
+        font-size: 0.75rem;
+        gap: 3px;
+    }
+
+    .current-qari span {
+        max-width: 120px;
+    }
+
+    .change-qari {
+        padding: 3px 8px;
+        font-size: 0.7rem;
+    }
+
+    .qari-name {
+        font-size: 0.8rem;
+    }
+}
+/* Audio Translation Selector */
+.audio-translation-selector {
+    width: 100%;
+    display: none;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    backdrop-filter: blur(10px);
+    margin: 1px auto;
+    max-width: 800px;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.current-audio-translation {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #006B5F;
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.current-audio-translation span {
+    font-weight: 500;
+    display: inline-block;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.change-audio-translation {
+    background: transparent;
+    color: #48C9B0;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Audio Translation Modal Styles */
+.audio-translations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.audio-translation-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid rgba(0, 107, 95, 0.1);
+}
+
+.audio-translation-option:hover {
+    background: rgba(72, 201, 176, 0.05);
+    border-color: #48C9B0;
+}
+
+.audio-translation-option.selected {
+    background: rgba(72, 201, 176, 0.1);
+    border-color: #48C9B0;
+}
+
+.audio-translation-info {
+    flex: 1;
+}
+
+.audio-translation-language {
+    font-size: 0.9rem;
+    color: #006B5F;
+    margin-bottom: 2px;
+    font-weight: 500;
+}
+
+/* Responsive styles for audio translation selector */
+@media (max-width: 768px) {
+    .audio-translation-selector {
+        width: 95%;
+        padding: 6px 12px;
+    }
+
+    .current-audio-translation {
+        font-size: 0.8rem;
+        gap: 4px;
+    }
+
+    .current-audio-translation span {
+        max-width: 160px;
+    }
+
+    .change-audio-translation {
+        padding: 3px 10px;
+        font-size: 0.7rem;
+    }
+
+    .audio-translation-language {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .audio-translation-selector {
+        padding: 6px 10px;
+    }
+
+    .current-audio-translation {
+        font-size: 0.75rem;
+        gap: 3px;
+    }
+
+    .current-audio-translation span {
+        max-width: 120px;
+    }
+
+    .change-audio-translation {
+        padding: 3px 8px;
+        font-size: 0.7rem;
+    }
+
+    .audio-translation-language {
+        font-size: 0.8rem;
     }
 }

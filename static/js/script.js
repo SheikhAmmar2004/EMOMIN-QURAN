@@ -146,9 +146,9 @@ async function initializeSurahGrid() {
         `;
     }
 }
-
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing surah grid...');
     initializeSurahGrid();
 });
+
