@@ -27,12 +27,17 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>
             Translation
         </button>
+        <button class="nav-button" data-view="tafsir">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 4v16h2V4h-2M15 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11V4z"/><path d="M8 12h3"/><path d="M8 16h3"/><path d="M8 8h3"/></svg>
+            Tafsir
+        </button>
         <button class="nav-button" data-view="audio">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6L8 10H4V14H8L12 18V6Z"></path><path d="M17 7C17 7 19 9 19 12C19 15 17 17 17 17"></path><path d="M15.5 10.5C15.5 10.5 16.5 11.5 16.5 12C16.5 12.5 15.5 13.5 15.5 13.5"></path></svg>
-            Audio Translation
+            Audio
         </button>
     </div>
 </div>
+
 <!-- Add this right after the Translation Selector div -->
 <div class="qari-selector">
     <div class="current-qari">
@@ -40,12 +45,21 @@
     </div>
     <a class="change-qari" id="changeQari">(Change)</a>
 </div>
+
 <!-- Translation Selector -->
 <div class="translation-selector" style="display: none;">
     <div class="current-translation">
-        Translation by <span id="currentTranslator">Ahmed Raza Khan</span>
+        Translation by <span id="currentTranslator">Saheeh International</span>
     </div>
     <a class="change-translation" id="changeTranslation">(Change)</a>
+</div>
+
+<!-- Tafsir Selector -->
+<div class="tafsir-selector" style="display: none;">
+    <div class="current-tafsir">
+        Tafsir by <span id="currentTafsir">Bayan-ul-Quran</span>
+    </div>
+    <a class="change-tafsir" id="changeTafsir">(Change)</a>
 </div>
 
 <!-- Audio Translation Selector -->
@@ -68,6 +82,23 @@
         <div class="modal-body">
             <div class="translations-list" id="translationsList">
                 <div class="loading">Loading translations...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tafsir Modal -->
+<div class="modal-overlay" id="tafsirModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Select Tafsir</h3>
+            <button class="close-modal" id="closeTafsirModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="tafsir-list" id="tafsirList">
+                <div class="loading">Loading tafsirs...</div>
             </div>
         </div>
     </div>
@@ -115,6 +146,7 @@
         </div>
     </div>
 </div>
+
 <!-- Audio Player -->
 <div class="audio-player">
     <button class="play-button" id="playButton" aria-label="Play/Pause">
@@ -137,12 +169,14 @@
         <div class="verse" data-verse-number="{{ loop.index }}">
             <div class="arabic-text">{{ verse }}</div>
             <div class="verse-translation"></div>
+            <div class="verse-tafsir"></div>
             <div class="verse-number">{{ loop.index }}</div>
         </div>
         {% endfor %}
     </div>
 </div>
 {% endblock %}
+
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/surah.js') }}"></script>
 <script src="{{ url_for('static', filename='js/Base.js') }}"></script>

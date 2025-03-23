@@ -1,0 +1,455 @@
+/* Qibla Direction Styles */
+.qibla-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Section */
+.qibla-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding: 0 1rem;
+}
+
+.location-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.location-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+    border-radius: 12px;
+    color: white;
+}
+
+.location-text h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.qibla-angle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    color: white;
+}
+
+.angle-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.angle-text h3 {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+#qibla-degree {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+/* Compass Section */
+.compass-wrapper {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: start;
+    margin-top: 2rem;
+}
+
+.compass-container {
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    position: relative;
+    padding: 20px;
+}
+
+.compass {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 0 15px #f5f5f5,
+        0 0 40px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.compass-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+/* Cardinal Points */
+.cardinal-point {
+    position: absolute;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.north { top: 20px; left: 50%; transform: translateX(-50%); color: #ff4444; }
+.south { bottom: 20px; left: 50%; transform: translateX(-50%); }
+.east { right: 20px; top: 50%; transform: translateY(-50%); }
+.west { left: 20px; top: 50%; transform: translateY(-50%); }
+
+/* Degree Markers */
+.degree-markers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.degree-marker {
+    position: absolute;
+    width: 2px;
+    height: 12px;
+    background: #e0e0e0;
+    left: 50%;
+    transform-origin: 50% 200px;
+}
+
+.degree-marker::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 6px;
+    background: #e0e0e0;
+    left: 0;
+    top: -190px;
+}
+
+/* Compass Rose */
+.compass-rose {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    height: 90%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #f0f0f0;
+    border-radius: 50%;
+}
+
+.rose-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 70%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #f0f0f0;
+    border-radius: 50%;
+}
+
+/* Compass Arrow */
+.compass-arrow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 200px;
+    transform: translate(-50%, -50%);
+    transform-origin: center center;
+}
+
+.arrow-north {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 6px;
+    height: 100px;
+    background: #ff4444;
+    transform: translateX(-50%);
+}
+
+.arrow-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background: #ff4444;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+}
+
+.arrow-south {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 6px;
+    height: 100px;
+    background: #666;
+    transform: translateX(-50%);
+}
+
+.arrow-north::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 30px solid #ff4444;
+}
+
+.arrow-south::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 30px solid #666;
+}
+
+/* Qibla Indicator */
+.qibla-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center center;
+    z-index: 10;
+}
+
+.kaaba-icon {
+    position: absolute;
+    top: -110px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    background: #006B5F;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 107, 95, 0.3);
+}
+
+.indicator-line {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    width: 2px;
+    height: 100px;
+    background: #006B5F;
+    transform: translateX(-50%);
+}
+
+/* Instructions Card */
+.instructions-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    width: 300px;
+}
+
+.instructions-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.instructions-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8f5e9;
+    border-radius: 10px;
+    color: #2e7d32;
+}
+
+.instructions-header h3 {
+    color: #2c3e50;
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.instructions-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.step-number {
+    width: 24px;
+    height: 24px;
+    background: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #666;
+}
+
+.step p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.calibrate-button {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #006B5F;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.calibrate-button:hover {
+    background: #005048;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 107, 95, 0.2);
+}
+
+.calibrate-button svg {
+    transition: transform 0.3s ease;
+}
+
+.calibrate-button:hover svg {
+    transform: rotate(180deg);
+}
+
+.error {
+    color: #d32f2f;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .compass-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .instructions-card {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .qibla-container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .qibla-header {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+
+    .location-info {
+        flex-direction: column;
+    }
+
+    .compass-container {
+        width: 300px;
+        height: 300px;
+    }
+
+    .degree-marker {
+        transform-origin: 50% 150px;
+    }
+
+    .degree-marker::after {
+        top: -140px;
+    }
+
+    .compass-arrow {
+        height: 150px;
+    }
+
+    .arrow-north,
+    .arrow-south {
+        height: 75px;
+    }
+
+    .kaaba-icon {
+        top: -85px;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .compass-container {
+        width: 250px;
+        height: 250px;
+        padding: 10px;
+    }
+
+    .cardinal-point {
+        font-size: 1.1rem;
+    }
+
+    .location-text h2 {
+        font-size: 1.4rem;
+    }
+
+    .qibla-angle {
+        padding: 0.8rem 1.5rem;
+    }
+
+    #qibla-degree {
+        font-size: 1.2rem;
+    }
+}

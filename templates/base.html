@@ -18,8 +18,8 @@
                 <button class="menu-toggle" aria-label="Toggle menu">
                     <img src="{{ url_for('static', filename='images/menuicon.png') }}" alt="Menu" class="menu-icon">
                 </button>
-                <img src="{{ url_for('static', filename='images/ArabicCalligraphy.png') }}" alt="Quran" class="nav-logo">
             </div>
+            
             <div class="nav-menu">
                 <img src="{{ url_for('static', filename='images/ArabicCalligraphy.png') }}" alt="Quran" class="nav-logo">
                 <a href="{{ url_for('index') }}" class="nav-link">
@@ -39,6 +39,18 @@
                         <img src="{{ url_for('static', filename='images/chooseicon.png') }}" alt="Select Mood" class="nav-icon">
                     </div>
                     <span>Select your mood</span>
+                </a>
+                <a href="{{ url_for('prayer_times') }}" class="nav-link">
+                    <div class="nav-icon-wrapper">
+                        <img src="{{ url_for('static', filename='images/prayer-icon.png') }}" alt="Prayer Times" class="nav-icon">
+                    </div>
+                    <span>Prayer Times</span>
+                </a>
+                <a href="{{ url_for('qibla') }}" class="nav-link">
+                    <div class="nav-icon-wrapper">
+                        <img src="{{ url_for('static', filename='images/qibla-icon.png') }}" alt="Qibla Direction" class="nav-icon">
+                    </div>
+                    <span>Qibla Direction</span>
                 </a>
             </div>
         </div>
@@ -71,6 +83,8 @@
                     <li><a href="{{ url_for('index') }}">Home</a></li>
                     <li><a href="{{ url_for('detect_emotion') }}">Scan your mood</a></li>
                     <li><a href="{{ url_for('select_emotion') }}">Select your mood</a></li>
+                    <li><a href="{{ url_for('prayer_times') }}">Prayer Times</a></li>
+                    <li><a href="{{ url_for('qibla') }}">Qibla Direction</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -78,6 +92,7 @@
                 <ul class="footer-links">
                     <li><a href="https://quranapi.pages.dev" target="_blank">Quran API</a></li>
                     <li><a href="https://api.quran.com" target="_blank">Quran.com API</a></li>
+                    <li><a href="https://aladhan.com/prayer-times-api" target="_blank">Al Adhan API</a></li>
                 </ul>
             </div>
         </div>

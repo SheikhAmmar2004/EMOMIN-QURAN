@@ -16,8 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const navContainer = document.querySelector('.nav-container');
     const navButtons = document.querySelectorAll('.nav-button');
     const translationSelector = document.querySelector('.translation-selector');
+    const tafsirSelector = document.querySelector('.tafsir-selector');
     const audioTranslationSelector = document.querySelector('.audio-translation-selector');
     const verseTranslations = document.querySelectorAll('.verse-translation');
+    const verseTafsirs = document.querySelectorAll('.verse-tafsir');
     
     // Audio Translation variables
     const audioTranslationModal = document.getElementById('audioTranslationModal');
@@ -57,6 +59,39 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Function to toggle tafsir visibility
+    function toggleTafsirVisibility(show) {
+        const tafsirSelector = document.querySelector('.tafsir-selector');
+        
+        if (show) {
+            tafsirSelector.style.display = 'flex';
+            tafsirSelector.style.opacity = '0';
+            setTimeout(() => {
+                tafsirSelector.style.opacity = '1';
+            }, 10);
+        } else {
+            tafsirSelector.style.opacity = '0';
+            setTimeout(() => {
+                tafsirSelector.style.display = 'none';
+            }, 300);
+        }
+
+        verseTafsirs.forEach(tafsir => {
+            if (show) {
+                tafsir.style.display = 'block';
+                tafsir.style.opacity = '0';
+                setTimeout(() => {
+                    tafsir.style.opacity = '1';
+                }, 10);
+            } else {
+                tafsir.style.opacity = '0';
+                setTimeout(() => {
+                    tafsir.style.display = 'none';
+                }, 300);
+            }
+        });
+    }
     
     // Function to toggle audio translation selector visibility
     function toggleAudioTranslationVisibility(show) {
@@ -83,6 +118,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const qariSelector = document.querySelector('.qari-selector');
     let qaris = null;
     let currentQariId = localStorage.getItem('selectedQari') || 'ar.alafasy';
+
+    // Tafsir Modal functionality
+    const tafsirModal = document.getElementById('tafsirModal');
+    const changeTafsirBtn = document.getElementById('changeTafsir');
+    const closeTafsirBtn = document.getElementById('closeTafsirModal');
+    const tafsirList = document.getElementById('tafsirList');
+    const currentTafsirSpan = document.getElementById('currentTafsir');
+    let tafsirs = null;
+    let currentTafsirId = localStorage.getItem('selectedTafsirId') || 'ur-tafsir-bayan-ul-quran';
 
     // Function to toggle qari selector visibility
     function toggleQariVisibility(show) {
@@ -113,13 +157,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const showTranslation = view === 'translation' || view === 'audio';
             const showQari = view === 'translation' || view === 'reading';
             const showAudioTranslation = view === 'audio';
+            const showTafsir = view === 'tafsir';
             
             toggleTranslationVisibility(showTranslation);
             toggleQariVisibility(showQari);
             toggleAudioTranslationVisibility(showAudioTranslation);
+            toggleTafsirVisibility(showTafsir);
             
             if (showTranslation && currentTranslationId) {
                 fetchAndDisplayTranslation(currentTranslationId);
+            }
+            
+            if (showTafsir && currentTafsirId) {
+                fetchAndDisplayTafsir(currentTafsirId);
             }
             
             if (showAudioTranslation) {
@@ -192,7 +242,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
         }
-    } 
+    }
+
+// Function to fetch and display tafsir
+async function fetchAndDisplayTafsir(tafsirSlug) {
+    try {
+        const surahNumber = document.querySelector('.surah-banner2').dataset.surahNumber;
+        const response = await fetch(`https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/${tafsirSlug}/${surahNumber}.json`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data && data.ayahs) {
+            data.ayahs.forEach((tafsirAyah) => {
+                const verseElement = document.querySelector(`.verse[data-verse-number="${tafsirAyah.ayah}"]`);
+                if (verseElement) {
+                    const tafsirElement = verseElement.querySelector('.verse-tafsir');
+                    if (tafsirElement) {
+                        tafsirElement.textContent = tafsirAyah.text;
+                        tafsirElement.style.display = 'block';
+                        setTimeout(() => {
+                            tafsirElement.style.opacity = '1';
+                        }, 10);
+                    }
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching tafsir:', error);
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'translation-error';
+        errorDiv.textContent = 'Failed to load tafsir. Please try again.';
+        document.querySelector('.verses-container').prepend(errorDiv);
+        setTimeout(() => errorDiv.remove(), 3000);
+    }
+}
+    
     
     // Function to update audio source based on selected qari
     async function updateAudioSource() {
@@ -232,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function updateAudioTranslationSource() {
         try {
             const surahNumber = document.querySelector('.surah-banner2').dataset.surahNumber;
-            const audioTranslationUrl = `http://127.0.0.1:5000/get_audio?surah=${surahNumber}&lang=${currentAudioTranslationLang}`;
+            const audioTranslationUrl = `http://65.2.121.185:5000/get_audio?surah=${surahNumber}&lang=${currentAudioTranslationLang}`;
             
             audio.src = audioTranslationUrl;
             
@@ -275,6 +363,120 @@ document.addEventListener('DOMContentLoaded', function() {
             qariModal.classList.remove('active');
         }
     });
+
+    // Open tafsir modal
+    changeTafsirBtn.addEventListener('click', async () => {
+        tafsirModal.classList.add('active');
+        if (!tafsirs) {
+            await loadTafsirs();
+        }
+    });
+
+    // Close tafsir modal
+    closeTafsirBtn.addEventListener('click', () => {
+        tafsirModal.classList.remove('active');
+    });
+
+    // Close tafsir modal when clicking outside
+    tafsirModal.addEventListener('click', (e) => {
+        if (e.target === tafsirModal) {
+            tafsirModal.classList.remove('active');
+        }
+    });
+
+    // Load tafsirs from API
+async function loadTafsirs() {
+    try {
+        tafsirList.innerHTML = '<div class="loading">Loading tafsirs...</div>';
+
+        const response = await fetch('https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/editions.json');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const tafsirArray = await response.json();
+        
+        // Clear loading message
+        tafsirList.innerHTML = '';
+
+        // Create a map to categorize tafsirs by language
+        const languages = {};
+        
+        // Categorize tafsirs by language
+        tafsirArray.forEach(tafsir => {
+            const language = tafsir.language_name;
+            if (!languages[language]) {
+                languages[language] = [];
+            }
+            languages[language].push(tafsir);
+        });
+
+        // Sort languages alphabetically
+        const sortedLanguages = Object.keys(languages).sort();
+
+        // Add tafsirs to modal, grouped by language
+        sortedLanguages.forEach(language => {
+            const languageGroup = languages[language];
+            const categoryDiv = document.createElement('div');
+            categoryDiv.className = 'translation-category';
+            
+            categoryDiv.innerHTML = ` 
+                <div class="category-title">${language}</div>
+                ${languageGroup.map(tafsir => `
+                    <label class="translation-option">
+                        <input type="radio" name="tafsir" class="translation-checkbox" 
+                               value="${tafsir.slug}" 
+                               ${currentTafsirId === tafsir.slug ? 'checked' : ''}>
+                        <div class="translation-info">
+                            <div class="translator-name">${tafsir.name || 'Unknown author'}</div>
+                            <div class="translation-language">${tafsir.author_name}</div>
+                        </div>
+                    </label>
+                `).join('')}
+            `;
+
+            tafsirList.appendChild(categoryDiv);
+        });
+
+        // Add event listeners to radio buttons
+        document.querySelectorAll('input[name="tafsir"]').forEach(radio => {
+            radio.addEventListener('change', async function() {
+                const selectedSlug = this.value;
+                const selectedTafsir = tafsirArray.find(t => t.slug === selectedSlug);
+                
+                if (selectedTafsir) {
+                    // Update current tafsir display
+                    currentTafsirSpan.textContent = selectedTafsir.name;
+                    currentTafsirId = selectedTafsir.slug;
+                    localStorage.setItem('selectedTafsirId', currentTafsirId);
+                    
+                    // Clear existing tafsirs
+                    document.querySelectorAll('.verse-tafsir').forEach(el => {
+                        el.textContent = '';
+                        el.style.opacity = '0';
+                        el.style.display = 'none';
+                    });
+                    
+                    // Close the modal
+                    tafsirModal.classList.remove('active');
+                    
+                    // Fetch and display new tafsir
+                    await fetchAndDisplayTafsir(currentTafsirId);
+                }
+            });
+        });
+
+    } catch (error) {
+        console.error('Error loading tafsirs:', error);
+        tafsirList.innerHTML = `
+            <div class="error-message">
+                <p>Error loading tafsirs. Please try again later.</p>
+                <p>Error details: ${error.message}</p>
+            </div>
+        `;
+    }
+}
     
     // Open audio translation modal
     changeAudioTranslationBtn.addEventListener('click', () => {
@@ -386,6 +588,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (currentView === 'translation' || currentView === 'audio') {
             fetchAndDisplayTranslation(currentTranslationId);
         }
+    }
+
+    // Load initial tafsir if in tafsir view
+    if (currentTafsirId && currentView === 'tafsir') {
+        fetchAndDisplayTafsir(currentTafsirId);
     }
 
     // Open modal and load translations if not already loaded
@@ -541,15 +748,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Get the surah number from the data attribute
     const surahNumber = document.querySelector('.surah-banner2').dataset.surahNumber;
-    const audioUrl = `https://api.quran.com/api/v4/chapter_recitations/7/${surahNumber}`;
 
-    // Fetch audio URL
-    fetch(audioUrl)
-        .then(response => response.json())
-        .then(data => {
-            audio.src = data.audio_file.audio_url;
-        })
-        .catch(error => console.error('Error loading audio:', error));
+    // Initial audio setup
+    updateAudioSource();
 
     // Play/Pause functionality
     playButton.addEventListener('click', () => {

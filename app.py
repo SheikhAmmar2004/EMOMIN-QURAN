@@ -72,7 +72,15 @@ def get_recommendations(emotion):
 @app.route('/')
 def index():
     return render_template('index.html')
+# Add these new routes to your existing app.py file
 
+@app.route('/prayer-times')
+def prayer_times():
+    return render_template('prayer_times.html')
+
+@app.route('/qibla')
+def qibla():
+    return render_template('qibla.html')
 # Route for the emotion detection page
 @app.route('/detect-emotion')
 def detect_emotion():
@@ -116,6 +124,45 @@ def show_surah(surah_id):
     except Exception as e:
         print("Error:", str(e))
         return f"Error loading surah: {str(e)}", 500
+
+
+
+# Add new route for juz display
+@app.route('/juz/<int:juz_number>')
+def show_juz(juz_number):
+    try:
+        # Fetch juz data from API
+        response = requests.get(f'http://api.alquran.cloud/v1/juz/{juz_number}/quran-uthmani')
+        response.raise_for_status()
+        juz_data = response.json()
+
+        # Get the ayahs from the juz
+        ayahs = juz_data['data']['ayahs']
+        
+        # Get the Arabic juz name
+        juz_names = {
+            1: "الم", 2: "سَيَقُولُ", 3: "تِلْكَ ٱلرُّسُلُ", 4: "لَنْ تَنَالُوا", 
+            5: "وَٱلْمُحْصَنَاتُ", 6: "لَا يُحِبُّ ٱللهُ", 7: "وَإِذَا سَمِعُوا", 
+            8: "وَلَوْ أَنَّنَا", 9: "قَالَ ٱلْمَلَأُ", 10: "وَٱعْلَمُوا",
+            11: "يَعْتَذِرُونَ", 12: "وَمَا مِنْ دَآبَّةٍ", 13: "وَمَا أُبَرِّئُ", 
+            14: "رُبَمَا", 15: "سُبْحَانَ ٱلَّذِى", 16: "قَالَ أَلَمْ",
+            17: "ٱقْتَرَبَ لِلنَّاسِ", 18: "قَدْ أَفْلَحَ", 19: "وَقَالَ ٱلَّذِينَ", 
+            20: "أَمَّنْ خَلَقَ", 21: "أُتْلُ مَاأُوحِیَ", 22: "وَمَنْ يَقْنُتْ",
+            23: "وَمَا لِيَ", 24: "فَمَنْ أَظْلَمُ", 25: "إِلَيْهِ يُرَدُّ", 
+            26: "حم", 27: "قَالَ فَمَا خَطْبُكُمْ", 28: "قَدْ سَمِعَ ٱللهُ",
+            29: "تَبَارَكَ ٱلَّذِى", 30: "عَمَّ"
+        }
+
+        return render_template('juz.html', 
+                             juz_number=juz_number,
+                             juz_name=juz_names.get(juz_number, ""),
+                             ayahs=ayahs)
+    except Exception as e:
+        print("Error:", str(e))
+        return f"Error loading juz: {str(e)}", 500
+
+# Rest of the code remains unchanged...
+
 
 @app.route('/get_emotion', methods=['POST'])
 def get_emotion_endpoint():

@@ -41,13 +41,16 @@ html {
 }
 
 .mobile-nav {
-  display: none;
-  align-items: center;
+  
   gap: 1rem;
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .menu-toggle {
-  display: none;
+  display: block;
   background: none;
   border: none;
   padding: 0.5rem;
@@ -58,6 +61,7 @@ html {
 .menu-icon {
   width: 1.5rem;
   height: 1.5rem;
+  padding-left:16px;
 }
 
 .nav-brand {
@@ -68,15 +72,29 @@ html {
 .nav-logo {
   width: 65px;
   height: 60px;
-  margin-right:50px;
-  margin-left: 50px;
+  margin-left: 87.5px;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-menu {
   display: flex;
-  gap: 1.5rem;
-  align-items: center;
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 240px;
+  height: 100vh;
+  background: white;
+  flex-direction: column;
+  padding: 1rem .5rem;
+  gap: .8rem;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1001;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  align-items: flex-start;
+  
+}
+.nav-open .nav-menu {
+  transform: translateX(280px);
 }
 
 .nav-link {
@@ -87,10 +105,13 @@ html {
   text-decoration: none;
   font-weight: 400;
   font-size: 0.9375rem;
-  padding: 0.5rem 1rem;
   margin-right: 2rem;
-  border-radius: 0.5rem;
   transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  width:80%;
+  /* Align text to the left */
+  text-align: left;
 }
 
 
@@ -119,77 +140,23 @@ html {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-
-@media (max-width: 1024px) {
-  .nav-container {
-      padding: 0.5rem 1rem;
-  }
-
-  .mobile-nav {
-      display: flex;
-      width: 100%;
-      justify-content: flex-start;
-      align-items: center;
-  }
-
-  .menu-toggle {
-      display: block;
-  }
-
-  .nav-menu {
-      position: fixed;
-      top: 0;
-      left: -280px;
-      width: 240px;
-      height: 100vh;
-      background: white;
-      flex-direction: column;
-      padding: 1rem .5rem;
-      gap: .8rem;
-      transition: transform 0.3s ease-in-out;
-      z-index: 1001;
-      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-      
-      /* Align items to the left */
-      display: flex;
-      align-items: flex-start;
-  }
-
-  .nav-open .nav-menu {
-      transform: translateX(280px);
-  }
-
-  .nav-link {
-    border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
-    width:80%;
-    /* Align text to the left */
-    text-align: left;
-  }
-
-  .menu-open .mobile-menu-overlay {
-      display: block;
-      opacity: 1;
-  }
-
-
-  .menu-open {
-      overflow: hidden;
-  }
-  .nav-logo{
-    width: 65px;
-    height: 60px;
-    margin-left: 90px;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+.menu-open .mobile-menu-overlay {
+  display: block;
+  opacity: 1;
+}
+.menu-open {
+  overflow: hidden;
+}
+.nav-container {
+  padding: 0.5rem 1rem;
 }
 
-/* Rest of your existing CSS remains the same */
+
 
 
 /* Banner */
 .banner {
-  background: linear-gradient(90deg, #006B5F 35%, #48C9B0 65%);
+  background: linear-gradient(90deg, #007991 15%, #78ffd6 85%);
   padding: 2.5rem 1.25rem;
   position: relative;
   overflow: visible;
@@ -236,133 +203,6 @@ html {
   z-index: 0;
   
 }
-/* Surahs Section */
-.surahs-section {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.surahs-heading {
-  color: #006B5F;
-  text-align: center;
-  padding: 20px 0;
-  margin: 0;
-  border-bottom: 2px solid #006B5F;
-  margin-bottom: 30px;
-}
-
-.surahs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-@media (min-width: 768px) {
-  .surahs-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .surahs-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-@media(max-width:768px){
-  .surahs-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .menu-icon{
-    display: block;
-  }
-}
-@media(max-width:374px){
-  .surahs-grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-
-.surah-card {
-  background: white;
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  font-weight: 400;
-}
-
-.surah-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-.surah-number {
-  background: #4DB6AC;
-  color: white;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 10px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.surah-arabic {
-  color: #006B5F;
-  font-size: 24px;
-  margin: 5px 0;
-  font-weight: bold;
-}
-
-.surah-english {
-  color: #666;
-  font-size: 16px;
-  margin: 5px 0;
-}
-
-.surah-info {
-  color: #999;
-  font-size: 12px;
-  margin-top: 5px;
-}
-
-.revelation-place {
-  background: #E8F5E9;
-  color: #2E7D32;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 12px;
-  display: inline-block;
-  margin-top: 8px;
-}
-
-/* Loading State */
-.loading {
-  text-align: center;
-  padding: 40px;
-  color: #006B5F;
-  font-size: 18px;
-  grid-column: 1 / -1;
-}
-
-.error {
-  text-align: center;
-  padding: 40px;
-  color: #ff0000;
-  font-size: 16px;
-  grid-column: 1 / -1;
-  background: #fff0f0;
-  border-radius: 8px;
-  margin: 20px;
-}
-
 /* Footer */
 .footer {
   background: linear-gradient(135deg, #006B5F 0%, #48C9B0 100%);
@@ -594,191 +434,227 @@ html {
       color: #000;
   }
 }
-/* Existing styles remain the same */
 
-/* Search Container Styles */
-.search-container {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto 30px;
-  padding: 0 20px;
-  box-sizing: border-box;
+/* Prayer Times Styles */
+.prayer-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.search-wrapper {
-  position: relative;
-  width: 100%;
+.prayer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
 }
 
-
-.search-input {
-  width: 100%;
-  padding: 12px 20px 12px 40px; /* Add padding to the left to accommodate the icon */
-  border: 2px solid #006B5F;
-  border-radius: 25px;
-  font-size: 16px;
-  background-color: white;
-  color: #333;
-  box-sizing: border-box;
-}
-
-.search-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 107, 95, 0.2);
-}
-
-.search-input::placeholder {
-  color: #999;
-}
-.search-icon {
-  position: absolute;
-  left: 12px; /* Adjust the icon’s position */
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px; /* Adjust size if needed */
-  height: 20px;
-}
-
-.search-suggestions {
-  position: absolute;
-  top: calc(100% + 5px);
-  left: 0;
-  right: 0;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 1000;
-  display: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.suggestion-item {
-  padding: 12px 20px;
-  cursor: pointer;
+.location-info {
   display: flex;
   align-items: center;
-  gap: 10px;
-  transition: background-color 0.2s;
+  gap: 1rem;
 }
 
-.suggestion-item:hover,
-.suggestion-item:active { /* For touch devices */
-  background-color: #f0f9f8;
-}
-
-.suggestion-number {
-  flex-shrink: 0;
-  background: #4DB6AC;
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+.location-icon {
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
+  background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+  border-radius: 12px;
+  color: white;
 }
 
-.suggestion-text {
-  flex-grow: 1;
-  min-width: 0; /* Prevents text from overflowing */
+.location-text h2 {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 600;
 }
 
-.suggestion-name {
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.suggestion-translation {
-  font-size: 12px;
+.location-text p {
   color: #666;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
 }
 
-@keyframes highlightPulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+.next-prayer {
+  background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+  padding: 1.5rem 2rem;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+}
+
+.next-prayer h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.countdown {
+  margin-top: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.countdown span {
+  display: block;
+}
+
+#next-prayer-name {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.prayer-times-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.prayer-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.prayer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.prayer-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 12px;
+  color: #48C9B0;
+}
+
+.prayer-info {
+  flex: 1;
+}
+
+.prayer-info h3 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.prayer-info p {
+  color: #48C9B0;
+  margin: 0.5rem 0 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.prayer-card.next-prayer {
+  background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+  color: white;
+}
+
+.prayer-card.next-prayer .prayer-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.prayer-card.next-prayer .prayer-info h3,
+.prayer-card.next-prayer .prayer-info p {
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .prayer-container {
+      margin: 1rem;
+      padding: 1.5rem;
   }
-  50% {
-    transform: scale(1.03);
-    box-shadow: 0 8px 20px rgba(0, 107, 95, 0.2);
-    border: 2px solid #006B5F;
+
+  .prayer-header {
+      flex-direction: column;
+      gap: 2rem;
+      text-align: center;
+  }
+
+  .location-info {
+      flex-direction: column;
+  }
+
+  .next-prayer {
+      width: 100%;
+  }
+
+  .prayer-times-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+  }
+
+  .prayer-card {
+      padding: 1.5rem;
+  }
+}
+
+/* Prayer Card Themes */
+.prayer-card.fajr .prayer-icon {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.prayer-card.sunrise .prayer-icon {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.prayer-card.dhuhr .prayer-icon {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.prayer-card.asr .prayer-icon {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.prayer-card.maghrib .prayer-icon {
+  background: #fce4ec;
+  color: #c2185b;
+}
+
+.prayer-card.isha .prayer-icon {
+  background: #e8eaf6;
+  color: #3f51b5;
+}
+
+/* Animation for next prayer highlight */
+@keyframes pulse {
+  0% {
+      box-shadow: 0 0 0 0 rgba(72, 201, 176, 0.4);
+  }
+  70% {
+      box-shadow: 0 0 0 10px rgba(72, 201, 176, 0);
   }
   100% {
-    transform: scale(1);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 0 0 0 rgba(72, 201, 176, 0);
   }
 }
 
-.surah-card {
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-  -webkit-tap-highlight-color: transparent; /* Removes tap highlight on iOS */
-}
-
-.surah-card.highlight {
-  animation: highlightPulse 1.5s ease-in-out;
-  background-color: #f0f9f8;
-}
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .search-container {
-    max-width: 450px;
-  }
-}
-
-@media (max-width: 768px) {
-  .search-container {
-    max-width: 400px;
-    padding: 0 15px;
-    margin-bottom: 20px;
-  }
-  
-  .search-input {
-    font-size: 15px;
-  }
-
-  .suggestion-item {
-    padding: 10px 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .search-container {
-    max-width: 100%;
-    margin-bottom: 15px;
-  }
-  
-  .search-input {
-    font-size: 14px;
-  }
-
-  .suggestion-item {
-    padding: 8px 12px;
-  }
-
-  .suggestion-number {
-    width: 20px;
-    height: 20px;
-    font-size: 11px;
-  }
-
-  .suggestion-name {
-    font-size: 14px;
-  }
-
-  .suggestion-translation {
-    font-size: 11px;
-  }
+.prayer-card.next-prayer {
+  animation: pulse 2s infinite;
 }

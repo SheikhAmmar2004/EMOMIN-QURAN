@@ -1,22 +1,50 @@
 {% extends "base.html" %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="surahs-section">
-    <h2 class="surahs-heading">Surahs</h2>
-    <div class="search-container">
-        <div class="search-wrapper">
-            <input type="text" id="surahSearch" placeholder="Search surah by name..." class="search-input">
-            <img src="{{ url_for('static', filename='images/searchicon.png') }}" alt="Search Icon" class="search-icon">
-            <div id="searchSuggestions" class="search-suggestions"></div>
+<div class="toggle-nav">
+    <div class="toggle-container" data-active="surahs">
+        <button class="toggle-btn active" data-section="surahs">
+            Surahs
+        </button>
+        <button class="toggle-btn" data-section="juz">
+            Juz
+        </button>
+    </div>
+</div>
+
+<div id="content">
+    <div id="surahsSection" class="section active">
+        <div class="surahs-section">
+            <h2 class="surahs-heading">Surahs</h2>
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input type="text" id="surahSearch" placeholder="Search surah by name..." class="search-input">
+                    <img src="{{ url_for('static', filename='images/searchicon.png') }}" alt="Search Icon" class="search-icon">
+                    <div id="searchSuggestions" class="search-suggestions"></div>
+                </div>
+            </div>
+            <div id="surahsGrid" class="surahs-grid">
+                <!-- Surahs will be loaded here dynamically -->
+            </div>
         </div>
     </div>
-    <div id="surahsGrid" class="surahs-grid">
-        <!-- Surahs will be loaded here dynamically -->
+
+    <div id="juzSection" class="section">
+        <div class="surahs-section">
+            <h2 class="surahs-heading">Juz</h2>
+            <div id="juzGrid" class="surahs-grid">
+                <!-- Juz will be loaded here dynamically -->
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-<script src="{{ url_for('static', filename='js/Base.js') }}"></script>
+<script src="{{ url_for('static', filename='js/base.js') }}"></script>
 {% endblock %}

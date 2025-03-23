@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/surah.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block banner_class %}surah-banner{% endblock %}
+
+{% block banner_content %}
+<div class="surah-banner2">
+    <h1 class="surah-title">{{ juz_name }}</h1>
+    <span id="juzNumber" style="display: none;">{{ juz_number }}</span>
+    <img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Navigation Menu -->
+<div class="juz-nav">
+    <div class="juz-nav-container" data-active="reading">
+        <button class="juz-nav-button active" data-view="reading">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            Reading
+        </button>
+        <button class="juz-nav-button" data-view="translation">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>
+            Translation
+        </button>
+    </div>
+</div>
+
+<!-- Translation Selector -->
+<div class="translation-selector" style="display: none;">
+    <div class="current-translation">
+        Translation by <span id="currentTranslator">Muhammad Asad</span>
+    </div>
+    <a class="change-translation" id="changeTranslation">(Change)</a>
+</div>
+
+<!-- Translation Modal -->
+<div class="modal-overlay" id="translationModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Select Translation</h3>
+            <button class="close-modal" id="closeModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="translations-list" id="translationsList">
+                <div class="loading">Loading translations...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="surah-container">
+    <div class="verses-container">
+        {% for ayah in ayahs %}
+        <div class="verse" data-verse-number="{{ loop.index }}">
+            <div class="arabic-text">{{ ayah.text }}</div>
+            <div class="verse-translation"></div>
+            <div class="verse-info">
+                Surah {{ ayah.surah.englishName }} - Verse {{ ayah.numberInSurah }}
+            </div>
+            <div class="verse-number">{{ loop.index }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/juz.js') }}"></script>
+<script src="{{ url_for('static', filename='js/base.js') }}"></script>
+{% endblock %}

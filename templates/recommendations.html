@@ -1,5 +1,8 @@
 {% extends "base.html" %}
-
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+{% endblock %}
 {% block content %}
 <div class="surahs-section">
     <h2 class="surahs-heading">Recommended Surahs for {{ emotion|title }}</h2>

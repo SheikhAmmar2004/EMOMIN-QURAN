@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="prayer-container">
+    <div class="prayer-header">
+        <div class="location-info">
+            <div class="location-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
+            <div class="location-text">
+                <h2 id="location-name">Loading...</h2>
+                <p id="current-date">Loading...</p>
+            </div>
+        </div>
+        <div class="next-prayer">
+            <h3>Next Prayer</h3>
+            <div class="countdown">
+                <span id="next-prayer-name">--</span>
+                <span id="time-remaining">--:--</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="prayer-times-grid">
+        <div class="prayer-card fajr">
+            <div class="prayer-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"></path><path d="m4.93 10.93 1.41 1.41"></path><path d="M2 18h2"></path><path d="M20 18h2"></path><path d="m19.07 10.93-1.41 1.41"></path><path d="M22 22H2"></path><path d="m8 6 4-4 4 4"></path><path d="M16 18a4 4 0 0 0-8 0"></path></svg>
+            </div>
+            <div class="prayer-info">
+                <h3>Fajr</h3>
+                <p id="fajr-time">--:--</p>
+            </div>
+        </div>
+        <div class="prayer-card sunrise">
+            <div class="prayer-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+            </div>
+            <div class="prayer-info">
+                <h3>Sunrise</h3>
+                <p id="sunrise-time">--:--</p>
+            </div>
+        </div>
+        <div class="prayer-card dhuhr">
+            <div class="prayer-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+            </div>
+            <div class="prayer-info">
+                <h3>Dhuhr</h3>
+                <p id="dhuhr-time">--:--</p>
+            </div>
+        </div>
+        <div class="prayer-card asr">
+            <div class="prayer-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h1m16 0h1M3 12h1m16 0h1M3 7h1m16 0h1"></path><circle cx="12" cy="12" r="4"></circle></svg>
+            </div>
+            <div class="prayer-info">
+                <h3>Asr</h3>
+                <p id="asr-time">--:--</p>
+            </div>
+        </div>
+        <div class="prayer-card maghrib">
+            <div class="prayer-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10V2"></path><path d="m4.93 10.93 1.41 1.41"></path><path d="M2 18h2"></path><path d="M20 18h2"></path><path d="m19.07 10.93-1.41 1.41"></path><path d="M22 22H2"></path><path d="M16 18a4 4 0 0 0-8 0"></path></svg>
+            </div>
+            <div class="prayer-info">
+                <h3>Maghrib</h3>
+                <p id="maghrib-time">--:--</p>
+            </div>
+        </div>
+        <div class="prayer-card isha">
+            <div class="prayer-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+            </div>
+            <div class="prayer-info">
+                <h3>Isha</h3>
+                <p id="isha-time">--:--</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{{ url_for('static', filename='js/Base.js') }}"></script>
+<script src="{{ url_for('static', filename='js/prayer_time.js') }}"></script>
+
+{% endblock %}
