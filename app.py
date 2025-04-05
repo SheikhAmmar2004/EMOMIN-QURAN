@@ -11,50 +11,99 @@ app = Flask(__name__)
 
 # Dictionary mapping emotions to their recommended surahs
 SURAH_RECOMMENDATIONS = {
-     # Happy - These Surahs relate to feelings of joy, positive emotions, and uplifting the mood
-    "happy": [108, 104, 93, 103, 1],  # Al-Kauthar (108), Al-Humazah (104), Al-Duha (93), Al-Asr (103), Al-Fatiha (1)
-    # Justification: These Surahs reflect happiness and positive feelings. **Al-Kauthar (108)** brings joy, **Al-Humazah (104)** brings emotional reflection that uplifts, **Al-Duha (93)** lifts sadness into joy, **Al-Asr (103)** uplifts emotionally, and **Al-Fatiha (1)** promotes joy.
+    "happy": [1, 19, 104, 107, 108],  
+    "sad": [2, 103, 93, 105], 
+    "angry": [1], 
+    "fear": [112, 113, 114],  
+    "disgust": [1],  
+    "neutral": [1],  
+    "surprise": [1], 
+    "depressed": [1, 55, 36, 112, 93, 112, 113, 114, 76, 18, 56], 
+    "anxiety": [59, 67, 1, 24, 5, 9],  
+    "stress": [76, 1, 36, 18, 59, 67, 56, 55, 3, 2, 112, 113, 114, 93], 
+    "pain": [19],  
+}
 
-    # Sad - These Surahs focus on sadness, depression, and emotional stability or relief
-    "sad": [2, 113, 114, 109, 5],  # Al-Baqarah (2), Al-Falaq (113), Al-Nas (114), Al-Kafirun (109), Al-Ma'idah (5)
-    # Justification: These Surahs focus on improving emotional well-being. **Al-Baqarah (2)** brings relief from sadness, **Al-Falaq (113)** and **Al-Nas (114)** provide peace, **Al-Kafirun (109)** addresses emotional relief, and **Al-Ma'idah (5)** helps relieve mild stress.
-
-    # Angry - Surahs that help reduce anger and emotional tension, promoting patience
-    "angry": [111, 1, 18, 77],  # Al-Masad (111), Al-Fatiha (1), Al-Kahf (18), Al-Mursalat (77)
-    # Justification: These Surahs focus on reducing emotional tension. **Al-Masad (111)** reduces anger, **Al-Fatiha (1)** calms the mind, **Al-Kahf (18)** promotes patience, and **Al-Mursalat (77)** reduces stress and brings peace.
-
-    # Fear - Surahs that address fear, anxiety, and help with emotional stability and peace
-    "fear": [113, 55, 56, 24, 3],  # Al-Falaq (113), Al-Rehman (55), Al-Waqiah (56), An-Nur (24), Al-Imran (3)
-    # Justification: These Surahs address fear and anxiety by promoting calmness. **Al-Falaq (113)** reduces fear, **Al-Rehman (55)** brings peace and comfort, **Al-Waqiah (56)** provides balance, **An-Nur (24)** offers emotional stability, and **Al-Imran (3)** strengthens the believer.
-
-    # Disgust - Surahs related to guilt, shame, self-reflection, emotional clarity, and relief
-    "disgust": [19, 104, 1, 67],  # Maryam (19), Al-Humazah (104), Al-Fatiha (1), Al-Mulk (67)
-    # Justification: These Surahs address internal conflicts, guilt, and emotional instability. **Maryam (19)** helps with guilt relief, **Al-Humazah (104)** promotes self-reflection, **Al-Fatiha (1)** brings clarity, and **Al-Mulk (67)** helps with emotional relief.
-
-    # Neutral - Surahs that are associated with calmness, balance, and emotional neutrality
-    "neutral": [112, 13, 11, 18, 1],  # Al-Ikhlas (112), Al-Ra'ad (13), Hud (11), Al-Kahf (18), Al-Fatiha (1)
-    # Justification: These Surahs bring emotional neutrality and stability. **Al-Ikhlas (112)** promotes calmness, **Al-Ra'ad (13)** creates balance, **Hud (11)** helps focus and calm, **Al-Kahf (18)** relieves anxiety, and **Al-Fatiha (1)** brings emotional stability.
-
-    # Surprise - These Surahs may help with shock, astonishment, or unexpected emotions
-    "surprise": [1, 55, 18, 77],  # Al-Fatiha (1), Al-Rehman (55), Al-Kahf (18), Al-Mursalat (77)
-    # Justification: These Surahs offer emotional stability and calming effects that help with unexpected emotions. **Al-Fatiha (1)** provides a stable foundation, **Al-Rehman (55)** offers comfort, **Al-Kahf (18)** helps with anxiety, and **Al-Mursalat (77)** provides peace and calmness.
-
-    # Depressed - Surahs that uplift depression and sadness, help with emotional stability
-    "depressed": [1, 36, 93, 112, 114],  # Al-Fatiha (1), Az-Zumar (36), Al-Duha (93), Al-Ikhlas (112), Al-Nas (114)
-    # Justification: These Surahs bring relief from depressive states. **Al-Duha (93)** lifts sadness to joy, **Al-Fatiha (1)** offers emotional stability, **Al-Nas (114)** brings calmness, and **Az-Zumar (36)** provides emotional relief.
-
-    # Anxiety - Surahs that help with anxiety and mental stress relief
-    "anxiety": [2, 18, 24, 55, 56, 11],  # Al-Baqarah (2), Al-Kahf (18), An-Nur (24), Al-Rehman (55), Al-Waqiah (56), Hud (11)
-    # Justification: These Surahs provide comfort and reduce anxiety. **Al-Kahf (18)** and **An-Nur (24)** are particularly focused on mental stability, **Al-Rehman (55)** brings relaxation, and **Al-Waqiah (56)** provides peace.
-
-    # Stress - Surahs related to stress relief, calmness, and emotional stability
-    "stress": [13, 5, 10, 17, 77],  # Al-Ra'ad (13), Al-Ma'idah (5), Yunus (10), Al-Isra (17), Al-Mursalat (77)
-    # Justification: These Surahs help relieve stress and bring emotional calmness. **Al-Ra'ad (13)** and **Al-Ma'idah (5)** specifically deal with stress relief and promote emotional balance.
-
-    # Pain - Surahs related to pain relief and comfort during difficult times
-    "pain": [19],  # Maryam (19) - Specifically linked to pain relief (labor pain, etc.)
-    # Justification: **Maryam (19)** is directly associated with alleviating pain, particularly in the context of labor and difficult situations.
-
+# Dictionary mapping emotions to their recommended ayahs
+AYAH_RECOMMENDATIONS = {
+    "happy": [
+        {"surah": 2, "ayah": 11},
+        {"surah": 11, "ayah": 41},
+        {"surah": 27, "ayah": 19},
+        {"surah": 46, "ayah": 15},
+        {"surah": 14, "ayah": 37},
+        {"surah": 5, "ayah": 114},
+        {"surah": 25, "ayah": 65},
+        {"surah": 44, "ayah": 12}
+    ],
+    "sad": [
+        {"surah": 21, "ayah": 87},
+        {"surah": 7, "ayah": 23},
+        {"surah": 3, "ayah": 193},
+        {"surah": 12, "ayah": 101},
+        {"surah": 40, "ayah": 7},
+        {"surah": 71, "ayah": 28},
+        {"surah": 2, "ayah": 286},
+        {"surah": 25, "ayah": 74},
+        {"surah": 12, "ayah": 87},
+        {"surah": 15, "ayah": 56},
+        {"surah": 30, "ayah": 36}
+    ],
+    "angry": [
+        {"surah": 7, "ayah": 47},
+        {"surah": 23, "ayah": 94},
+        {"surah": 3, "ayah": 194}
+    ],
+    "disgust": [
+        {"surah": 3, "ayah": 53},
+        {"surah": 3, "ayah": 194}
+    ],
+    "surprise": [
+        {"surah": 3, "ayah": 191},
+        {"surah": 21, "ayah": 83},
+        {"surah": 23, "ayah": 109},
+        {"surah": 26, "ayah": 83},
+        {"surah": 12, "ayah": 111},
+        {"surah": 27, "ayah": 19}
+    ],
+    "neutral": [
+        {"surah": 13, "ayah": 20},
+        {"surah": 17, "ayah": 82},
+        {"surah": 6, "ayah": 82},
+        {"surah": 18, "ayah": 16},
+        {"surah": 13, "ayah": 28},
+        {"surah": 22, "ayah": 46},
+        {"surah": 7, "ayah": 179},
+        {"surah": 41, "ayah": 44},
+        {"surah": 10, "ayah": 57},
+        {"surah": 17, "ayah": 45}
+    ],
+    "fear": [
+        {"surah": 2, "ayah": 126},
+        {"surah": 14, "ayah": 35},
+        {"surah": 68, "ayah": 52},
+        {"surah": 23, "ayah": 97},
+        {"surah": 38, "ayah": 41}
+    ],
+    "anxiety": [
+        {"surah": 13, "ayah": 28},
+        {"surah": 17, "ayah": 82},
+        {"surah": 20, "ayah": 124}
+    ],
+    "stress": [
+        {"surah": 2, "ayah": 155},
+        {"surah": 24, "ayah": 21},
+        {"surah": 12, "ayah": 1},
+        {"surah": 55, "ayah": 29}
+    ],
+    "depression": [
+        {"surah": 2, "ayah": 156},
+        {"surah": 12, "ayah": 87},
+        {"surah": 39, "ayah": 53},
+        {"surah": 2, "ayah": 216},
+        {"surah": 2, "ayah": 155},
+        {"surah": 24, "ayah": 21}
+    ]
 }
 
 # Variable to store the last detected emotion
@@ -67,12 +116,16 @@ def get_recommendations(emotion):
     emotion = emotion.lower()
     return SURAH_RECOMMENDATIONS.get(emotion, SURAH_RECOMMENDATIONS['neutral'])
 
+def get_ayah_recommendations(emotion):
+    """
+    Get recommended ayahs for a given emotion.
+    """
+    emotion = emotion.lower()
+    return AYAH_RECOMMENDATIONS.get(emotion, AYAH_RECOMMENDATIONS['neutral'])
 
-# Route for the main page
 @app.route('/')
 def index():
     return render_template('index.html')
-# Add these new routes to your existing app.py file
 
 @app.route('/prayer-times')
 def prayer_times():
@@ -81,31 +134,44 @@ def prayer_times():
 @app.route('/qibla')
 def qibla():
     return render_template('qibla.html')
-# Route for the emotion detection page
+
 @app.route('/detect-emotion')
 def detect_emotion():
     global last_detected_emotion
     last_detected_emotion = None
     return render_template('detect_emotion.html')
 
-# Route for the emotion selection page
 @app.route('/select-emotion')
 def select_emotion():
     return render_template('select_emotion.html')
 
-# Route for emotion-based recommendations# Update the show_recommendations route
 @app.route('/recommendations/<emotion>')
 def show_recommendations(emotion):
     recommended_surahs = get_recommendations(emotion)
-    # Add from_detection parameter to indicate if coming from emotion detection
+    recommended_ayahs = get_ayah_recommendations(emotion)
     from_detection = request.args.get('from_detection', 'false')
     return render_template(
         'recommendations.html', 
         emotion=emotion, 
         recommended_surahs=json.dumps(recommended_surahs),
+        recommended_ayahs=json.dumps(recommended_ayahs),
         from_detection=from_detection
     )
 
+@app.route('/ayah/<int:surah_number>/<int:ayah_number>')
+def show_ayah(surah_number, ayah_number):
+    try:
+        # Fetch the ayah data from the API
+        response = requests.get(f'https://api.alquran.cloud/v1/ayah/{surah_number}:{ayah_number}')
+        response.raise_for_status()
+        ayah_data = response.json()['data']
+        
+        return render_template('ayah.html', ayah=ayah_data)
+    except Exception as e:
+        print("Error:", str(e))
+        return f"Error loading ayah: {str(e)}", 500
+
+# ... rest of your routes remain the same ...
 # Route to display a specific Surah with its audio
 @app.route('/surah/<int:surah_id>')
 def show_surah(surah_id):

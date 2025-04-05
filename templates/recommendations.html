@@ -4,17 +4,56 @@
 <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
 {% endblock %}
 {% block content %}
-<div class="surahs-section">
-    <h2 class="surahs-heading">Recommended Surahs for {{ emotion|title }}</h2>
-    
-    <!-- Countdown Timer -->
-    <div id="countdown" class="countdown hidden">
-        Auto-selecting surah in <span id="timer">5</span> seconds...
+<div class="recommendation-nav">
+    <div class="recommendation-nav-container" data-active="surahs">
+        <button class="recommendation-nav-button active" data-section="surahs">
+            Surahs
+        </button>
+        <button class="recommendation-nav-button" data-section="ayah">
+            Ayah
+        </button>
+        <button class="recommendation-nav-button" data-section="hadith">
+            Hadith
+        </button>
     </div>
-    
-    <!-- Surah Grid -->
-    <div id="surahsGrid" class="surahs-grid">
-        <!-- Surahs will be loaded here dynamically -->
+</div>
+
+<div id="content">
+    <!-- Surahs Section -->
+    <div id="surahsSection" class="section active">
+        <div class="surahs-section">
+            <h2 class="surahs-heading">Recommended Surahs for {{ emotion|title }}</h2>
+
+            <!-- Countdown Timer -->
+            <div id="countdown" class="countdown hidden">
+                Auto-selecting surah in <span id="timer">5</span> seconds...
+            </div>
+
+            <!-- Surah Grid -->
+            <div id="surahsGrid" class="surahs-grid">
+                <!-- Surahs will be loaded here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Ayah Section -->
+    <div id="ayahSection" class="section">
+        <div class="ayah-section">
+            <h2 class="surahs-heading">Recommended Ayahs for {{ emotion|title }}</h2>
+            <div id="ayahGrid" class="ayah-grid">
+                <!-- Ayah will be loaded here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Hadith Section -->
+    <div id="hadithSection" class="section">
+        <div class="hadith-section">
+            <h2 class="surahs-heading">Recommended Hadith for {{ emotion|title }}</h2>
+            <div id="hadithGrid" class="hadith-grid">
+                <!-- Hadith will be loaded here dynamically -->
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -23,8 +62,10 @@
 <script src="{{ url_for('static', filename='js/Base.js') }}"></script>
 <script>
     // API and Context Variables
-    const API_URL = 'https://api.quran.com/api/v4/chapters';
+    const SURAH_API_URL = 'https://api.quran.com/api/v4/chapters';
+    const AYAH_API_URL = 'https://api.alquran.cloud/v1/ayah';
     const recommendedSurahs = JSON.parse('{{ recommended_surahs|safe }}');
+    const recommendedAyahs = JSON.parse('{{ recommended_ayahs|safe }}');
     const fromDetection = '{{ from_detection }}' === 'true';
     const autoPlayEnabled = localStorage.getItem('autoPlayEnabled') === 'true';
     let countdownTimer;
@@ -32,7 +73,7 @@
     // Fetch Recommended Surahs from the Quran API
     async function fetchRecommendedSurahs() {
         try {
-            const response = await fetch(API_URL);
+            const response = await fetch(SURAH_API_URL);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -43,6 +84,21 @@
             return allSurahs.filter(surah => recommendedSurahs.includes(surah.id));
         } catch (error) {
             console.error('Error fetching surahs:', error);
+            throw error;
+        }
+    }
+
+    // Fetch Ayah Data from the API
+    async function fetchAyahData(surahNumber, ayahNumber) {
+        try {
+            const response = await fetch(`${AYAH_API_URL}/${surahNumber}:${ayahNumber}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.data;
+        } catch (error) {
+            console.error('Error fetching ayah:', error);
             throw error;
         }
     }
@@ -60,9 +116,21 @@
         `;
     }
 
-    // Handle Surah Selection (Manual)
+    // Create HTML for Each Ayah Card
+    function createAyahCard(ayah) {
+        return `
+            <div class="ayah-card" onclick="handleAyahSelection(${ayah.surah.number}, ${ayah.numberInSurah})">
+                <div class="surah-number">${ayah.numberInSurah}</div>
+                <div class="surah-arabic">${ayah.surah.name}</div>
+                <div class="surah-english">${ayah.surah.englishName}</div>
+                <div class="surah-info">${ayah.surah.englishNameTranslation} (${ayah.surah.numberOfAyahs})</div>
+                <div class="revelation-place">${ayah.surah.revelationType}</div>
+            </div>
+        `;
+    }
+
+    // Handle Surah Selection
     function handleSurahSelection(surahId) {
-        // Clear the countdown if it's running
         if (countdownTimer) {
             clearTimeout(countdownTimer);
             clearInterval(window.timerInterval);
@@ -70,14 +138,64 @@
         window.location.href = `/surah/${surahId}?from_detection=${fromDetection}`;
     }
 
+    // Handle Ayah Selection
+    function handleAyahSelection(surahNumber, ayahNumber) {
+        window.location.href = `/ayah/${surahNumber}/${ayahNumber}`;
+    }
+
+    // Initialize Recommended Ayahs
+    async function initializeAyahs() {
+        const ayahGrid = document.getElementById('ayahGrid');
+        ayahGrid.innerHTML = '<div class="loading">Loading Recommended Ayahs...</div>';
+
+        try {
+            const ayahPromises = recommendedAyahs.map(ayah => 
+                fetchAyahData(ayah.surah, ayah.ayah)
+            );
+            const ayahs = await Promise.all(ayahPromises);
+            const ayahsHTML = ayahs.map(ayah => createAyahCard(ayah)).join('');
+            ayahGrid.innerHTML = ayahsHTML;
+        } catch (error) {
+            console.error('Error:', error);
+            ayahGrid.innerHTML = `
+                <div class="error">
+                    Failed to load ayah recommendations. Please try again later.<br>
+                    Error: ${error.message}
+                </div>
+            `;
+        }
+    }
+
+    // Initialize Recommended Surahs
+    async function initializeRecommendations() {
+        const surahsGrid = document.getElementById('surahsGrid');
+        surahsGrid.innerHTML = '<div class="loading">Loading Recommended Surahs...</div>';
+        
+        try {
+            const surahs = await fetchRecommendedSurahs();
+            const surahsHTML = surahs.map(surah => createSurahCard(surah)).join('');
+            surahsGrid.innerHTML = surahsHTML;
+
+            if (fromDetection && autoPlayEnabled) {
+                startCountdown(surahs);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            surahsGrid.innerHTML = `
+                <div class="error">
+                    Failed to load recommendations. Please try again later.<br>
+                    Error: ${error.message}
+                </div>
+            `;
+        }
+    }
+
     // Start Countdown for Auto Selection
     function startCountdown(surahs) {
         if (!autoPlayEnabled || !fromDetection) {
-            console.log('Countdown not started: autoPlay:', autoPlayEnabled, 'fromDetection:', fromDetection);
             return;
         }
 
-        console.log('Starting countdown');
         const countdownElement = document.getElementById('countdown');
         const timerElement = document.getElementById('timer');
         let timeLeft = 5;
@@ -96,49 +214,25 @@
         }, 1000);
     }
 
-    // Initialize Recommended Surahs on Page Load
-    async function initializeRecommendations() {
-        const surahsGrid = document.getElementById('surahsGrid');
-        surahsGrid.innerHTML = '<div class="loading">Loading Recommended Surahs...</div>';
-        
-        try {
-            const surahs = await fetchRecommendedSurahs();
-            const surahsHTML = surahs.map(surah => createSurahCard(surah)).join('');
-            surahsGrid.innerHTML = surahsHTML;
-
-            // Start Countdown if Auto-Play is Enabled and From Detection
-            if (fromDetection && autoPlayEnabled) {
-                console.log('Starting countdown with surahs:', surahs);
-                startCountdown(surahs);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            surahsGrid.innerHTML = `
-                <div class="error">
-                    Failed to load recommendations. Please try again later.<br>
-                    Error: ${error.message}
-                </div>
-            `;
-        }
-    }
-
     // Execute Initialization When Document is Ready
-    document.addEventListener('DOMContentLoaded', initializeRecommendations);
-</script>
-<style>
-.countdown {
-    background-color: #006B5F;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-align: center;
-    margin: 20px auto;
-    max-width: 300px;
-    font-weight: bold;
-}
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeRecommendations();
+        initializeAyahs();
 
-.hidden {
-    display: none;
-}
-</style>
+        const toggleButtons = document.querySelectorAll(".recommendation-nav-button");
+        const sections = document.querySelectorAll(".section");
+        const navContainer = document.querySelector(".recommendation-nav-container");
+
+        toggleButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                toggleButtons.forEach(btn => btn.classList.remove("active"));
+                sections.forEach(section => section.classList.remove("active"));
+
+                this.classList.add("active");
+                document.getElementById(this.getAttribute("data-section") + "Section").classList.add("active");
+                navContainer.setAttribute("data-active", this.getAttribute("data-section"));
+            });
+        });
+    });
+</script>
 {% endblock %}
