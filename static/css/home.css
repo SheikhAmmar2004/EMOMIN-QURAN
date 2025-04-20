@@ -574,7 +574,116 @@ padding: 20px;
       font-size: 0.7rem;
       gap: 3px;
   }
-
-
 }
 
+/* Hadith Section Styles */
+.hadith-section {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hadith-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.hadith-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-weight: 400;
+  position: relative;
+  overflow: hidden;
+}
+
+.hadith-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.hadith-number {
+  background: #4DB6AC;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.hadith-arabic {
+  font-family: 'Scheherazade New', serif;
+  color: #006B5F;
+  font-size: 24px;
+  margin: 10px 0;
+  font-weight: bold;
+  line-height: 1.6;
+  padding: 0 10px;
+}
+
+.hadith-english {
+  color: #666;
+  font-size: 16px;
+  margin: 15px 0;
+  line-height: 1.5;
+  padding: 0 10px;
+}
+
+.hadith-reference {
+  background: #E8F5E9;
+  color: #2E7D32;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* Responsive Design for Hadith Cards */
+@media (max-width: 1024px) {
+  .hadith-grid {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hadith-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 15px;
+  }
+  
+  .hadith-card {
+      padding: 15px;
+  }
+  
+  .hadith-arabic {
+      font-size: 20px;
+  }
+  
+  .hadith-english {
+      font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hadith-grid {
+      grid-template-columns: 1fr;
+  }
+  
+  .hadith-card {
+      padding: 15px;
+  }
+}

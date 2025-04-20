@@ -66,6 +66,7 @@
     const AYAH_API_URL = 'https://api.alquran.cloud/v1/ayah';
     const recommendedSurahs = JSON.parse('{{ recommended_surahs|safe }}');
     const recommendedAyahs = JSON.parse('{{ recommended_ayahs|safe }}');
+    const recommendedHadiths = JSON.parse('{{ recommended_hadiths|safe }}');
     const fromDetection = '{{ from_detection }}' === 'true';
     const autoPlayEnabled = localStorage.getItem('autoPlayEnabled') === 'true';
     let countdownTimer;
@@ -128,6 +129,17 @@
             </div>
         `;
     }
+// Create HTML for Each Hadith Card
+function createHadithCard(hadith, index) {
+    return `
+        <div class="hadith-card" onclick="handleHadithSelection('{{ emotion }}', ${index})">
+            <div class="hadith-number">${index + 1}</div>
+            <div class="hadith-arabic" dir="rtl">${hadith.arabic}</div>
+            <div class="hadith-english">${hadith.english}</div>
+            <div class="hadith-reference">${hadith.reference}</div>
+        </div>
+    `;
+}   
 
     // Handle Surah Selection
     function handleSurahSelection(surahId) {
@@ -141,6 +153,11 @@
     // Handle Ayah Selection
     function handleAyahSelection(surahNumber, ayahNumber) {
         window.location.href = `/ayah/${surahNumber}/${ayahNumber}`;
+    }
+
+        // Handle Hadith Selection
+        function handleHadithSelection(emotion, index) {
+        window.location.href = `/hadith/${emotion}/${index}`;
     }
 
     // Initialize Recommended Ayahs
@@ -163,6 +180,18 @@
                     Error: ${error.message}
                 </div>
             `;
+        }
+    }
+    // Initialize Recommended Hadiths
+    function initializeHadiths() {
+        const hadithGrid = document.getElementById('hadithGrid');
+        if (recommendedHadiths && recommendedHadiths.length > 0) {
+            const hadithsHTML = recommendedHadiths.map((hadith, index) => 
+                createHadithCard(hadith, index)
+            ).join('');
+            hadithGrid.innerHTML = hadithsHTML;
+        } else {
+            hadithGrid.innerHTML = '<div class="no-recommendations">No hadith recommendations available for this emotion.</div>';
         }
     }
 
@@ -218,6 +247,8 @@
     document.addEventListener('DOMContentLoaded', () => {
         initializeRecommendations();
         initializeAyahs();
+        initializeHadiths();
+
 
         const toggleButtons = document.querySelectorAll(".recommendation-nav-button");
         const sections = document.querySelectorAll(".section");

@@ -1483,3 +1483,115 @@ body, html {
         height: 10px;
     }
 }
+/* Add these styles at the end of your existing surah.css file */
+
+/* Hadith-specific styles */
+.hadith-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.hadith-reference {
+    display: inline-block;
+    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 107, 95, 0.2);
+}
+
+.translation-title {
+    color: #006B5F;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.hadith-verse-translation {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4A5568;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(72, 201, 176, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #48C9B0;
+}
+
+.english-translation {
+    margin-top: 20px;
+}
+
+.urdu-translation {
+    background: rgba(72, 201, 176, 0.05);
+    margin-top: 20px;
+    border-left-color: #48C9B0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hadith-reference {
+        font-size: 0.85rem;
+        padding: 5px 10px;
+    }
+
+    .translation-title {
+        font-size: 1rem;
+    }
+
+    .metadata-item {
+        font-size: 0.85rem;
+    }
+
+    .banner-subtitle {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hadith-reference {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+    }
+
+    .translation-title {
+        font-size: 0.95rem;
+    }
+
+    .metadata-item {
+        font-size: 0.8rem;
+    }
+
+    .banner-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .hadith-metadata {
+        gap: 15px;
+    }
+}
+
+/* Scroll Bar */
+.verses-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.verses-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.verses-container::-webkit-scrollbar-thumb {
+    background: #48C9B0;
+    border-radius: 4px;
+}
+
+.verses-container::-webkit-scrollbar-thumb:hover {
+    background: #006B5F;
+}

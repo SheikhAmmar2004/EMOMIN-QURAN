@@ -6,106 +6,19 @@ import numpy as np
 import time
 import requests
 import json
+from recommendations import SURAH_RECOMMENDATIONS, AYAH_RECOMMENDATIONS, HADITH_RECOMMENDATIONS,juz_names
 
 app = Flask(__name__)
 
-# Dictionary mapping emotions to their recommended surahs
-SURAH_RECOMMENDATIONS = {
-    "happy": [1, 19, 104, 107, 108],  
-    "sad": [2, 103, 93, 105], 
-    "angry": [1], 
-    "fear": [112, 113, 114],  
-    "disgust": [1],  
-    "neutral": [1],  
-    "surprise": [1], 
-    "depressed": [1, 55, 36, 112, 93, 112, 113, 114, 76, 18, 56], 
-    "anxiety": [59, 67, 1, 24, 5, 9],  
-    "stress": [76, 1, 36, 18, 59, 67, 56, 55, 3, 2, 112, 113, 114, 93], 
-    "pain": [19],  
-}
-
-# Dictionary mapping emotions to their recommended ayahs
-AYAH_RECOMMENDATIONS = {
-    "happy": [
-        {"surah": 2, "ayah": 11},
-        {"surah": 11, "ayah": 41},
-        {"surah": 27, "ayah": 19},
-        {"surah": 46, "ayah": 15},
-        {"surah": 14, "ayah": 37},
-        {"surah": 5, "ayah": 114},
-        {"surah": 25, "ayah": 65},
-        {"surah": 44, "ayah": 12}
-    ],
-    "sad": [
-        {"surah": 21, "ayah": 87},
-        {"surah": 7, "ayah": 23},
-        {"surah": 3, "ayah": 193},
-        {"surah": 12, "ayah": 101},
-        {"surah": 40, "ayah": 7},
-        {"surah": 71, "ayah": 28},
-        {"surah": 2, "ayah": 286},
-        {"surah": 25, "ayah": 74},
-        {"surah": 12, "ayah": 87},
-        {"surah": 15, "ayah": 56},
-        {"surah": 30, "ayah": 36}
-    ],
-    "angry": [
-        {"surah": 7, "ayah": 47},
-        {"surah": 23, "ayah": 94},
-        {"surah": 3, "ayah": 194}
-    ],
-    "disgust": [
-        {"surah": 3, "ayah": 53},
-        {"surah": 3, "ayah": 194}
-    ],
-    "surprise": [
-        {"surah": 3, "ayah": 191},
-        {"surah": 21, "ayah": 83},
-        {"surah": 23, "ayah": 109},
-        {"surah": 26, "ayah": 83},
-        {"surah": 12, "ayah": 111},
-        {"surah": 27, "ayah": 19}
-    ],
-    "neutral": [
-        {"surah": 13, "ayah": 20},
-        {"surah": 17, "ayah": 82},
-        {"surah": 6, "ayah": 82},
-        {"surah": 18, "ayah": 16},
-        {"surah": 13, "ayah": 28},
-        {"surah": 22, "ayah": 46},
-        {"surah": 7, "ayah": 179},
-        {"surah": 41, "ayah": 44},
-        {"surah": 10, "ayah": 57},
-        {"surah": 17, "ayah": 45}
-    ],
-    "fear": [
-        {"surah": 2, "ayah": 126},
-        {"surah": 14, "ayah": 35},
-        {"surah": 68, "ayah": 52},
-        {"surah": 23, "ayah": 97},
-        {"surah": 38, "ayah": 41}
-    ],
-    "anxiety": [
-        {"surah": 13, "ayah": 28},
-        {"surah": 17, "ayah": 82},
-        {"surah": 20, "ayah": 124}
-    ],
-    "stress": [
-        {"surah": 2, "ayah": 155},
-        {"surah": 24, "ayah": 21},
-        {"surah": 12, "ayah": 1},
-        {"surah": 55, "ayah": 29}
-    ],
-    "depression": [
-        {"surah": 2, "ayah": 156},
-        {"surah": 12, "ayah": 87},
-        {"surah": 39, "ayah": 53},
-        {"surah": 2, "ayah": 216},
-        {"surah": 2, "ayah": 155},
-        {"surah": 24, "ayah": 21}
-    ]
-}
-
+# Add this new route to handle individual hadith display
+@app.route('/hadith/<emotion>/<int:index>')
+def show_hadith(emotion, index):
+    try:
+        hadith = HADITH_RECOMMENDATIONS[emotion.lower()][index]
+        return render_template('hadith.html', hadith=hadith, emotion=emotion)
+    except (KeyError, IndexError) as e:
+        print("Error:", str(e))
+        return f"Error loading hadith: {str(e)}", 404
 # Variable to store the last detected emotion
 last_detected_emotion = None
 
@@ -122,6 +35,13 @@ def get_ayah_recommendations(emotion):
     """
     emotion = emotion.lower()
     return AYAH_RECOMMENDATIONS.get(emotion, AYAH_RECOMMENDATIONS['neutral'])
+
+def get_hadith_recommendations(emotion):
+    """
+    Get recommended hadith for a given emotion.
+    """
+    emotion = emotion.lower()
+    return HADITH_RECOMMENDATIONS.get(emotion, HADITH_RECOMMENDATIONS['neutral'])
 
 @app.route('/')
 def index():
@@ -149,12 +69,16 @@ def select_emotion():
 def show_recommendations(emotion):
     recommended_surahs = get_recommendations(emotion)
     recommended_ayahs = get_ayah_recommendations(emotion)
+    recommended_hadiths = get_hadith_recommendations(emotion)
+
     from_detection = request.args.get('from_detection', 'false')
     return render_template(
         'recommendations.html', 
         emotion=emotion, 
         recommended_surahs=json.dumps(recommended_surahs),
         recommended_ayahs=json.dumps(recommended_ayahs),
+        recommended_hadiths=json.dumps(recommended_hadiths),
+
         from_detection=from_detection
     )
 
@@ -204,21 +128,6 @@ def show_juz(juz_number):
 
         # Get the ayahs from the juz
         ayahs = juz_data['data']['ayahs']
-        
-        # Get the Arabic juz name
-        juz_names = {
-            1: "الم", 2: "سَيَقُولُ", 3: "تِلْكَ ٱلرُّسُلُ", 4: "لَنْ تَنَالُوا", 
-            5: "وَٱلْمُحْصَنَاتُ", 6: "لَا يُحِبُّ ٱللهُ", 7: "وَإِذَا سَمِعُوا", 
-            8: "وَلَوْ أَنَّنَا", 9: "قَالَ ٱلْمَلَأُ", 10: "وَٱعْلَمُوا",
-            11: "يَعْتَذِرُونَ", 12: "وَمَا مِنْ دَآبَّةٍ", 13: "وَمَا أُبَرِّئُ", 
-            14: "رُبَمَا", 15: "سُبْحَانَ ٱلَّذِى", 16: "قَالَ أَلَمْ",
-            17: "ٱقْتَرَبَ لِلنَّاسِ", 18: "قَدْ أَفْلَحَ", 19: "وَقَالَ ٱلَّذِينَ", 
-            20: "أَمَّنْ خَلَقَ", 21: "أُتْلُ مَاأُوحِیَ", 22: "وَمَنْ يَقْنُتْ",
-            23: "وَمَا لِيَ", 24: "فَمَنْ أَظْلَمُ", 25: "إِلَيْهِ يُرَدُّ", 
-            26: "حم", 27: "قَالَ فَمَا خَطْبُكُمْ", 28: "قَدْ سَمِعَ ٱللهُ",
-            29: "تَبَارَكَ ٱلَّذِى", 30: "عَمَّ"
-        }
-
         return render_template('juz.html', 
                              juz_number=juz_number,
                              juz_name=juz_names.get(juz_number, ""),
@@ -227,7 +136,6 @@ def show_juz(juz_number):
         print("Error:", str(e))
         return f"Error loading juz: {str(e)}", 500
 
-# Rest of the code remains unchanged...
 
 
 @app.route('/get_emotion', methods=['POST'])

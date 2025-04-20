@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/surah.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block banner_class %}hadith-banner{% endblock %}
+
+{% block banner_content %}
+<div class="surah-banner2">
+    <h1 class="surah-title">Hadith</h1>
+    <img class="banner-image2" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Hadith">
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Main Content Container -->
+<div class="hadith-container">
+    <div class="verses-container">
+        <div class="verse" data-verse-number="{{ hadith.reference }}">
+            <!-- Reference Badge -->
+            <div class="hadith-reference">
+                Reference: {{ hadith.reference }}
+            </div>
+            
+            <!-- Arabic Text -->
+            <div class="arabic-text">{{ hadith.arabic }}</div>
+            
+            <!-- English Translation -->
+            <div class="hadith-verse-translation english-translation">
+                <h3 class="translation-title">English Translation</h3>
+                {{ hadith.english }}
+            </div>
+            
+            <!-- Urdu Translation -->
+            <div class="hadith-verse-translation urdu-translation">
+                <h3 class="translation-title">Urdu Translation</h3>
+                {{ hadith.urdu }}
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/Base.js') }}"></script>
+{% endblock %}
