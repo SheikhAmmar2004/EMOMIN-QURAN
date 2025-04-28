@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}My History - EMOMIN QURAN{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block banner_class %}profile-banner{% endblock %}
+
+{% block banner_content %}
+<h1>My History</h1>
+<img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
+{% endblock %}
+
+{% block content %}
+<div class="history-container">
+    <div class="filters">
+        <div class="filter-group">
+            <label for="timeRange">Time Range:</label>
+            <select id="timeRange" onchange="updateCharts()">
+                <option value="day">Last 24 Hours</option>
+                <option value="week">Last Week</option>
+                <option value="month">Last Month</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Emotion Distribution</h3>
+            <canvas id="emotionChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Content Interaction</h3>
+            <canvas id="contentChart"></canvas>
+        </div>
+    </div>
+
+    <div class="history-sections">
+        <div class="history-section">
+            <h3>Recent Emotions</h3>
+            <div class="history-list">
+                {% for entry in emotion_history %}
+                <div class="history-item">
+                    <div class="emotion-icon {{ entry.emotion.lower() }}"></div>
+                    <div class="history-details">
+                        <span class="emotion-name">{{ entry.emotion }}</span>
+                        <span class="emotion-source">({{ entry.source }})</span>
+                        <span class="timestamp">{{ entry.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="history-section">
+            <h3>Content History</h3>
+            <div class="history-list">
+                {% for entry in content_history %}
+                <div class="history-item">
+                    <div class="content-icon {{ entry.content_type.lower() }}"></div>
+                    <div class="history-details">
+                        <span class="content-name">{{ entry.content_type.title() }} #{{ entry.content_id }}</span>
+                        <span class="emotion-tag">{{ entry.emotion }}</span>
+                        <span class="timestamp">{{ entry.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let emotionChart, contentChart;
+
+function createCharts(data) {
+    const emotionCtx = document.getElementById('emotionChart').getContext('2d');
+    const contentCtx = document.getElementById('contentChart').getContext('2d');
+
+    emotionChart = new Chart(emotionCtx, {
+        type: 'doughnut',
+        data: {
+            labels: data.emotions.labels,
+            datasets: [{
+                data: data.emotions.data,
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
+                    '#9966FF', '#FF9F40', '#FF6384', '#36A2EB'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right'
+                }
+            }
+        }
+    });
+
+    contentChart = new Chart(contentCtx, {
+        type: 'bar',
+        data: {
+            labels: data.content.labels,
+            datasets: [{
+                label: 'Interactions',
+                data: data.content.data,
+                backgroundColor: '#48C9B0'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+}
+
+async function updateCharts() {
+    const timeRange = document.getElementById('timeRange').value;
+    try {
+        const response = await fetch(`/auth/history/data?range=${timeRange}`);
+        const data = await response.json();
+        
+        emotionChart.data.labels = data.emotions.labels;
+        emotionChart.data.datasets[0].data = data.emotions.data;
+        emotionChart.update();
+
+        contentChart.data.labels = data.content.labels;
+        contentChart.data.datasets[0].data = data.content.data;
+        contentChart.update();
+    } catch (error) {
+        console.error('Error updating charts:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/auth/history/data?range=week')
+        .then(response => response.json())
+        .then(data => createCharts(data))
+        .catch(error => console.error('Error loading initial chart data:', error));
+});
+</script>
+<script src="{{ url_for('static', filename='js/Base.js') }}"></script>
+
+{% endblock %}

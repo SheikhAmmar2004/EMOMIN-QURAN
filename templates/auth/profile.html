@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - EMOMIN QURAN{% endblock %}
+
+{% block banner_class %}profile-banner{% endblock %}
+
+{% block banner_content %}
+<h1>My Profile</h1>
+<img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <div class="avatar-placeholder">{{ current_user.username[0].upper() }}</div>
+            </div>
+            <div class="profile-info">
+                <h2>{{ current_user.username }}</h2>
+                <p>{{ current_user.email }}</p>
+                <p class="text-muted">Member since: {{ current_user.created_at.strftime('%B %d, %Y') }}</p>
+            </div>
+        </div>
+        
+        <div class="profile-stats">
+            <div class="stat-card">
+                <h3>Last Login</h3>
+                {% if current_user.last_login %}
+                <p id="last-login"
+                   data-utc="{{ current_user.last_login.isoformat() }}">
+                   {{ current_user.last_login.strftime('%B %d, %Y at %H:%M UTC') }}
+                </p>
+                {% else %}
+                <p>First login</p>
+                {% endif %}
+            </div>
+            <!-- Add more stat cards as needed -->
+        </div>
+        
+        <div class="profile-actions">
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-outline btn-danger">Logout</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/Base.js') }}"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const el = document.getElementById('last-login');
+        if (el && el.dataset.utc) {
+            const utcTime = new Date(el.dataset.utc);
+            const localTimeStr = utcTime.toLocaleString(undefined, {
+                dateStyle: 'medium',
+                timeStyle: 'short'
+            });
+            el.textContent = `Last login: ${localTimeStr}`;
+        }
+    });
+</script>
+{% endblock %}

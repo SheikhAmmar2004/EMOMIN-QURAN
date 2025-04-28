@@ -11,15 +11,16 @@ body, html {
   align-items: center;
   gap: 20px;
   min-height: calc(100vh - 400px);
+  background: var(--neutral-50);
 }
 
 .detect_emotions-heading {
-  color: #006B5F;
+  color: var(--primary);
   text-align: center;
   padding: 20px 0;
   margin: 0;
-  border-bottom: 2px solid #006B5F;
-  width: 100%;
+  border-bottom: 2px solid var(--neutral-300);
+  margin-bottom: 30px;
 }
 
 .status-message {
@@ -32,29 +33,29 @@ body, html {
 }
 
 .status-message.info {
-  background-color: rgba(0, 107, 95, 0.1);
-  color: #006B5F;
+  background-color: var(--primary-light);
+  color: var(--primary);
 }
 
 .status-message.warning {
-  background-color: #fff3cd;
-  color: #856404;
+  background-color: var(--warning-light);
+  color: var(--warning);
 }
 
 .status-message.error {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: var(--error-light);
+  color: var(--error);
 }
 
 #videoContainer {
   width: 540px;
   height: 380px;
-  border: 3px solid #006B5F;
+  border: 3px solid var(--secondary);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 107, 95, 0.2);
+  box-shadow: 0 4px 15px var(--secondary-light);
   position: relative;
-  flex: 0 0 auto; /* Prevent flex shrinking and growing */
+  flex: 0 0 auto;
 }
 
 #videoElement {
@@ -62,8 +63,7 @@ body, html {
   height: 100%;
   object-fit: cover;
   display: block;
-  transform: scaleX(-1); /* Flips the video horizontally */
-
+  transform: scaleX(-1);
 }
 
 #loadingSpinner {
@@ -73,8 +73,8 @@ body, html {
   transform: translate(-50%, -50%);
   width: 50px;
   height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #006B5F;
+  border: 5px solid var(--neutral-200);
+  border-top: 5px solid var(--secondary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   z-index: 2;
@@ -93,6 +93,7 @@ body, html {
   text-align: center;
   width: 100%;
   max-width: 600px;
+  color: var(--neutral-800);
 }
 
 #popup {
@@ -101,8 +102,8 @@ body, html {
   top: 20px;
   right: 20px;
   padding: 15px 25px;
-  background-color: #006B5F;
-  color: white;
+  background-color: var(--primary);
+  color: var(--neutral-50);
   border-radius: 8px;
   z-index: 1000;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -115,7 +116,7 @@ body, html {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
+  background: var(--neutral-50);
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
@@ -146,20 +147,20 @@ body, html {
 }
 
 .dialog-button.primary {
-  background: #006B5F;
-  color: white;
+  background: var(--primary);
+  color: var(--neutral-50);
 }
 
 .dialog-button.secondary {
-  background: #e9ecef;
-  color: #495057;
+  background: var(--neutral-200);
+  color: var(--neutral-700);
 }
 
 .dialog-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-/* Container for the toggle switch */
+
 .toggle-container {
   display: flex;
   align-items: center;
@@ -167,7 +168,6 @@ body, html {
   margin: 20px 0;
 }
 
-/* Toggle Switch */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -181,7 +181,6 @@ body, html {
   height: 0;
 }
 
-/* Slider */
 .slider {
   position: absolute;
   cursor: pointer;
@@ -189,7 +188,7 @@ body, html {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--neutral-300);
   transition: 0.4s;
   border-radius: 34px;
 }
@@ -201,29 +200,25 @@ body, html {
   width: 19px;
   left: 3px;
   bottom: 3px;
-  background-color: white;
+  background-color: var(--neutral-50);
   transition: 0.4s;
   border-radius: 50%;
 }
 
-/* When checked */
 .toggle-switch input:checked + .slider {
-  background-color: #006B5F;
+  background-color: var(--secondary);
 }
 
 .toggle-switch input:checked + .slider::before {
   transform: translateX(24px);
 }
 
-/* Toggle Label */
 .toggle-label {
   font-size: 16px;
-  color: #333;
+  color: var(--neutral-700);
   font-weight: 500;
 }
 
-
-/* Tablet and smaller screens */
 @media (max-width: 768px) {
   .emotion-container {
     padding: 15px;
@@ -238,7 +233,7 @@ body, html {
   #videoContainer {
     width: 100%;
     max-width: 480px;
-    height: 360px; /* Maintain 4:3 aspect ratio */
+    height: 360px;
   }
 
   .dialog-buttons {
@@ -250,7 +245,6 @@ body, html {
   }
 }
 
-/* Mobile screens */
 @media (max-width: 480px) {
   .emotion-container {
     padding: 10px;
@@ -268,7 +262,7 @@ body, html {
   }
 
   #videoContainer {
-    height: 270px; /* Maintain 4:3 aspect ratio for smaller screens */
+    height: 270px;
   }
 
   .status-message {

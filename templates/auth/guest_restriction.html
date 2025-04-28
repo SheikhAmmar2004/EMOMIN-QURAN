@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Feature Restricted - EMOMIN QURAN{% endblock %}
+
+{% block banner_class %}restriction-banner{% endblock %}
+
+{% block banner_content %}
+<h1>Feature Restricted</h1>
+<img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
+{% endblock %}
+
+{% block content %}
+<div class="restriction-container">
+    <div class="restriction-card">
+        <div class="restriction-icon">
+            <img src="{{ url_for('static', filename='images/lock-icon.png') }}" alt="Restricted">
+        </div>
+        <h2>This feature requires an account</h2>
+        <p>To access emotion detection and personalized recommendations, please create an account or log in.</p>
+        <p>Creating an account is quick and free, and gives you access to all features.</p>
+        
+        <div class="restriction-actions">
+            <a href="{{ url_for('auth.signup') }}" class="btn btn-primary">Create Account</a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline">Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/Base.js') }}"></script>
+{% endblock %}

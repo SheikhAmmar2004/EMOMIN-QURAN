@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/surah.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
 {% endblock %}
@@ -177,50 +176,10 @@
     </div>
 </div>
 
-<div class="navigation">
-    <a href="javascript:history.back()" class="back-button">← Back to Recommendations</a>
-</div>
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/ayah.js') }}"></script>
 <script src="{{ url_for('static', filename='js/Base.js') }}"></script>
 
-<style>
-.ayah-container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
-
-
-.audio-player {
-    margin: 30px 0;
-    text-align: center;
-}
-
-.audio-player audio {
-    width: 100%;
-    max-width: 500px;
-}
-
-.navigation {
-    margin-top: 30px;
-    text-align: center;
-}
-
-.back-button {
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #006B5F;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-}
-
-.back-button:hover {
-    background-color: #005a4f;
-}
-</style>
 {% endblock %}

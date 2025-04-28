@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, request, jsonify
+from flask import Flask, render_template, Response, request, jsonify, session
 import cv2
 from emotion import get_emotion
 import base64
@@ -6,21 +6,90 @@ import numpy as np
 import time
 import requests
 import json
-from recommendations import SURAH_RECOMMENDATIONS, AYAH_RECOMMENDATIONS, HADITH_RECOMMENDATIONS,juz_names
+from recommendations import SURAH_RECOMMENDATIONS, AYAH_RECOMMENDATIONS, HADITH_RECOMMENDATIONS, juz_names
+from flask_login import LoginManager, current_user, login_required
+from models import db, User, EmotionHistory, ContentHistory
+from auth import auth, init_login_manager, guest_user_required
+import os
+from datetime import timedelta
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emomin.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 
-# Add this new route to handle individual hadith display
-@app.route('/hadith/<emotion>/<int:index>')
-def show_hadith(emotion, index):
+# Initialize extensions
+db.init_app(app)
+app.register_blueprint(auth, url_prefix='/auth')
+init_login_manager(app)
+
+# Create database tables if they don't exist
+with app.app_context():
+    db.create_all()
+
+@app.before_request
+def default_guest_status():
+    """Set default guest status for unauthenticated users"""
+    if not current_user.is_authenticated and 'is_guest' not in session:
+        session['is_guest'] = True
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/prayer-times')
+def prayer_times():
+    return render_template('prayer_times.html')
+
+@app.route('/qibla')
+def qibla():
+    return render_template('qibla.html')
+@app.route('/detect-emotion')
+@guest_user_required
+def detect_emotion():
+    return render_template('detect_emotion.html')
+
+@app.route('/select-emotion')
+@guest_user_required
+def select_emotion():
+    return render_template('select_emotion.html')
+
+@app.route('/get_emotion', methods=['POST'])
+@guest_user_required
+def get_emotion_endpoint():
+    global last_detected_emotion
     try:
-        hadith = HADITH_RECOMMENDATIONS[emotion.lower()][index]
-        return render_template('hadith.html', hadith=hadith, emotion=emotion)
-    except (KeyError, IndexError) as e:
+        data = request.json
+        image_data = data.get("image")
+        if not image_data:
+            return jsonify({"error": "No image data received"}), 400
+
+        image_data = base64.b64decode(image_data.split(",")[1])
+        np_image = np.frombuffer(image_data, np.uint8)
+        frame = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
+
+        emotion = get_emotion(frame)
+        if emotion:
+            last_detected_emotion = emotion
+            
+            if current_user.is_authenticated:
+                emotion_history = EmotionHistory(
+                    user_id=current_user.id,
+                    emotion=emotion,
+                    source='detected'
+                )
+                db.session.add(emotion_history)
+                db.session.commit()
+                
+            return jsonify({"emotion": emotion}), 200
+        else:
+            return jsonify({"error": "Could not detect emotion"}), 500
+    except Exception as e:
         print("Error:", str(e))
-        return f"Error loading hadith: {str(e)}", 404
-# Variable to store the last detected emotion
-last_detected_emotion = None
+        return jsonify({"error": str(e)}), 500
+
 
 def get_recommendations(emotion):
     """
@@ -43,33 +112,20 @@ def get_hadith_recommendations(emotion):
     emotion = emotion.lower()
     return HADITH_RECOMMENDATIONS.get(emotion, HADITH_RECOMMENDATIONS['neutral'])
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/prayer-times')
-def prayer_times():
-    return render_template('prayer_times.html')
-
-@app.route('/qibla')
-def qibla():
-    return render_template('qibla.html')
-
-@app.route('/detect-emotion')
-def detect_emotion():
-    global last_detected_emotion
-    last_detected_emotion = None
-    return render_template('detect_emotion.html')
-
-@app.route('/select-emotion')
-def select_emotion():
-    return render_template('select_emotion.html')
-
 @app.route('/recommendations/<emotion>')
 def show_recommendations(emotion):
     recommended_surahs = get_recommendations(emotion)
     recommended_ayahs = get_ayah_recommendations(emotion)
     recommended_hadiths = get_hadith_recommendations(emotion)
+
+    if current_user.is_authenticated:
+        emotion_history = EmotionHistory(
+            user_id=current_user.id,
+            emotion=emotion,
+            source='selected'
+        )
+        db.session.add(emotion_history)
+        db.session.commit()
 
     from_detection = request.args.get('from_detection', 'false')
     return render_template(
@@ -78,45 +134,8 @@ def show_recommendations(emotion):
         recommended_surahs=json.dumps(recommended_surahs),
         recommended_ayahs=json.dumps(recommended_ayahs),
         recommended_hadiths=json.dumps(recommended_hadiths),
-
         from_detection=from_detection
     )
-
-@app.route('/ayah/<int:surah_number>/<int:ayah_number>')
-def show_ayah(surah_number, ayah_number):
-    try:
-        # Fetch the ayah data from the API
-        response = requests.get(f'https://api.alquran.cloud/v1/ayah/{surah_number}:{ayah_number}')
-        response.raise_for_status()
-        ayah_data = response.json()['data']
-        
-        return render_template('ayah.html', ayah=ayah_data)
-    except Exception as e:
-        print("Error:", str(e))
-        return f"Error loading ayah: {str(e)}", 500
-
-# ... rest of your routes remain the same ...
-# Route to display a specific Surah with its audio
-@app.route('/surah/<int:surah_id>')
-def show_surah(surah_id):
-    try:
-        response = requests.get(f'https://quranapi.pages.dev/api/{surah_id}.json')
-        response.raise_for_status()
-        surah_data = response.json()
-        surah_data['number'] = surah_id
-
-        audio_response = requests.get(f'https://api.alquran.cloud/v1/surah/{surah_id}/ar.alafasy')
-        if audio_response.status_code == 200:
-            audio_data = audio_response.json()
-            surah_data['audio_url'] = audio_data.get('audio_file', {}).get('audio_url', '')
-
-        return render_template('surah.html', surah=surah_data)
-    except Exception as e:
-        print("Error:", str(e))
-        return f"Error loading surah: {str(e)}", 500
-
-
-
 # Add new route for juz display
 @app.route('/juz/<int:juz_number>')
 def show_juz(juz_number):
@@ -136,35 +155,82 @@ def show_juz(juz_number):
         print("Error:", str(e))
         return f"Error loading juz: {str(e)}", 500
 
-
-
-@app.route('/get_emotion', methods=['POST'])
-def get_emotion_endpoint():
-    """
-    Receive base64 image data, decode it, detect emotion, and return the result.
-    """
-    global last_detected_emotion
+@app.route('/surah/<int:surah_id>')
+def show_surah(surah_id):
     try:
-        data = request.json
-        image_data = data.get("image")
-        if not image_data:
-            return jsonify({"error": "No image data received"}), 400
+        response = requests.get(f'https://quranapi.pages.dev/api/{surah_id}.json')
+        response.raise_for_status()
+        surah_data = response.json()
+        surah_data['number'] = surah_id
 
-        # Decode the base64 image
-        image_data = base64.b64decode(image_data.split(",")[1])
-        np_image = np.frombuffer(image_data, np.uint8)
-        frame = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
+        if current_user.is_authenticated:
+            content_history = ContentHistory(
+                user_id=current_user.id,
+                content_type='surah',
+                content_id=str(surah_id),
+                emotion=request.args.get('emotion', 'neutral')
+            )
+            db.session.add(content_history)
+            db.session.commit()
 
-        # Detect emotion
-        emotion = get_emotion(frame)
-        if emotion:
-            last_detected_emotion = emotion
-            return jsonify({"emotion": emotion}), 200
-        else:
-            return jsonify({"error": "Could not detect emotion"}), 500
+        audio_response = requests.get(f'https://api.alquran.cloud/v1/surah/{surah_id}/ar.alafasy')
+        if audio_response.status_code == 200:
+            audio_data = audio_response.json()
+            surah_data['audio_url'] = audio_data.get('audio_file', {}).get('audio_url', '')
+
+        return render_template('surah.html', surah=surah_data)
     except Exception as e:
         print("Error:", str(e))
-        return jsonify({"error": str(e)}), 500
+        return f"Error loading surah: {str(e)}", 500
+
+@app.route('/ayah/<int:surah_number>/<int:ayah_number>')
+def show_ayah(surah_number, ayah_number):
+    try:
+        response = requests.get(f'https://api.alquran.cloud/v1/ayah/{surah_number}:{ayah_number}')
+        response.raise_for_status()
+        ayah_data = response.json()['data']
+        
+        if current_user.is_authenticated:
+            content_history = ContentHistory(
+                user_id=current_user.id,
+                content_type='ayah',
+                content_id=f'{surah_number}:{ayah_number}',
+                emotion=request.args.get('emotion', 'neutral')
+            )
+            db.session.add(content_history)
+            db.session.commit()
+        
+        return render_template('ayah.html', ayah=ayah_data)
+    except Exception as e:
+        print("Error:", str(e))
+        return f"Error loading ayah: {str(e)}", 500
+
+@app.route('/hadith/<emotion>/<int:index>')
+def show_hadith(emotion, index):
+    try:
+        hadith = HADITH_RECOMMENDATIONS[emotion.lower()][index]
+        
+        if current_user.is_authenticated:
+            content_history = ContentHistory(
+                user_id=current_user.id,
+                content_type='hadith',
+                content_id=str(index),
+                emotion=emotion
+            )
+            db.session.add(content_history)
+            db.session.commit()
+        
+        return render_template('hadith.html', hadith=hadith, emotion=emotion)
+    except (KeyError, IndexError) as e:
+        print("Error:", str(e))
+        return f"Error loading hadith: {str(e)}", 404
+
+@app.context_processor
+def inject_user_status():
+    return {
+        'is_authenticated': current_user.is_authenticated,
+        'is_guest': session.get('is_guest', True)
+    }
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

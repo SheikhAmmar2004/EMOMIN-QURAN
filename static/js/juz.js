@@ -1,4 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+        // Reading Progress Bar functionality
+        const readingProgressBar = document.getElementById('readingProgressBar');
+        const footer = document.querySelector('footer'); // Assumes your footer is in base.html
+
+    
+        // Function to update the reading progress
+        function updateReadingProgress() {
+            // Get the current scroll position
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            
+            // Get the total scrollable height (total document height minus viewport height)
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight-footer.offsetHeight;
+            
+            // Calculate the scroll percentage
+            const scrollPercentage = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+            
+            // Update the progress bar width
+            readingProgressBar.style.width = `${scrollPercentage}%`;
+        }
+        
+        // Add scroll event listener to update the progress bar
+        window.addEventListener('scroll', updateReadingProgress);
+        
+        // Initialize the progress bar on page load
+        updateReadingProgress();
     // Navigation functionality
     const navContainer = document.querySelector('.juz-nav-container');
     const navButtons = document.querySelectorAll('.juz-nav-button');
@@ -230,5 +256,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelectorAll('.verse').forEach(verse => {
         observer.observe(verse);
+    });
+    // Update reading progress when the window is resized
+    window.addEventListener('resize', updateReadingProgress);
+    
+    // Update reading progress when a tab or view is changed since content height might change
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Slight delay to ensure content has updated first
+            setTimeout(updateReadingProgress, 100);
+        });
+    });
+    // Juz Navigation
+    const prevJuzBtn = document.querySelector('.prev-juz');
+    const nextJuzBtn = document.querySelector('.next-juz');
+    const currentJuzNumber = parseInt(document.getElementById('juzNumber').textContent);
+
+    if (prevJuzBtn) {
+        prevJuzBtn.addEventListener('click', () => {
+            if (currentJuzNumber > 1) {
+                window.location.href = `/juz/${currentJuzNumber - 1}`;
+            }
+        });
+    }
+
+    if (nextJuzBtn) {
+        nextJuzBtn.addEventListener('click', () => {
+            if (currentJuzNumber < 30) {
+                window.location.href = `/juz/${currentJuzNumber + 1}`;
+            }
+        });
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        // Left arrow key for previous surah
+        if (e.key === 'ArrowLeft' && currentJuzNumber > 1) {
+            window.location.href = `/juz/${currentJuzNumber - 1}`;
+        }
+        // Right arrow key for next surah
+        else if (e.key === 'ArrowRight' && currentJuzNumber < 30) {
+            window.location.href = `/juz/${currentJuzNumber + 1}`;
+        }
     });
 });

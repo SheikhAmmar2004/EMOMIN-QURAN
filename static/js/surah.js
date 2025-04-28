@@ -1,4 +1,29 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Reading Progress Bar functionality
+    const readingProgressBar = document.getElementById('readingProgressBar');
+    const footer=document.querySelector('footer');
+    
+    // Function to update the reading progress
+    function updateReadingProgress() {
+        // Get the current scroll position
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        
+        // Get the total scrollable height (total document height minus viewport height)
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight-footer.offsetHeight;
+        
+        // Calculate the scroll percentage
+        const scrollPercentage = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        
+        // Update the progress bar width
+        readingProgressBar.style.width = `${scrollPercentage}%`;
+    }
+    
+    // Add scroll event listener to update the progress bar
+    window.addEventListener('scroll', updateReadingProgress);
+    
+    // Initialize the progress bar on page load
+    updateReadingProgress();
+    
     // Auto-play functionality
     const autoPlayEnabled = localStorage.getItem('autoPlayEnabled') === 'true';
     const fromDetection = new URLSearchParams(window.location.search).get('from_detection') === 'true';
@@ -725,10 +750,15 @@ async function loadTafsirs() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                
+                // When a verse comes into view, update the reading progress
+                updateReadingProgress();
             } else {
                 entry.target.classList.remove('visible');
             }
         });
+    }, {
+        threshold: 0.2 // Trigger when 20% of the element is visible
     });
 
     document.querySelectorAll('.verse').forEach(verse => {
@@ -789,5 +819,49 @@ async function loadTafsirs() {
         pauseIcon.style.display = 'none';
         progress.style.width = '0%';
         timeDisplay.textContent = '0:00';
+    });
+    
+    // Update reading progress when the window is resized
+    window.addEventListener('resize', updateReadingProgress);
+    
+    // Update reading progress when a tab or view is changed since content height might change
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Slight delay to ensure content has updated first
+            setTimeout(updateReadingProgress, 100);
+        });
+    });
+
+    // Surah Navigation
+    const prevSurahBtn = document.querySelector('.prev-surah');
+    const nextSurahBtn = document.querySelector('.next-surah');
+    const currentSurahNumber = parseInt(document.querySelector('.surah-banner2').dataset.surahNumber);
+
+    if (prevSurahBtn) {
+        prevSurahBtn.addEventListener('click', () => {
+            if (currentSurahNumber > 1) {
+                window.location.href = `/surah/${currentSurahNumber - 1}`;
+            }
+        });
+    }
+
+    if (nextSurahBtn) {
+        nextSurahBtn.addEventListener('click', () => {
+            if (currentSurahNumber < 114) {
+                window.location.href = `/surah/${currentSurahNumber + 1}`;
+            }
+        });
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        // Left arrow key for previous surah
+        if (e.key === 'ArrowLeft' && currentSurahNumber > 1) {
+            window.location.href = `/surah/${currentSurahNumber - 1}`;
+        }
+        // Right arrow key for next surah
+        else if (e.key === 'ArrowRight' && currentSurahNumber < 114) {
+            window.location.href = `/surah/${currentSurahNumber + 1}`;
+        }
     });
 });

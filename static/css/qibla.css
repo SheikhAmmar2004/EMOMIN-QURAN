@@ -1,11 +1,12 @@
 /* Qibla Direction Styles */
 .qibla-container {
     max-width: 1200px;
+    width: auto;
     margin: 2rem auto;
     padding: 2rem;
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    background: var(--neutral-50);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 /* Header Section */
@@ -29,26 +30,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+    background: var(--neutral-100);
     border-radius: 12px;
-    color: white;
+    color: var(--secondary);
 }
 
 .location-text h2 {
-    color: #2c3e50;
+    color: var(--neutral-800);
     font-size: 1.8rem;
     margin: 0;
     font-weight: 600;
 }
 
 .qibla-angle {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
-    padding: 1rem 2rem;
+    background: var(--primary);
+    padding: 1.5rem 2rem;
     border-radius: 15px;
-    color: white;
+    color: var(--neutral-50);
+    text-align: center;
 }
 
 .angle-icon {
@@ -57,14 +56,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
 }
 
 .angle-text h3 {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.2rem;
     opacity: 0.9;
+    color: white;
 }
 
 #qibla-degree {
@@ -93,10 +92,10 @@
 .compass {
     width: 100%;
     height: 100%;
-    background: #fff;
+    background: var(--neutral-50);
     border-radius: 50%;
     box-shadow: 
-        0 0 0 15px #f5f5f5,
+        0 0 0 15px var(--neutral-100),
         0 0 40px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
@@ -114,10 +113,10 @@
     position: absolute;
     font-size: 1.4rem;
     font-weight: 700;
-    color: #333;
+    color: var(--neutral-700);
 }
 
-.north { top: 20px; left: 50%; transform: translateX(-50%); color: #ff4444; }
+.north { top: 20px; left: 50%; transform: translateX(-50%); color: var(--error); }
 .south { bottom: 20px; left: 50%; transform: translateX(-50%); }
 .east { right: 20px; top: 50%; transform: translateY(-50%); }
 .west { left: 20px; top: 50%; transform: translateY(-50%); }
@@ -133,7 +132,7 @@
     position: absolute;
     width: 2px;
     height: 12px;
-    background: #e0e0e0;
+    background: var(--neutral-200);
     left: 50%;
     transform-origin: 50% 200px;
 }
@@ -143,7 +142,7 @@
     position: absolute;
     width: 2px;
     height: 6px;
-    background: #e0e0e0;
+    background: var(--neutral-200);
     left: 0;
     top: -190px;
 }
@@ -156,7 +155,7 @@
     width: 90%;
     height: 90%;
     transform: translate(-50%, -50%);
-    border: 2px solid #f0f0f0;
+    border: 2px solid var(--neutral-200);
     border-radius: 50%;
 }
 
@@ -167,7 +166,7 @@
     width: 70%;
     height: 70%;
     transform: translate(-50%, -50%);
-    border: 2px solid #f0f0f0;
+    border: 2px solid var(--neutral-200);
     border-radius: 50%;
 }
 
@@ -188,7 +187,7 @@
     left: 50%;
     width: 6px;
     height: 100px;
-    background: #ff4444;
+    background: var(--error);
     transform: translateX(-50%);
 }
 
@@ -198,10 +197,10 @@
     left: 50%;
     width: 20px;
     height: 20px;
-    background: #ff4444;
+    background: var(--error);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+    box-shadow: 0 0 10px rgba(194, 24, 91, 0.3);
 }
 
 .arrow-south {
@@ -210,7 +209,7 @@
     left: 50%;
     width: 6px;
     height: 100px;
-    background: #666;
+    background: var(--neutral-600);
     transform: translateX(-50%);
 }
 
@@ -222,7 +221,7 @@
     transform: translate(-50%, -50%);
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
-    border-bottom: 30px solid #ff4444;
+    border-bottom: 30px solid var(--error);
 }
 
 .arrow-south::after {
@@ -233,7 +232,7 @@
     transform: translate(-50%, 50%);
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
-    border-top: 30px solid #666;
+    border-top: 30px solid var(--neutral-600);
 }
 
 /* Qibla Indicator */
@@ -252,13 +251,13 @@
     transform: translateX(-50%);
     width: 50px;
     height: 50px;
-    background: #006B5F;
+    background: var(--secondary);
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(0, 107, 95, 0.3);
+    box-shadow: 0 4px 10px rgba(72, 201, 176, 0.3);
 }
 
 .indicator-line {
@@ -267,13 +266,13 @@
     left: 50%;
     width: 2px;
     height: 100px;
-    background: #006B5F;
+    background: var(--secondary);
     transform: translateX(-50%);
 }
 
 /* Instructions Card */
 .instructions-card {
-    background: white;
+    background: var(--neutral-50);
     border-radius: 15px;
     padding: 2rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -293,13 +292,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #e8f5e9;
+    background: var(--success-light);
     border-radius: 10px;
-    color: #2e7d32;
+    color: var(--success);
 }
 
 .instructions-header h3 {
-    color: #2c3e50;
+    color: var(--neutral-800);
     margin: 0;
     font-size: 1.2rem;
     font-weight: 600;
@@ -320,18 +319,18 @@
 .step-number {
     width: 24px;
     height: 24px;
-    background: #f0f0f0;
+    background: var(--neutral-200);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    color: #666;
+    color: var(--neutral-600);
 }
 
 .step p {
     margin: 0;
-    color: #666;
+    color: var(--neutral-600);
     font-size: 0.9rem;
 }
 
@@ -339,7 +338,7 @@
     width: 100%;
     margin-top: 1.5rem;
     padding: 1rem;
-    background: #006B5F;
+    background: var(--primary);
     color: white;
     border: none;
     border-radius: 10px;
@@ -353,7 +352,7 @@
 }
 
 .calibrate-button:hover {
-    background: #005048;
+    background: var(--primary-hover);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 107, 95, 0.2);
 }
@@ -367,7 +366,7 @@
 }
 
 .error {
-    color: #d32f2f;
+    color: var(--error);
     text-align: center;
     margin-top: 1rem;
 }
@@ -379,7 +378,7 @@
     }
 
     .instructions-card {
-        width: 100%;
+        width: auto;
         max-width: 500px;
         margin: 0 auto;
     }
@@ -389,6 +388,7 @@
     .qibla-container {
         margin: 1rem;
         padding: 1.5rem;
+        width: auto;
     }
 
     .qibla-header {
@@ -431,6 +431,9 @@
 }
 
 @media (max-width: 480px) {
+    .qibla-container {
+        width: auto;
+    }
     .compass-container {
         width: 250px;
         height: 250px;

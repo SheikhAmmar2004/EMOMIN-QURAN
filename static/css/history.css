@@ -1,0 +1,164 @@
+.history-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    background: var(--neutral-50);
+}
+
+.filters {
+    background: var(--neutral-50);
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.filter-group label {
+    font-weight: 500;
+    color: var(--neutral-700);
+}
+
+.filter-group select {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--neutral-200);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--neutral-700);
+    background-color: var(--neutral-50);
+    cursor: pointer;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.chart-card {
+    background: var(--neutral-50);
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card h3 {
+    margin: 0 0 1.5rem;
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.history-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.history-section {
+    background: var(--neutral-50);
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.history-section h3 {
+    margin: 0 0 1.5rem;
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--neutral-100);
+    border-radius: 10px;
+    transition: transform 0.2s ease;
+}
+
+.history-item:hover {
+    transform: translateY(-2px);
+}
+
+.emotion-icon,
+.content-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--neutral-50);
+    font-size: 1.2rem;
+}
+
+.history-details {
+    flex: 1;
+}
+
+.emotion-name,
+.content-name {
+    display: block;
+    font-weight: 500;
+    color: var(--neutral-700);
+}
+
+.emotion-source,
+.emotion-tag {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    background: var(--neutral-200);
+    color: var(--neutral-600);
+    margin-left: 0.5rem;
+}
+
+.timestamp {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--neutral-500);
+    margin-top: 0.2rem;
+}
+
+/* Emotion Icons - Using secondary color variations for better distinction */
+.emotion-icon.happy { background-color: var(--success); }
+.emotion-icon.sad { background-color: var(--info); }
+.emotion-icon.angry { background-color: var(--error); }
+.emotion-icon.neutral { background-color: var(--neutral-500); }
+.emotion-icon.surprise { background-color: var(--warning); }
+.emotion-icon.fear { background-color: var(--secondary); }
+.emotion-icon.disgust { background-color: var(--neutral-700); }
+
+/* Content Icons - Using primary and secondary colors */
+.content-icon.surah { background-color: var(--secondary); }
+.content-icon.ayah { background-color: var(--primary); }
+.content-icon.hadith { background-color: var(--primary-hover); }
+
+@media (max-width: 768px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-sections {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

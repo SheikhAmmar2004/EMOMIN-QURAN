@@ -2,6 +2,26 @@ body, html {
     overflow-x: hidden;
 }
 
+/* Reading Progress Bar */
+.reading-progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+}
+
+.reading-progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(to right, var(--secondary), var(--primary));
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 1px 5px rgba(0, 107, 95, 0.2);
+    transition: width 0.15s ease-out;
+}
+
 /* Enhanced Surah Banner */
 .surah-banner {
     box-shadow: 0 10px 30px rgba(0, 107, 95, 0.2);
@@ -54,11 +74,11 @@ body, html {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     gap: 15px;
     width: 200px;
-    position: fixed; /* Fixed position for scrolling */
-    bottom: 10px; /* Position at the bottom */
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Center alignment */
-    z-index: 1000; /* Ensure it stays above other elements */
+    position: fixed; 
+    bottom: 10px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    z-index: 1000; 
 }
 
 
@@ -84,13 +104,13 @@ body, html {
 .play-button svg {
     width: 24px;
     height: 24px;
-    fill: #006B5F;
+    fill: var(--secondary);
 }
 
 .audio-progress {
     flex-grow: 1;
     height: 4px;
-    background: #48C9B0;
+    background: var(--neutral-200);
     border-radius: 2px;
     position: relative;
     cursor: pointer;
@@ -101,13 +121,13 @@ body, html {
     left: 0;
     top: 0;
     height: 100%;
-    background: #006B5F;
+    background: var(--secondary);
     border-radius: 2px;
     transition: width 0.1s linear;
 }
 
 .time-display {
-    color: #006B5F;
+    color: var(--neutral-600);
     font-size: 14px;
     font-family: 'Montserrat', sans-serif;
     min-width: 50px;
@@ -116,10 +136,12 @@ body, html {
 
 
 /* Surah Content */
-.surah-container {
+.surah-container, .ayah-container, .hadith-container  {
     max-width: 1000px;
+    width: 100%;
     margin: 40px auto;
     padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .verses-container {
@@ -134,14 +156,14 @@ body, html {
     position: relative;
     margin-bottom: 35px;
     padding: 25px 25px 25px 60px;
-    border-bottom: 1px solid rgba(0, 107, 95, 0.1);
+    border-bottom: 1px solid var(--neutral-200);
     transition: all 0.3s ease;
 }
 
 .verse:hover {
-    background: rgba(72, 201, 176, 0.05);
-    transform: translateX(10px);
-    border-radius: 15px;
+    background: var(--neutral-50);
+  transform: translateX(10px);
+  border-radius: 15px;
 }
 
 .verse:last-child {
@@ -151,16 +173,16 @@ body, html {
 
 .arabic-text {
     font-size: 36px;
-    line-height: 2.2;
-    text-align: right;
-    margin-bottom: 15px;
-    color: #006B5F;
-    font-family: "Scheherazade New", "Traditional Arabic", "Amiri", serif;
-    transition: all 0.3s ease;
+  line-height: 2.2;
+  text-align: right;
+  margin-bottom: 15px;
+  color: var(--primary);
+  font-family: "Scheherazade New", "Traditional Arabic", "Amiri", serif;
+  transition: all 0.3s ease;
 }
 
 .verse:hover .arabic-text {
-    color: #48C9B0;
+    color: var(--neutral-700);
 }
 
 .verse-number {
@@ -170,7 +192,7 @@ body, html {
     transform: translateY(-50%);
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+    background: var(--secondary);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -178,13 +200,14 @@ body, html {
     justify-content: center;
     font-size: 16px;
     font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0, 107, 95, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
 }
 
 .verse:hover .verse-number {
     transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 6px 15px rgba(0, 107, 95, 0.3);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+    background: var(--primary);
 }
 
 /* Animations */
@@ -225,12 +248,16 @@ body, html {
     border-radius: 4px;
 }
 
-.verses-container::-webkit-scrollbar-thumb:hover {
+.verses-containers::-webkit-scrollbar-thumb:hover {
     background: #006B5F;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .reading-progress-container {
+        height: 4px;
+    }
+    
     .surah-title {
         font-size: 2rem;
         padding-left: 0;
@@ -281,6 +308,10 @@ body, html {
 }
 
 @media (max-width: 480px) {
+    .reading-progress-container {
+        height: 3px;
+    }
+    
     .surah-title {
         font-size: 1.75rem;
     }
@@ -313,10 +344,9 @@ body, html {
         padding-left: 0; 
      }   
 }
-/* Previous CSS remains unchanged until the navigation menu section */
 
 /* Navigation Menu */
-.surah-nav {
+.surah-nav,.juz-nav {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -325,17 +355,15 @@ body, html {
 }
 
 .nav-container {
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--neutral-100);
     backdrop-filter: blur(10px);
     border-radius: 50px;
     padding: 3px;
     display: flex;
     gap: 3px;
-    box-shadow: 
-        0 2px 8px rgba(0, 107, 95, 0.08),
-        0 0 1px rgba(0, 107, 95, 0.1);
-    max-width: 360px;
-    width: 90%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    max-width: 720px;
+    width: 100%;
     margin: 0 auto;
     position: relative;
 }
@@ -345,14 +373,15 @@ body, html {
     position: absolute;
     top: 3px;
     left: 3px;
-    width: calc(50% - 3px);
+    width: calc(24.8%);
     height: calc(100% - 6px);
-    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+    background: var(--primary);
     border-radius: 50px;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 2px 8px rgba(0, 107, 95, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     z-index: 0;
 }
+
 
 .nav-container[data-active="translation"]::before {
     transform: translateX(100%);
@@ -362,17 +391,25 @@ body, html {
     transform: translateX(200%);
 }
 
+.nav-container[data-active="tafsir"]::before {
+    transform: translateX(200%);
+}
+
+.nav-container[data-active="audio"]::before {
+    transform: translateX(300%);
+}
+
 .nav-button {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
-    padding: 6px 8px;
+    padding: 6px 4px;
     border: none;
     border-radius: 50px;
     background: transparent;
-    color: #006B5F;
+    color: var(--neutral-600);
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
     font-size: 0.8rem;
@@ -381,6 +418,7 @@ body, html {
     position: relative;
     z-index: 1;
     letter-spacing: 0.2px;
+    min-width: 0;
 
 }
 
@@ -389,6 +427,7 @@ body, html {
     height: 14px;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     stroke-width: 2.2;
+    color: var(--neutral-500);
 }
 
 .nav-button.active {
@@ -403,49 +442,24 @@ body, html {
 }
 
 .nav-button:not(.active):hover {
-    color: #48C9B0;
+    color: var(--secondary);
 }
 
 .nav-button:not(.active):hover svg {
     transform: scale(1.1);
-    color: #48C9B0;
+    color: var(--secondary);
 }
 
-/* Responsive adjustments */
+
+/* Responsive adjustments for navigation */
 @media (max-width: 768px) {
     .nav-container {
-        width: 95%;
-        padding: 2.5px;
-        max-width: 340px;
+        max-width: 440px;
     }
 
     .nav-button {
-        padding: 5px 8px;
         font-size: 0.75rem;
-    }
-
-    .nav-button svg {
-        width: 13px;
-        height: 13px;
-    }
-
-    .nav-container::before {
-        top: 2.5px;
-        left: 2.5px;
-        width: calc(33.33% - 2.5px);
-        height: calc(100% - 5px);
-    }
-}
-
-@media (max-width: 480px) {
-    .nav-container {
-        max-width: 320px;
-    }
-
-    .nav-button {
-        padding: 4px 6px;
-        font-size: 0.7rem;
-        gap: 3px;
+        padding: 5px 3px;
     }
 
     .nav-button svg {
@@ -454,56 +468,95 @@ body, html {
     }
 }
 
-/* Previous CSS remains unchanged after these additions */
+@media (max-width: 480px) {
+    .nav-container {
+        max-width: 400px;
+    }
 
-/* Previous CSS remains unchanged */
+    .nav-button {
+        font-size: 0.7rem;
+        padding: 4px 2px;
+    }
 
-/* Previous CSS remains unchanged */
+    .nav-button svg {
+        width: 11px;
+        height: 11px;
+    }
+}
+
+@media (max-width: 360px) {
+    .nav-button {
+        font-size: 0.65rem;
+    }
+
+    .nav-button svg {
+        width: 10px;
+        height: 10px;
+    }
+}
 
 /* Translation Selector */
-.translation-selector {
-    width: 100%;
-    display: none;
-    align-items: center;
-    padding-left: 20px;
-    padding-right: 20px;
-    backdrop-filter: blur(10px);
-    margin: 1px auto;
-    max-width: 800px;
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
-}
-.current-translation {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #006B5F;
-    font-size: 0.85rem;
-    font-weight: 400;
-    line-height: 1.2;
+.translation-selector,
+.tafsir-selector,
+.qari-selector,
+.audio-translation-selector {
+  width: 100%;
+  display: none;
+  align-items: center;
+  padding: 8px 20px;
+  backdrop-filter: blur(10px);
+  margin: 1px auto;
+  max-width: 800px;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
 }
 
-.current-translation span {
-    font-weight: 500;
-    display: inline-block;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.current-translation,
+.current-tafsir,
+.current-qari,
+.current-audio-translation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--neutral-600);
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.2;
 }
 
-.change-translation {
-    background: transparent;
-    color: #48C9B0;
-    padding: 4px 12px;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
+.current-translation span,
+.current-tafsir span,
+.current-qari span,
+.current-audio-translation span {
+  font-weight: 500;
+  display: inline-block;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--neutral-800);
 }
 
+.change-translation,
+.change-tafsir,
+.change-qari,
+.change-audio-translation {
+  background: transparent;
+  color: var(--secondary);
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.change-translation:hover,
+.change-tafsir:hover,
+.change-qari:hover,
+.change-audio-translation:hover {
+  color: var(--primary);
+}
 
 
 /* Responsive adjustments for translation selector */
@@ -567,8 +620,7 @@ body, html {
     }
 }
 
-/* Modal Styles */
-/* Rest of the CSS remains unchanged */
+
 
 /* Modal Styles */
 .modal-overlay {
@@ -592,16 +644,15 @@ body, html {
 
 .modal-content {
     background: white;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow: hidden;
     position: relative;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    transform: translateY(20px);
-    opacity: 0;
-    transition: all 0.3s ease-out;
+    background-color: white;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 16px;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    animation: modal-slide-in 0.3s ease-out;
+    
 }
 
 .modal-overlay.active .modal-content {
@@ -611,14 +662,14 @@ body, html {
 
 .modal-header {
     padding: 16px 20px;
-    border-bottom: 1px solid rgba(0, 107, 95, 0.1);
+    border-bottom: 1px solid var(--neutral-200);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .modal-header h3 {
-    color: #006B5F;
+    color: var(--neutral-800);
     font-size: 1.1rem;
     margin: 0;
 }
@@ -626,7 +677,7 @@ body, html {
 .close-modal {
     background: transparent;
     border: none;
-    color: #48C9B0;
+    color: var(--neutral-500);
     cursor: pointer;
     padding: 4px;
     border-radius: 50%;
@@ -637,8 +688,9 @@ body, html {
 }
 
 .close-modal:hover {
-    background: rgba(72, 201, 176, 0.1);
+    background: var(--neutral-100);
     transform: rotate(90deg);
+    color: var(--neutral-700);
 }
 
 .modal-body {
@@ -647,11 +699,6 @@ body, html {
     max-height: calc(80vh - 130px);
 }
 
-.translations-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
 
 .loading {
     text-align: center;
@@ -670,6 +717,16 @@ body, html {
     margin: 8px 0;
 }
 
+/* Translation Options */
+.translations-list,
+.tafsir-list,
+.qari-list,
+.audio-translations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .translation-category {
     border-bottom: 1px solid rgba(0, 107, 95, 0.1);
     padding-bottom: 16px;
@@ -685,21 +742,52 @@ body, html {
     font-weight: 600;
     margin-bottom: 12px;
 }
-
-.translation-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    cursor: pointer;
+.translation-option,
+.tafsir-option,
+.qari-option,
+.audio-translation-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid var(--neutral-200);
 }
 
-.translation-option:hover {
-    background: rgba(72, 201, 176, 0.05);
+.translation-option:hover,
+.tafsir-option:hover,
+.qari-option:hover,
+.audio-translation-option:hover {
+  background: var(--neutral-50);
+  border-color: var(--secondary);
 }
 
+.translation-option.selected,
+.tafsir-option.selected,
+.qari-option.selected,
+.audio-translation-option.selected {
+  background: var(--secondary-light);
+  border-color: var(--secondary);
+}
+
+.translation-info,
+.tafsir-info,
+.qari-info,
+.audio-translation-info {
+  flex: 1;
+}
+
+.translator-name,
+.tafsir-name,
+.qari-name,
+.audio-translation-language {
+  font-size: 0.9rem;
+  color: var(--neutral-700);
+  margin-bottom: 2px;
+  font-weight: 500;
+}
 .translation-checkbox {
     appearance: none;
     width: 18px;
@@ -727,40 +815,31 @@ body, html {
     transform: rotate(45deg);
 }
 
-.translation-info {
-    flex: 1;
-}
-
-.translator-name {
-    font-size: 0.85rem;
-    color: #333;
-    margin-bottom: 2px;
-}
-
 .translation-language {
     font-size: 0.75rem;
-    color: #666;
-}
+    color: var(--neutral-500);
+  }
 
 /* Rest of the CSS remains unchanged */
 /* Add these styles to your existing CSS */
-.verse-translation {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #4A5568;
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background: rgba(72, 201, 176, 0.05);
-    border-radius: 8px;
-    border-left: 3px solid #48C9B0;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
+.verse-translation,
+.verse-tafsir {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--neutral-700);
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--neutral-50);
+  border-radius: 8px;
+  border-left: 3px solid var(--secondary);
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
 }
 
 .translation-error {
-    background: #FEE2E2;
-    color: #DC2626;
+    background: var(--error-light);
+    color: var(--error);
     padding: 0.75rem 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
@@ -795,93 +874,7 @@ body, html {
         margin-top: 0.6rem;
     }
 }
-/* Add these styles to your existing CSS */
 
-/* Qari Selector */
-.qari-selector {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding-top: 8px;
-    padding-left: 20px;
-    padding-right: 20px;
-    backdrop-filter: blur(10px);
-    margin: 1px auto;
-    max-width: 800px;
-    border-radius: 12px;
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
-}
-
-.current-qari {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #006B5F;
-    font-size: 0.85rem;
-    line-height: 1.2;
-    font-weight: 400;
-}
-
-.current-qari span {
-    font-weight: 500;
-    display: inline-block;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.change-qari {
-    background: transparent;
-    color: #48C9B0;
-    padding: 4px 12px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-
-/* Qari list styles */
-.qari-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.qari-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: 1px solid rgba(0, 107, 95, 0.1);
-}
-
-.qari-option:hover {
-    background: rgba(72, 201, 176, 0.05);
-    border-color: #48C9B0;
-}
-
-.qari-option.selected {
-    background: rgba(72, 201, 176, 0.1);
-    border-color: #48C9B0;
-}
-
-.qari-info {
-    flex: 1;
-}
-
-.qari-name {
-    font-size: 0.9rem;
-    color: #006B5F;
-    margin-bottom: 2px;
-    font-weight: 500;
-}
 
 /* Responsive styles for qari selector */
 @media (max-width: 768px) {
@@ -932,89 +925,9 @@ body, html {
         font-size: 0.8rem;
     }
 }
-/* Audio Translation Selector */
-.audio-translation-selector {
-    width: 100%;
-    display: none;
-    align-items: center;
-    padding-left: 20px;
-    padding-right: 20px;
-    backdrop-filter: blur(10px);
-    margin: 1px auto;
-    max-width: 800px;
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
-}
 
-.current-audio-translation {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #006B5F;
-    font-size: 0.85rem;
-    font-weight: 400;
-    line-height: 1.2;
-}
-
-.current-audio-translation span {
-    font-weight: 500;
-    display: inline-block;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.change-audio-translation {
-    background: transparent;
-    color: #48C9B0;
-    padding: 4px 12px;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
 
 /* Audio Translation Modal Styles */
-.audio-translations-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.audio-translation-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: 1px solid rgba(0, 107, 95, 0.1);
-}
-
-.audio-translation-option:hover {
-    background: rgba(72, 201, 176, 0.05);
-    border-color: #48C9B0;
-}
-
-.audio-translation-option.selected {
-    background: rgba(72, 201, 176, 0.1);
-    border-color: #48C9B0;
-}
-
-.audio-translation-info {
-    flex: 1;
-}
-
-.audio-translation-language {
-    font-size: 0.9rem;
-    color: #006B5F;
-    margin-bottom: 2px;
-    font-weight: 500;
-}
 
 /* Responsive styles for audio translation selector */
 @media (max-width: 768px) {
@@ -1099,31 +1012,22 @@ body, html {
     }
 }
 
-/* Rest of your existing surah.css styles remain unchanged */
-/* Navigation Menu */
-.juz-nav {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 12px 0;
-    margin-top: 12px;
-}
 
 .juz-nav-container {
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--neutral-100);
     backdrop-filter: blur(10px);
     border-radius: 50px;
     padding: 3px;
     display: flex;
     gap: 3px;
-    box-shadow: 
-        0 2px 8px rgba(0, 107, 95, 0.08),
-        0 0 1px rgba(0, 107, 95, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     max-width: 360px;
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
     position: relative;
 }
+
+
 
 .juz-nav-container::before {
     content: '';
@@ -1132,7 +1036,7 @@ body, html {
     left: 3px;
     width: calc(50% - 3px);
     height: calc(100% - 6px);
-    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
+    background: var(--primary);
     border-radius: 50px;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow: 0 2px 8px rgba(0, 107, 95, 0.2);
@@ -1157,7 +1061,7 @@ body, html {
     border: none;
     border-radius: 50px;
     background: transparent;
-    color: #006B5F;
+    color: var(--neutral-600);
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
     font-size: 0.8rem;
@@ -1187,13 +1091,11 @@ body, html {
 }
 
 .juz-nav-button:not(.active):hover {
-    color: #48C9B0;
-}
+    color: var(--secondary);}
 
 .juz-nav-button:not(.active):hover svg {
     transform: scale(1.1);
-    color: #48C9B0;
-}
+    color: var(--secondary);}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -1213,12 +1115,7 @@ body, html {
         height: 13px;
     }
 
-    .juz-nav-container::before {
-        top: 2.5px;
-        left: 2.5px;
-        width: calc(33.33% - 2.5px);
-        height: calc(100% - 5px);
-    }
+   
 }
 
 @media (max-width: 480px) {
@@ -1237,103 +1134,10 @@ body, html {
         height: 12px;
     }
 }
-/* Add these styles after your existing verse-translation styles */
 
-/* Tafsir Styles */
-.verse-tafsir {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #4A5568;
-    margin-top: 1rem;
-    padding: 0.75rem 1rem;
-    background: rgba(72, 201, 176, 0.05);
-    border-radius: 8px;
-    border-left: 3px solid #006B5F;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
-}
 
-/* Tafsir Selector */
-.tafsir-selector {
-    width: 100%;
-    display: none;
-    align-items: center;
-    padding: 8px 20px;
-    backdrop-filter: blur(10px);
-    margin: 1px auto;
-    max-width: 800px;
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
-}
 
-.current-tafsir {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #006B5F;
-    font-size: 0.85rem;
-    font-weight: 400;
-    line-height: 1.2;
-}
 
-.current-tafsir span {
-    font-weight: 500;
-    display: inline-block;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.change-tafsir {
-    background: transparent;
-    color: #48C9B0;
-    padding: 4px 12px;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-/* Tafsir List Styles */
-.tafsir-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.tafsir-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: 1px solid rgba(0, 107, 95, 0.1);
-}
-
-.tafsir-option:hover {
-    background: rgba(72, 201, 176, 0.05);
-    border-color: #48C9B0;
-}
-
-.tafsir-option.selected {
-    background: rgba(72, 201, 176, 0.1);
-    border-color: #48C9B0;
-}
-
-/* Enhanced Navigation Menu Styles */
-.nav-container[data-active="tafsir"]::before {
-    transform: translateX(200%);
-}
-
-.nav-container[data-active="audio"]::before {
-    transform: translateX(300%);
-}
 
 /* Responsive Styles for Tafsir */
 @media (max-width: 768px) {
@@ -1389,118 +1193,17 @@ body, html {
     }
 }
 
-/* Update Navigation Menu Styles */
-.nav-container {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border-radius: 50px;
-    padding: 3px;
-    display: flex;
-    gap: 3px;
-    box-shadow: 
-        0 2px 8px rgba(0, 107, 95, 0.08),
-        0 0 1px rgba(0, 107, 95, 0.1);
-    max-width: 480px; /* Increased to accommodate 4 buttons */
-    width: 90%;
-    margin: 0 auto;
-    position: relative;
-}
-
-.nav-container::before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: calc(25% - 3px); /* Adjusted for 4 buttons */
-    height: calc(100% - 6px);
-    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
-    border-radius: 50px;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 2px 8px rgba(0, 107, 95, 0.2);
-    z-index: 0;
-}
-
-.nav-button {
-    flex: 1;
-    min-width: 0; /* Allow buttons to shrink */
-    font-size: 0.8rem; /* Slightly smaller font size */
-    padding: 6px 4px; /* Adjusted padding */
-}
-
-/* Update transform values for the active indicator */
-.nav-container[data-active="translation"]::before {
-    transform: translateX(100%);
-}
-
-.nav-container[data-active="tafsir"]::before {
-    transform: translateX(200%);
-}
-
-.nav-container[data-active="audio"]::before {
-    transform: translateX(300%);
-}
-
-/* Responsive adjustments for navigation */
-@media (max-width: 768px) {
-    .nav-container {
-        max-width: 440px;
-    }
-
-    .nav-button {
-        font-size: 0.75rem;
-        padding: 5px 3px;
-    }
-
-    .nav-button svg {
-        width: 12px;
-        height: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .nav-container {
-        max-width: 400px;
-    }
-
-    .nav-button {
-        font-size: 0.7rem;
-        padding: 4px 2px;
-    }
-
-    .nav-button svg {
-        width: 11px;
-        height: 11px;
-    }
-}
-
-@media (max-width: 360px) {
-    .nav-button {
-        font-size: 0.65rem;
-    }
-
-    .nav-button svg {
-        width: 10px;
-        height: 10px;
-    }
-}
-/* Add these styles at the end of your existing surah.css file */
 
 /* Hadith-specific styles */
-.hadith-container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
 
 .hadith-reference {
+    background: var(--neutral-100);
+    color: var(--neutral-700);
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
     display: inline-block;
-    background: linear-gradient(135deg, #48C9B0 0%, #006B5F 100%);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0, 107, 95, 0.2);
+    margin-top: 8px;
 }
 
 .translation-title {
@@ -1580,18 +1283,106 @@ body, html {
 /* Scroll Bar */
 .verses-container::-webkit-scrollbar {
     width: 8px;
-}
-
-.verses-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
+  }
+  
+  .verses-container::-webkit-scrollbar-track {
+    background: var(--neutral-100);
     border-radius: 4px;
-}
-
-.verses-container::-webkit-scrollbar-thumb {
-    background: #48C9B0;
+  }
+  
+  .verses-container::-webkit-scrollbar-thumb {
+    background: var(--neutral-400);
     border-radius: 4px;
+  }
+  
+  .verses-container::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary);
+  }
+  /* Add this to your existing CSS file */
+
+.surah-navigation,.juz-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1rem;
 }
 
-.verses-container::-webkit-scrollbar-thumb:hover {
-    background: #006B5F;
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg,var(--secondary), var(--primary));
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 107, 95, 0.2);
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 107, 95, 0.3);
+}
+
+.nav-btn:active {
+    transform: translateY(0);
+}
+
+.nav-btn:disabled {
+    background: #e2e8f0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.nav-btn svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.nav-btn:hover:not(:disabled) svg {
+    transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .surah-navigation,.juz-navigation {
+        padding: 0.75rem;
+    }
+
+    .nav-btn {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.9rem;
+    }
+
+    .nav-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .surah-navigation, .juz-navigation {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .nav-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .nav-btn svg {
+        width: 16px;
+        height: 16px;
+    }
 }

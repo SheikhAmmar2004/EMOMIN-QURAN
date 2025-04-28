@@ -3,19 +3,18 @@ body, html {
 }
 
 .emotions-section {
+    padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
 }
 
 .emotions-heading {
-    color: #006B5F;
+    color: var(--primary);
     text-align: center;
     padding: 20px 0;
     margin: 0;
-    border-bottom: 2px solid #006B5F;
+    border-bottom: 2px solid var(--neutral-300);
     margin-bottom: 30px;
-    /*font-size: 2rem;*/
 }
 
 .emotions-grid {
@@ -30,18 +29,17 @@ body, html {
     border-radius: 10px;
     padding: 15px;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    font-weight: 400;
+    border: 1px solid var(--neutral-200);
 }
 
 .emotion-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    border-color: var(--secondary);
 }
 
 .emotion-icon {
@@ -58,21 +56,12 @@ body, html {
 }
 
 .emotion-card p {
-    color: #006D5B;
+    color: var(--primary);
     font-size: 18px;
+    margin: 5px 0;
     font-weight: bold;
-    margin: 10px 0 0 0;
-    transition: color 0.3s ease;
 }
 
-.emotion-card:hover p {
-    color: #48C9B0;
-}
-
-.emotion-card.selected {
-    border: 2px solid #006B5F;
-    transform: scale(1.05);
-}
 /* Styles for medium-sized screens (tablets) and larger */
 @media (min-width: 768px) {
     .emotions-grid {
