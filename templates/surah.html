@@ -191,9 +191,18 @@
         </button>
     </div>
 </div>
+{% include 'partials/feedback_modal.html' %}
+
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/surah.js') }}"></script>
 <script src="{{ url_for('static', filename='js/Base.js') }}"></script>
+<script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
+<script>
+    // Set content type and ID for feedback system
+    document.body.dataset.contentType = 'surah';
+    document.body.dataset.contentId = '{{ surah.number }}';
+    document.body.dataset.emotion = '{{ request.args.get("emotion", "neutral") }}';
+</script>
 {% endblock %}

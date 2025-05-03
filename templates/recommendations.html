@@ -147,7 +147,7 @@ function createHadithCard(hadith, index) {
             clearTimeout(countdownTimer);
             clearInterval(window.timerInterval);
         }
-        window.location.href = `/surah/${surahId}?from_detection=${fromDetection}`;
+        window.location.href = `/surah/${surahId}?from_detection=${fromDetection}&source=recommendations&emotion={{ emotion }}`;
     }
 
     // Handle Ayah Selection

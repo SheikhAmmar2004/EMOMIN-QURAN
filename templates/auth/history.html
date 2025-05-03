@@ -4,6 +4,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/feedback.css') }}">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 
@@ -21,7 +22,7 @@
             <label for="timeRange">Time Range:</label>
             <select id="timeRange" onchange="updateCharts()">
                 <option value="day">Last 24 Hours</option>
-                <option value="week">Last Week</option>
+                <option value="week" selected>Last Week</option>
                 <option value="month">Last Month</option>
             </select>
         </div>
@@ -35,6 +36,18 @@
         <div class="chart-card">
             <h3>Content Interaction</h3>
             <canvas id="contentChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Feedback Charts -->
+    <div class="feedback-charts">
+        <div class="feedback-chart-card">
+            <h3>Content Effectiveness</h3>
+            <canvas id="contentEffectivenessChart"></canvas>
+        </div>
+        <div class="feedback-chart-card">
+            <h3>Emotional Improvement</h3>
+            <canvas id="emotionImprovementChart"></canvas>
         </div>
     </div>
 
@@ -70,15 +83,34 @@
                 {% endfor %}
             </div>
         </div>
+        
+        <!-- Feedback Summary Section -->
+        <div class="history-section">
+            <h3>Feedback Summary</h3>
+            <div class="feedback-list" id="feedbackList">
+                <div class="loading-feedback">Loading your feedback</div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-let emotionChart, contentChart;
+let emotionChart, contentChart, contentEffectivenessChart, emotionImprovementChart;
 
 function createCharts(data) {
     const emotionCtx = document.getElementById('emotionChart').getContext('2d');
     const contentCtx = document.getElementById('contentChart').getContext('2d');
+
+    // Custom colors that match the Islamic-themed website
+    const emotionColors = [
+        'rgba(46, 125, 50, 0.8)',    // success (happy)
+        'rgba(25, 118, 210, 0.8)',    // info (sad)
+        'rgba(194, 24, 91, 0.8)',     // error (angry)
+        'rgba(115, 115, 115, 0.8)',   // neutral
+        'rgba(239, 108, 0, 0.8)',     // warning (surprise) 
+        'rgba(72, 201, 176, 0.8)',    // secondary (fear)
+        'rgba(64, 64, 64, 0.8)'       // neutral-700 (disgust)
+    ];
 
     emotionChart = new Chart(emotionCtx, {
         type: 'doughnut',
@@ -86,18 +118,46 @@ function createCharts(data) {
             labels: data.emotions.labels,
             datasets: [{
                 data: data.emotions.data,
-                backgroundColor: [
-                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
-                    '#9966FF', '#FF9F40', '#FF6384', '#36A2EB'
-                ]
+                backgroundColor: emotionColors,
+                borderColor: 'rgba(255, 255, 255, 0.8)',
+                borderWidth: 2
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: true,
             plugins: {
                 legend: {
-                    position: 'right'
+                    position: 'right',
+                    labels: {
+                        font: {
+                            family: 'Poppins, sans-serif',
+                            size: 12
+                        },
+                        padding: 15,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: {
+                        family: 'Poppins, sans-serif', 
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        family: 'Poppins, sans-serif',
+                        size: 13
+                    },
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: true
                 }
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
             }
         }
     });
@@ -109,21 +169,300 @@ function createCharts(data) {
             datasets: [{
                 label: 'Interactions',
                 data: data.content.data,
-                backgroundColor: '#48C9B0'
+                backgroundColor: 'rgba(72, 201, 176, 0.7)',
+                borderColor: 'rgba(72, 201, 176, 1)',
+                borderWidth: 1,
+                borderRadius: 6,
+                hoverBackgroundColor: 'rgba(0, 107, 95, 0.8)'
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: true,
             scales: {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 1
+                        stepSize: 1,
+                        font: {
+                            family: 'Poppins, sans-serif'
+                        }
+                    },
+                    grid: {
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            family: 'Poppins, sans-serif'
+                        }
+                    },
+                    grid: {
+                        display: false
                     }
                 }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: {
+                        family: 'Poppins, sans-serif', 
+                        size: 14
+                    },
+                    bodyFont: {
+                        family: 'Poppins, sans-serif',
+                        size: 13
+                    },
+                    padding: 12,
+                    cornerRadius: 8
+                }
+            },
+            animation: {
+                delay: function(context) {
+                    return context.dataIndex * 100;
+                },
+                duration: 1000,
+                easing: 'easeOutQuart'
             }
         }
     });
+    
+    // Create feedback charts
+    createFeedbackCharts();
+}
+
+async function createFeedbackCharts() {
+    try {
+        const response = await fetch(`/get_feedback_data?range=${document.getElementById('timeRange').value}`);
+        const data = await response.json();
+        
+        // Content Effectiveness Chart
+        const contentEffectivenessCtx = document.getElementById('contentEffectivenessChart').getContext('2d');
+        const contentTypes = Object.keys(data.content_effectiveness);
+        
+        contentEffectivenessChart = new Chart(contentEffectivenessCtx, {
+            type: 'bar',
+            data: {
+                labels: contentTypes.map(type => type.charAt(0).toUpperCase() + type.slice(1)),
+                datasets: [
+                    {
+                        label: 'Helped',
+                        data: contentTypes.map(type => data.content_effectiveness[type].yes),
+                        backgroundColor: 'rgba(46, 125, 50, 0.7)',
+                        borderColor: 'rgba(46, 125, 50, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Did Not Help',
+                        data: contentTypes.map(type => data.content_effectiveness[type].no),
+                        backgroundColor: 'rgba(194, 24, 91, 0.7)',
+                        borderColor: 'rgba(194, 24, 91, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Not Sure',
+                        data: contentTypes.map(type => data.content_effectiveness[type]['not sure']),
+                        backgroundColor: 'rgba(115, 115, 115, 0.7)',
+                        borderColor: 'rgba(115, 115, 115, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    x: {
+                        stacked: false,
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: 'Poppins, sans-serif'
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            font: {
+                                family: 'Poppins, sans-serif'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: 'Poppins, sans-serif'
+                            },
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: {
+                            family: 'Poppins, sans-serif', 
+                            size: 14
+                        },
+                        bodyFont: {
+                            family: 'Poppins, sans-serif',
+                            size: 13
+                        },
+                        padding: 12,
+                        cornerRadius: 8
+                    }
+                },
+                animation: {
+                    delay: function(context) {
+                        return context.dataIndex * 100 + context.datasetIndex * 100;
+                    }
+                }
+            }
+        });
+        
+        // Emotion Improvement Chart
+        const emotionImprovementCtx = document.getElementById('emotionImprovementChart').getContext('2d');
+        const emotions = Object.keys(data.emotion_improvement);
+        
+        emotionImprovementChart = new Chart(emotionImprovementCtx, {
+            type: 'radar',
+            data: {
+                labels: emotions.map(emotion => emotion.charAt(0).toUpperCase() + emotion.slice(1)),
+                datasets: [
+                    {
+                        label: 'Helped',
+                        data: emotions.map(emotion => data.emotion_improvement[emotion].yes),
+                        backgroundColor: 'rgba(46, 125, 50, 0.2)',
+                        borderColor: 'rgba(46, 125, 50, 0.8)',
+                        pointBackgroundColor: 'rgba(46, 125, 50, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(46, 125, 50, 1)',
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Did Not Help',
+                        data: emotions.map(emotion => data.emotion_improvement[emotion].no),
+                        backgroundColor: 'rgba(194, 24, 91, 0.2)',
+                        borderColor: 'rgba(194, 24, 91, 0.8)',
+                        pointBackgroundColor: 'rgba(194, 24, 91, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(194, 24, 91, 1)',
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            backdropColor: 'transparent',
+                            font: {
+                                family: 'Poppins, sans-serif'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        angleLines: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        pointLabels: {
+                            font: {
+                                family: 'Poppins, sans-serif',
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: 'Poppins, sans-serif'
+                            },
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: {
+                            family: 'Poppins, sans-serif', 
+                            size: 14
+                        },
+                        bodyFont: {
+                            family: 'Poppins, sans-serif',
+                            size: 13
+                        },
+                        padding: 12,
+                        cornerRadius: 8
+                    }
+                }
+            }
+        });
+        
+        // Populate feedback list
+        const feedbackList = document.getElementById('feedbackList');
+        
+        if (data.raw_feedback && data.raw_feedback.length > 0) {
+            const feedbackHTML = data.raw_feedback.map(feedback => `
+                <div class="feedback-item">
+                    <div class="feedback-metadata">
+                        <span class="feedback-type">${feedback.content_type.charAt(0).toUpperCase() + feedback.content_type.slice(1)} #${feedback.content_id}</span>
+                        <span class="feedback-timestamp">${feedback.timestamp}</span>
+                    </div>
+                    <div class="feedback-emotion">
+                        Emotion: <strong>${feedback.emotion_before.charAt(0).toUpperCase() + feedback.emotion_before.slice(1)}</strong>
+                    </div>
+                    <div class="feedback-rating ${feedback.feedback.replace(' ', '-')}">
+                       Helpful: ${feedback.feedback.charAt(0).toUpperCase() + feedback.feedback.slice(1)}
+                    </div>
+                        ${feedback.comment ? `<div class="feedback-comment-text">Remarks: "${feedback.comment}"</div>` : ''}
+                </div>
+            `).join('');
+            
+            feedbackList.innerHTML = feedbackHTML;
+        } else {
+            feedbackList.innerHTML = '<div class="no-feedback-message">No feedback provided yet</div>';
+        }
+        
+    } catch (error) {
+        console.error('Error loading feedback data:', error);
+        document.getElementById('contentEffectivenessChart').parentNode.innerHTML = `
+            <h3>Content Effectiveness</h3>
+            <div class="chart-error">Failed to load feedback data</div>
+        `;
+        document.getElementById('emotionImprovementChart').parentNode.innerHTML = `
+            <h3>Emotional Improvement</h3>
+            <div class="chart-error">Failed to load feedback data</div>
+        `;
+    }
 }
 
 async function updateCharts() {
@@ -139,6 +478,16 @@ async function updateCharts() {
         contentChart.data.labels = data.content.labels;
         contentChart.data.datasets[0].data = data.content.data;
         contentChart.update();
+        
+        // Update feedback charts
+        if (contentEffectivenessChart) {
+            contentEffectivenessChart.destroy();
+        }
+        if (emotionImprovementChart) {
+            emotionImprovementChart.destroy();
+        }
+        
+        createFeedbackCharts();
     } catch (error) {
         console.error('Error updating charts:', error);
     }
@@ -149,8 +498,26 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => createCharts(data))
         .catch(error => console.error('Error loading initial chart data:', error));
+    
+    // Add animation to chart cards
+    const cards = document.querySelectorAll('.chart-card, .feedback-chart-card, .history-section');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+    });
 });
 </script>
 <script src="{{ url_for('static', filename='js/Base.js') }}"></script>
-
 {% endblock %}

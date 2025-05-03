@@ -1,0 +1,32 @@
+<!-- Feedback Modal -->
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/feedback.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/feedback.js"></script>
+
+{% endblock %}
+
+<div class="feedback-modal-overlay" id="feedbackModal">
+    <div class="feedback-modal">
+        <div class="feedback-modal-header">
+            <h3>Your Feedback</h3>
+            <button class="close-feedback-modal" id="closeFeedbackModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="feedback-modal-body">
+            <p class="feedback-question">Did this help improve your emotional state?</p>
+            <div class="feedback-options">
+                <button class="feedback-option" data-feedback="yes">Yes</button>
+                <button class="feedback-option" data-feedback="no">No</button>
+                <button class="feedback-option" data-feedback="not sure">Not Sure</button>
+            </div>
+            <div id="feedbackValidation" class="feedback-validation">Please select an option</div>
+            <div class="feedback-comment">
+                <label for="feedbackComment">Additional comments (optional):</label>
+                <textarea id="feedbackComment" rows="3" placeholder="Share your thoughts..."></textarea>
+            </div>
+            <button id="submitFeedback" class="submit-feedback-btn">Submit Feedback</button>
+        </div>
+    </div>
+</div>

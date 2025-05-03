@@ -8,10 +8,13 @@ import requests
 import json
 from recommendations import SURAH_RECOMMENDATIONS, AYAH_RECOMMENDATIONS, HADITH_RECOMMENDATIONS, juz_names
 from flask_login import LoginManager, current_user, login_required
-from models import db, User, EmotionHistory, ContentHistory
+from models import db, User, EmotionHistory, ContentHistory, UserFeedback
 from auth import auth, init_login_manager, guest_user_required
 import os
-from datetime import timedelta
+from datetime import datetime, timedelta, UTC
+
+
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
@@ -118,6 +121,9 @@ def show_recommendations(emotion):
     recommended_ayahs = get_ayah_recommendations(emotion)
     recommended_hadiths = get_hadith_recommendations(emotion)
 
+    # Capture the `source` query parameter (defaults to None if not provided)
+    source = request.args.get('source', None)
+
     if current_user.is_authenticated:
         emotion_history = EmotionHistory(
             user_id=current_user.id,
@@ -127,15 +133,16 @@ def show_recommendations(emotion):
         db.session.add(emotion_history)
         db.session.commit()
 
-    from_detection = request.args.get('from_detection', 'false')
+    # Pass the `source` to the template
     return render_template(
         'recommendations.html', 
         emotion=emotion, 
         recommended_surahs=json.dumps(recommended_surahs),
         recommended_ayahs=json.dumps(recommended_ayahs),
         recommended_hadiths=json.dumps(recommended_hadiths),
-        from_detection=from_detection
+        source=source  # Pass source here
     )
+
 # Add new route for juz display
 @app.route('/juz/<int:juz_number>')
 def show_juz(juz_number):
@@ -224,6 +231,86 @@ def show_hadith(emotion, index):
     except (KeyError, IndexError) as e:
         print("Error:", str(e))
         return f"Error loading hadith: {str(e)}", 404
+
+@app.route('/submit_feedback', methods=['POST'])
+@login_required
+def submit_feedback():
+    try:
+        data = request.json
+        feedback = UserFeedback(
+            user_id=current_user.id,
+            content_type=data.get('content_type'),
+            content_id=data.get('content_id'),
+            emotion_before=data.get('emotion_before'),
+            emotion_after=data.get('emotion_after', None),
+            feedback=data.get('feedback'),
+            comment=data.get('comment', None)
+        )
+        db.session.add(feedback)
+        db.session.commit()
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/get_feedback_data')
+@login_required
+def get_feedback_data():
+    try:
+        time_range = request.args.get('range', 'week')
+        
+        # Calculate date range based on the selected time range
+        if time_range == 'day':
+            date_filter = datetime.now(UTC) - timedelta(days=1)
+        elif time_range == 'month':
+            date_filter = datetime.now(UTC) - timedelta(days=30)
+        else:  # week
+            date_filter = datetime.now(UTC) - timedelta(days=7)
+        
+        # Get feedback data
+        feedback_data = UserFeedback.query.filter(
+            UserFeedback.user_id == current_user.id,
+            UserFeedback.timestamp >= date_filter
+        ).all()
+        
+        # Prepare data for charts
+        content_effectiveness = {
+            'surah': {'yes': 0, 'no': 0, 'not sure': 0},
+            'ayah': {'yes': 0, 'no': 0, 'not sure': 0},
+            'hadith': {'yes': 0, 'no': 0, 'not sure': 0}
+        }
+        
+        emotion_improvement = {}
+        
+        for feedback in feedback_data:
+            # Count by content type and feedback
+            if feedback.content_type in content_effectiveness:
+                content_effectiveness[feedback.content_type][feedback.feedback] += 1
+            
+            # Count by emotion
+            if feedback.emotion_before not in emotion_improvement:
+                emotion_improvement[feedback.emotion_before] = {'yes': 0, 'no': 0, 'not sure': 0}
+            emotion_improvement[feedback.emotion_before][feedback.feedback] += 1
+        
+        return jsonify({
+            'content_effectiveness': content_effectiveness,
+            'emotion_improvement': emotion_improvement,
+            'raw_feedback': [
+                {
+                    'id': feedback.id,
+                    'content_type': feedback.content_type,
+                    'content_id': feedback.content_id,
+                    'emotion_before': feedback.emotion_before,
+                    'feedback': feedback.feedback,
+                    'comment': feedback.comment,
+                    'timestamp': feedback.timestamp.strftime('%Y-%m-%d %H:%M')
+                }
+                for feedback in feedback_data
+            ]
+        }), 200
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 @app.context_processor
 def inject_user_status():

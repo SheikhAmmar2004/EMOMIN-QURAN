@@ -18,6 +18,8 @@ class User(db.Model, UserMixin):  # ✅ Inherit from UserMixin here
     # Relationships
     emotion_history = db.relationship('EmotionHistory', backref='user', lazy='dynamic')
     content_history = db.relationship('ContentHistory', backref='user', lazy='dynamic')
+    feedback = db.relationship('UserFeedback', backref='user', lazy='dynamic')
+    
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
     
@@ -44,4 +46,17 @@ class ContentHistory(db.Model):
     content_type = db.Column(db.String(20), nullable=False)  # 'surah', 'ayah', or 'hadith'
     content_id = db.Column(db.String(50), nullable=False)  # surah/ayah/hadith identifier
     emotion = db.Column(db.String(50), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+class UserFeedback(db.Model):
+    __tablename__ = 'user_feedback'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    content_type = db.Column(db.String(20), nullable=False)  # 'surah', 'ayah', or 'hadith'
+    content_id = db.Column(db.String(50), nullable=False)  # surah/ayah/hadith identifier
+    emotion_before = db.Column(db.String(50), nullable=False)
+    emotion_after = db.Column(db.String(20), nullable=True)
+    feedback = db.Column(db.String(20), nullable=False)  # 'yes', 'no', or 'not sure'
+    comment = db.Column(db.Text, nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)

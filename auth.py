@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse
-from models import User, EmotionHistory, ContentHistory, db
+from models import User, EmotionHistory, ContentHistory, UserFeedback, db
 from forms import LoginForm, RegistrationForm
 from datetime import datetime, timedelta
 import functools
@@ -99,10 +99,14 @@ def history():
         .order_by(EmotionHistory.timestamp.desc()).limit(10).all()
     content_history = ContentHistory.query.filter_by(user_id=current_user.id)\
         .order_by(ContentHistory.timestamp.desc()).limit(10).all()
+    feedback_history = UserFeedback.query.filter_by(user_id=current_user.id)\
+        .order_by(UserFeedback.timestamp.desc()).limit(10).all()
+    
     
     return render_template('auth/history.html',
                          emotion_history=emotion_history,
-                         content_history=content_history)
+                         content_history=content_history,
+                         feedback_history=feedback_history)
 
 @auth.route('/history/data')
 @login_required
@@ -135,6 +139,16 @@ def history_data():
         ContentHistory.user_id == current_user.id,
         ContentHistory.timestamp >= start_date
     ).group_by(ContentHistory.content_type).all()
+
+    # Get feedback data
+    feedback_data = db.session.query(
+        UserFeedback.feedback,
+        db.func.count(UserFeedback.id)
+    ).filter(
+        UserFeedback.user_id == current_user.id,
+        UserFeedback.timestamp >= start_date
+    ).group_by(UserFeedback.feedback).all()
+    
     
     return jsonify({
         'emotions': {
@@ -144,5 +158,9 @@ def history_data():
         'content': {
             'labels': [c[0] for c in content_data],
             'data': [c[1] for c in content_data]
+        },
+        'feedback': {
+            'labels': [f[0] for f in feedback_data],
+            'data': [f[1] for f in feedback_data]
         }
     })
