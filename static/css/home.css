@@ -181,7 +181,16 @@ padding: 20px;
       display: block;
   }
 }
-
+@media (max-width: 480px) {
+  .toggle-container {
+      margin: 0 10px;
+      width: 70%;
+  }
+  .toggle-btn {
+      padding: 5px;
+      font-size: 12px;
+  }
+}
 @media(max-width:374px) {
   .surahs-grid {
       grid-template-columns: repeat(1, 1fr);

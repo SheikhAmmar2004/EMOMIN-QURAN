@@ -24,35 +24,38 @@
             
             <div class="nav-menu">
                 <img src="{{ url_for('static', filename='images/ArabicCalligraphy.png') }}" alt="Quran" class="nav-logo">
+                
                 <a href="{{ url_for('index') }}" class="nav-link">
                     <div class="nav-icon-wrapper">
                         <img src="{{ url_for('static', filename='images/homeicon.png') }}" alt="Home" class="nav-icon">
                     </div>
                     <span>Home</span>
                 </a>
-                <a href="{{ url_for('detect_emotion') }}" class="nav-link {% if is_guest and not is_authenticated %}restricted-feature{% endif %}" id="detectEmotionBtn">
-                    <div class="nav-icon-wrapper">
-                        <img src="{{ url_for('static', filename='images/faceidicon.png') }}" alt="Scan" class="nav-icon">
-                    </div>
-                    <span>Scan your mood</span>
-                </a>
-                <a href="{{ url_for('select_emotion') }}" class="nav-link {% if is_guest and not is_authenticated %}restricted-feature{% endif %}">
-                    <div class="nav-icon-wrapper">
-                        <img src="{{ url_for('static', filename='images/chooseicon.png') }}" alt="Select Mood" class="nav-icon">
-                    </div>
-                    <span>Select your mood</span>
-                </a>
+
                 <a href="{{ url_for('prayer_times') }}" class="nav-link">
                     <div class="nav-icon-wrapper">
                         <img src="{{ url_for('static', filename='images/prayer-icon.png') }}" alt="Prayer Times" class="nav-icon">
                     </div>
-                    <span>Prayer Times</span>
+                    <span>Prayer Timings</span>
                 </a>
                 <a href="{{ url_for('qibla') }}" class="nav-link">
                     <div class="nav-icon-wrapper">
                         <img src="{{ url_for('static', filename='images/qibla-icon.png') }}" alt="Qibla Direction" class="nav-icon">
                     </div>
-                    <span>Qibla Direction</span>
+                    <span>Qibla Locator</span>
+                </a>
+
+                <a href="{{ url_for('detect_emotion') }}" class="nav-link {% if is_guest and not is_authenticated %}restricted-feature{% endif %}" id="detectEmotionBtn">
+                    <div class="nav-icon-wrapper">
+                        <img src="{{ url_for('static', filename='images/faceidicon.png') }}" alt="Scan" class="nav-icon">
+                    </div>
+                    <span>Scan Emotion</span>
+                </a>
+                <a href="{{ url_for('select_emotion') }}" class="nav-link {% if is_guest and not is_authenticated %}restricted-feature{% endif %}">
+                    <div class="nav-icon-wrapper">
+                        <img src="{{ url_for('static', filename='images/chooseicon.png') }}" alt="Select Mood" class="nav-icon">
+                    </div>
+                    <span>Choose Emotion</span>
                 </a>
                 
                 <!-- Auth Navigation Links -->
@@ -81,7 +84,7 @@
                             <div class="nav-icon-wrapper">
                                 <img src="{{ url_for('static', filename='images/signup-icon.png') }}" alt="Sign Up" class="nav-icon">
                             </div>
-                            <span>Sign Up</span>
+                            <span>Join Now</span>
                         </a>
                     {% else %}
                         <a href="{{ url_for('auth.login') }}" class="nav-link">
@@ -94,7 +97,7 @@
                             <div class="nav-icon-wrapper">
                                 <img src="{{ url_for('static', filename='images/signup-icon.png') }}" alt="Sign Up" class="nav-icon">
                             </div>
-                            <span>Sign Up</span>
+                            <span>Join Now</span>
                         </a>
                         <a href="{{ url_for('auth.guest_login') }}" class="nav-link">
                             <div class="nav-icon-wrapper">
@@ -166,10 +169,11 @@
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
                     <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('detect_emotion') }}">Scan your mood</a></li>
-                    <li><a href="{{ url_for('select_emotion') }}">Select your mood</a></li>
-                    <li><a href="{{ url_for('prayer_times') }}">Prayer Times</a></li>
-                    <li><a href="{{ url_for('qibla') }}">Qibla Direction</a></li>
+                    <li><a href="{{ url_for('prayer_times') }}">Namaz Timings</a></li>
+                    <li><a href="{{ url_for('qibla') }}">Qibla Locator</a></li>
+                    <li><a href="{{ url_for('detect_emotion') }}">Scan Emotion</a></li>
+                    <li><a href="{{ url_for('select_emotion') }}">Choose Emotion</a></li>
+
                 </ul>
             </div>
             <div class="footer-section">

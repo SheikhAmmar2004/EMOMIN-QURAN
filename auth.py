@@ -1,13 +1,17 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session, jsonify
+from flask import Blueprint, render_template, redirect, url_for, flash, request, session, jsonify, current_app
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse
 from models import User, EmotionHistory, ContentHistory, UserFeedback, db
-from forms import LoginForm, RegistrationForm
+from forms import LoginForm, RegistrationForm,RequestPasswordResetForm, ResetPasswordForm
 from datetime import datetime, timedelta
 import functools
+from flask_mail import Mail, Message
+
 
 auth = Blueprint('auth', __name__)
 login_manager = LoginManager()
+mail = Mail()
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -18,6 +22,19 @@ def init_login_manager(app):
     login_manager.login_view = 'auth.login'
     login_manager.login_message = 'Please log in to access this page.'
     login_manager.login_message_category = 'info'
+    mail.init_app(app)
+
+def send_password_reset_email(user):
+    token = user.get_reset_password_token()
+    msg = Message('Password Reset Request',
+                  sender=current_app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=[user.email])
+    msg.body = f'''To reset your password, visit the following link:
+{url_for('auth.reset_password', token=token, _external=True)}
+
+If you did not make this request then simply ignore this email and no changes will be made.
+'''
+    mail.send(msg)
 
 def guest_user_required(f):
     @functools.wraps(f)
@@ -27,6 +44,34 @@ def guest_user_required(f):
             return render_template('auth/guest_restriction.html')
         return f(*args, **kwargs)
     return decorated_function
+
+@auth.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RequestPasswordResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_password_reset_email(user)
+        flash('Check your email for the instructions to reset your password', 'info')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/reset_password_request.html', form=form)
+
+@auth.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for('index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset.', 'success')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/reset_password.html', form=form)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():

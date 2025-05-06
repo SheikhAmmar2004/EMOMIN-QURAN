@@ -28,9 +28,18 @@
   font-weight: 600;
 }
 
+.auth-description {
+  text-align: center;
+  color: var(--neutral-600);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 /* Form Elements */
 .form-group {
   margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .form-group label {
@@ -71,6 +80,23 @@
   margin-right: 0.5rem;
 }
 
+.forgot-password {
+  text-align: right;
+  margin-top: 0.5rem;
+}
+
+.forgot-password a {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
 .form-actions {
   margin-top: 2rem;
   text-align: center;
@@ -88,6 +114,7 @@
   text-decoration: none;
   border: none;
   font-size: 1rem;
+  min-width: 160px;
 }
 
 .btn-primary {
@@ -105,20 +132,15 @@
   background: transparent;
   border: 2px solid var(--secondary);
   color: var(--primary);
+  width: 90%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
 }
 
 .btn-outline:hover {
   background-color: var(--secondary-light);
   transform: translateY(-2px);
-}
-
-.btn-danger {
-  border-color: var(--error);
-  color: var(--error);
-}
-
-.btn-danger:hover {
-  background-color: var(--error-light);
 }
 
 /* Auth Alternatives */
@@ -130,7 +152,7 @@
 }
 
 .auth-alternatives p {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   color: var(--neutral-600);
 }
 
@@ -146,8 +168,17 @@
   text-decoration: underline;
 }
 
-.auth-alternatives .btn {
-  margin-top: 1rem;
+.guest-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.guest-option span {
+  color: var(--neutral-600);
+  font-size: 0.9rem;
 }
 
 /* Alerts */
@@ -185,6 +216,37 @@
 /* Banner for Auth Pages */
 .auth-banner {
   background: linear-gradient(90deg, var(--primary-hover) 15%, var(--secondary) 85%);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .auth-card {
+    padding: 1.5rem;
+  }
+  
+  .auth-card h2 {
+    font-size: 1.5rem;
+  }
+  
+  .form-control {
+    width: 87%;
+  }
+  
+  .btn {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .auth-alternatives {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+  }
+  
+  .guest-option {
+    margin-top: 0.5rem;
+    width: 87%;
+  }
+
 }
 
 /* Profile Page Styles */

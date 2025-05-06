@@ -154,4 +154,8 @@
       flex-direction: column;
       gap: 10px;
     }
+    .auth-status{
+      font-size: 0.8rem;
+      padding: 10px 15px;
+    }
   }

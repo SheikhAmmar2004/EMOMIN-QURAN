@@ -1,4 +1,5 @@
 from flask import Flask, render_template, Response, request, jsonify, session
+from flask_mail import Mail
 import cv2
 from emotion import get_emotion
 import base64
@@ -12,7 +13,10 @@ from models import db, User, EmotionHistory, ContentHistory, UserFeedback
 from auth import auth, init_login_manager, guest_user_required
 import os
 from datetime import datetime, timedelta, UTC
+from dotenv import load_dotenv
 
+
+load_dotenv()
 
 
 
@@ -22,7 +26,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emomin.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 
+# Mail settings
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')
+
 # Initialize extensions
+mail=Mail(app)
 db.init_app(app)
 app.register_blueprint(auth, url_prefix='/auth')
 init_login_manager(app)
