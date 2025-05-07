@@ -23,12 +23,6 @@
     <div id="surahsSection" class="section active">
         <div class="surahs-section">
             <h2 class="surahs-heading">Recommended Surahs for {{ emotion|title }}</h2>
-
-            <!-- Countdown Timer -->
-            <div id="countdown" class="countdown hidden">
-                Auto-selecting surah in <span id="timer">5</span> seconds...
-            </div>
-
             <!-- Surah Grid -->
             <div id="surahsGrid" class="surahs-grid">
                 <!-- Surahs will be loaded here dynamically -->
@@ -143,10 +137,6 @@ function createHadithCard(hadith, index) {
 
     // Handle Surah Selection
     function handleSurahSelection(surahId) {
-        if (countdownTimer) {
-            clearTimeout(countdownTimer);
-            clearInterval(window.timerInterval);
-        }
         window.location.href = `/surah/${surahId}?from_detection=${fromDetection}&source=recommendations&emotion={{ emotion }}`;
     }
 
@@ -219,29 +209,6 @@ function createHadithCard(hadith, index) {
         }
     }
 
-    // Start Countdown for Auto Selection
-    function startCountdown(surahs) {
-        if (!autoPlayEnabled || !fromDetection) {
-            return;
-        }
-
-        const countdownElement = document.getElementById('countdown');
-        const timerElement = document.getElementById('timer');
-        let timeLeft = 5;
-
-        countdownElement.classList.remove('hidden');
-        timerElement.textContent = timeLeft;
-
-        countdownTimer = setTimeout(() => {
-            const randomSurah = surahs[Math.floor(Math.random() * surahs.length)];
-            handleSurahSelection(randomSurah.id);
-        }, 5000);
-
-        window.timerInterval = setInterval(() => {
-            timeLeft--;
-            timerElement.textContent = timeLeft;
-        }, 1000);
-    }
 
     // Execute Initialization When Document is Ready
     document.addEventListener('DOMContentLoaded', () => {

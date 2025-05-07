@@ -7,8 +7,15 @@ import time
 
 class EmotionDetector:
     def __init__(self):
-        # Load Haar Cascade model for face detection
-        self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        # Load YuNet face detector
+        self.face_detector = cv2.FaceDetectorYN_create(
+            'face_detection_yunet_2023mar.onnx',
+            "",
+            (320, 320),  # Input size - smaller for faster processing
+            score_threshold=0.9,
+            nms_threshold=0.3,
+            top_k=5000
+        )
         
         # Load your improved custom model
         try:
@@ -23,7 +30,7 @@ class EmotionDetector:
         
         # Detection parameters
         self.confidence_threshold = 0.7
-        self.time_window = 2
+        self.time_window = 1  # Reduced from 2 to 1 second for faster response
         self.emotion_votes = {}
         self.last_detected_emotion = None
         self.last_emotion_time = 0
@@ -58,30 +65,35 @@ class EmotionDetector:
     def detect_emotion(self, frame):
         """Detect emotion in the given frame"""
         try:
-            # Resize frame for faster processing while maintaining aspect ratio
+            # Resize frame for faster processing
             height, width = frame.shape[:2]
-            scale_factor = min(1.0, 640 / max(height, width))
-            if scale_factor < 1.0:
-                frame = cv2.resize(frame, None, fx=scale_factor, fy=scale_factor)
-
-            # Convert to grayscale for face detection
-            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            target_width = 320  # Smaller size for faster processing
+            scale = target_width / width
+            target_height = int(height * scale)
             
-            # Detect faces using Haar Cascade
-            faces = self.face_cascade.detectMultiScale(
-                gray_frame,
-                scaleFactor=1.1,
-                minNeighbors=5,
-                minSize=(30, 30),
-                flags=cv2.CASCADE_SCALE_IMAGE
-            )
-
-            if len(faces) == 0:
+            resized_frame = cv2.resize(frame, (target_width, target_height))
+            
+            # Set input size for YuNet
+            self.face_detector.setInputSize((target_width, target_height))
+            
+            # Detect faces using YuNet
+            _, faces = self.face_detector.detect(resized_frame)
+            
+            if faces is None or len(faces) == 0:
                 return None
 
-            # Process the first detected face
-            x, y, w, h = faces[0]
-            face_roi = frame[y:y + h, x:x + w]
+            # Process the first detected face (highest confidence)
+            face = faces[0]
+            x, y, w, h = list(map(int, face[:4]))
+            
+            # Expand the face region slightly
+            padding = int(min(w, h) * 0.1)
+            x = max(0, x - padding)
+            y = max(0, y - padding)
+            w = min(target_width - x, w + 2 * padding)
+            h = min(target_height - y, h + 2 * padding)
+            
+            face_roi = resized_frame[y:y+h, x:x+w]
 
             # Preprocess the face
             processed_face = self.preprocess_face(face_roi)

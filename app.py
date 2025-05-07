@@ -71,7 +71,6 @@ def detect_emotion():
 @guest_user_required
 def select_emotion():
     return render_template('select_emotion.html')
-
 @app.route('/get_emotion', methods=['POST'])
 @guest_user_required
 def get_emotion_endpoint():
@@ -82,9 +81,13 @@ def get_emotion_endpoint():
         if not image_data:
             return jsonify({"error": "No image data received"}), 400
 
-        image_data = base64.b64decode(image_data.split(",")[1])
-        np_image = np.frombuffer(image_data, np.uint8)
+        # Decode image directly without saving to file
+        header, encoded = image_data.split(",", 1)
+        np_image = np.frombuffer(base64.b64decode(encoded), dtype=np.uint8)
         frame = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
+        
+        # Convert to RGB if needed (YuNet works with BGR by default)
+        # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         emotion = get_emotion(frame)
         if emotion:
@@ -101,7 +104,7 @@ def get_emotion_endpoint():
                 
             return jsonify({"emotion": emotion}), 200
         else:
-            return jsonify({"error": "Could not detect emotion"}), 500
+            return jsonify({"error": "Could not detect emotion"}), 204  # 204 No Content
     except Exception as e:
         print("Error:", str(e))
         return jsonify({"error": str(e)}), 500
