@@ -17,8 +17,8 @@
 
 {% block content %}
 <!-- Navigation Menu -->
-<div class="surah-nav">
-    <div class="nav-container" data-active="reading">
+<div class="ayah-nav">
+    <div class="ayah-nav-container" data-active="reading">
         <button class="nav-button active" data-view="reading">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
             Reading
@@ -31,17 +31,13 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 4v16h2V4h-2M15 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11V4z"/><path d="M8 12h3"/><path d="M8 16h3"/><path d="M8 8h3"/></svg>
             Tafsir
         </button>
-        <button class="nav-button" data-view="audio">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6L8 10H4V14H8L12 18V6Z"></path><path d="M17 7C17 7 19 9 19 12C19 15 17 17 17 17"></path><path d="M15.5 10.5C15.5 10.5 16.5 11.5 16.5 12C16.5 12.5 15.5 13.5 15.5 13.5"></path></svg>
-            Audio
-        </button>
     </div>
 </div>
 
 <!-- Qari Selector -->
 <div class="qari-selector">
     <div class="current-qari">
-        Recitation by <span id="currentQari">Mishary Rashid Alafasy</span>
+        Recitation by <span id="currentQari">Alafasy</span>
     </div>
     <a class="change-qari" id="changeQari">(Change)</a>
 </div>
@@ -57,17 +53,9 @@
 <!-- Tafsir Selector -->
 <div class="tafsir-selector" style="display: none;">
     <div class="current-tafsir">
-        Tafsir by <span id="currentTafsir">Bayan-ul-Quran</span>
+        Tafsir by <span id="currentTafsir">Tafsir Bayan ul Quran</span>
     </div>
     <a class="change-tafsir" id="changeTafsir">(Change)</a>
-</div>
-
-<!-- Audio Translation Selector -->
-<div class="audio-translation-selector" style="display: none;">
-    <div class="current-audio-translation">
-        Audio Translation in <span id="currentAudioLanguage">English</span>
-    </div>
-    <a class="change-audio-translation" id="changeAudioTranslation">(Change)</a>
 </div>
 
 <!-- Main Content Container -->
@@ -97,6 +85,7 @@
     </div>
     <div class="time-display" id="timeDisplay">0:00</div>
 </div>
+<audio id="audioElement" src="{{ ayah.audio_url }}"></audio>
 
 <!-- Modals -->
 <!-- Translation Modal -->
@@ -150,31 +139,6 @@
     </div>
 </div>
 
-<!-- Audio Translation Modal -->
-<div class="modal-overlay" id="audioTranslationModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Select Audio Translation Language</h3>
-            <button class="close-modal" id="closeAudioTranslationModal">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="audio-translations-list" id="audioTranslationsList">
-                <div class="audio-translation-option" data-language="English">
-                    <div class="audio-translation-info">
-                        <div class="audio-translation-language">English</div>
-                    </div>
-                </div>
-                <div class="audio-translation-option" data-language="Urdu">
-                    <div class="audio-translation-info">
-                        <div class="audio-translation-language">Urdu</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 {% include 'partials/feedback_modal.html' %}
 
 {% endblock %}

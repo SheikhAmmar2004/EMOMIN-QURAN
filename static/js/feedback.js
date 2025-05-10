@@ -112,61 +112,71 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Detect content consumption to trigger modal
-    function setupContentConsumptionDetection() {
-        const contentType = document.body.dataset.contentType;
-        const contentId = document.body.dataset.contentId;
-        
-        // Check if user came from recommendations page
-        const urlParams = new URLSearchParams(window.location.search);
-        const fromRecommendations = urlParams.get('source') === 'recommendations';
-        
-        // Only proceed if user came from recommendations
-        if (!fromRecommendations) {
-            return;
-        }
+// Detect content consumption to trigger modal
+function setupContentConsumptionDetection() {
+    const contentType = document.body.dataset.contentType;
+    const contentId = document.body.dataset.contentId;
+    
+    // Check if user came from recommendations page
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromRecommendations = urlParams.get('source') === 'recommendations';
+    
+    // Only proceed if user came from recommendations
+    if (!fromRecommendations) {
+        return;
+    }
 
-        if (localStorage.getItem(`feedback_${contentType}_${contentId}`) === 'given') return;
+    if (localStorage.getItem(`feedback_${contentType}_${contentId}`) === 'given') return;
 
-        if (contentType === 'surah' || contentType === 'ayah') {
-            const audio = document.querySelector('audio');
-            if (audio) {
-                audio.addEventListener('timeupdate', () => {
-                    const percentPlayed = (audio.currentTime / audio.duration) * 100;
+    if (contentType === 'surah' || contentType === 'ayah') {
+        // Fix: Select the audio element correctly
+        const audioPlayer = document.querySelector('.audio-player');
+        const audioElement = document.querySelector('audio');
+        
+        if (audioElement) {
+            audioElement.addEventListener('timeupdate', () => {
+                if (audioElement.duration) {
+                    const percentPlayed = (audioElement.currentTime / audioElement.duration) * 100;
                     if (percentPlayed >= 80 && !modalShown) {
-                        showFeedbackModal();
-                    }
-                });
-
-                audio.addEventListener('ended', showFeedbackModal);
-            }
-        }
-
-        const scrollableContent = document.querySelector('.verses-container, .hadith-container, .ayah-container');
-        if (scrollableContent) {
-            window.addEventListener('scroll', () => {
-                const scrollPosition = window.scrollY;
-                const contentHeight = scrollableContent.offsetHeight;
-                const windowHeight = window.innerHeight;
-                const scrollableHeight = contentHeight - windowHeight;
-
-                if (scrollableHeight > 0) {
-                    const scrollPercentage = (scrollPosition / scrollableHeight) * 100;
-                    contentPercentageViewed = Math.max(contentPercentageViewed, scrollPercentage);
-
-                    if (contentPercentageViewed >= 80 && !modalShown) {
                         showFeedbackModal();
                     }
                 }
             });
-        }
 
-        // Fallback: show modal after 3 minutes, but only if from recommendations
-        setTimeout(() => {
-            if (!modalShown) {
-                showFeedbackModal();
-            }
-        }, 180000);
+            audioElement.addEventListener('ended', () => {
+                if (!modalShown) {
+                    showFeedbackModal();
+                }
+            });
+        }
     }
+
+    const scrollableContent = document.querySelector('.verses-container, .hadith-container, .ayah-container');
+    if (scrollableContent) {
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            const contentHeight = scrollableContent.offsetHeight;
+            const windowHeight = window.innerHeight;
+            const scrollableHeight = contentHeight - windowHeight;
+
+            if (scrollableHeight > 0) {
+                const scrollPercentage = (scrollPosition / scrollableHeight) * 100;
+                contentPercentageViewed = Math.max(contentPercentageViewed, scrollPercentage);
+
+                if (contentPercentageViewed >= 80 && !modalShown) {
+                    showFeedbackModal();
+                }
+            }
+        });
+    }
+
+    // Fallback: show modal after 3 minutes, but only if from recommendations
+    setTimeout(() => {
+        if (!modalShown) {
+            showFeedbackModal();
+        }
+    }, 180000);
+}
 
     if (feedbackModal) {
         setupContentConsumptionDetection();

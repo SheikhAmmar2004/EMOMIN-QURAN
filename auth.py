@@ -95,7 +95,7 @@ def login():
         if not next_page or urlparse(next_page).netloc != '':
             next_page = url_for('index')
         
-        flash(f'Welcome back, {user.username}!', 'success')
+        #flash(f'Welcome back, {user.username}!', 'success')
         return redirect(next_page)
     
     return render_template('auth/login.html', form=form)

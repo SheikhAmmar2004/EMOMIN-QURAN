@@ -4,7 +4,6 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/feedback.css') }}">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 
@@ -28,46 +27,31 @@
         </div>
     </div>
 
-    <div class="charts-grid">
-        <div class="chart-card">
-            <h3>Emotion Distribution</h3>
-            <canvas id="emotionChart"></canvas>
-        </div>
-        <div class="chart-card">
-            <h3>Content Interaction</h3>
-            <canvas id="contentChart"></canvas>
-        </div>
-    </div>
-    
-    <!-- Feedback Charts -->
-    <div class="feedback-charts">
-        <div class="feedback-chart-card">
-            <h3>Content Effectiveness</h3>
-            <canvas id="contentEffectivenessChart"></canvas>
-        </div>
-        <div class="feedback-chart-card">
-            <h3>Emotional Improvement</h3>
-            <canvas id="emotionImprovementChart"></canvas>
-        </div>
-    </div>
-
-    <div class="history-sections">
-        <div class="history-section">
-            <h3>Recent Emotions</h3>
-            <div class="history-list">
-                {% for entry in emotion_history %}
-                <div class="history-item">
-                    <div class="emotion-icon {{ entry.emotion.lower() }}"></div>
-                    <div class="history-details">
-                        <span class="emotion-name">{{ entry.emotion }}</span>
-                        <span class="emotion-source">({{ entry.source }})</span>
-                        <span class="timestamp">{{ entry.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
-                    </div>
-                </div>
-                {% endfor %}
+<div class="charts-grid">
+        <div class="chart-container">
+            <div class="chart-card">
+                <h3>Emotion Distribution</h3>
+                <canvas id="emotionChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Content Effectiveness</h3>
+                <canvas id="contentEffectivenessChart"></canvas>
             </div>
         </div>
+        <div class="chart-container">
+            <div class="chart-card">
+                <h3>Emotional Improvement</h3>
+                <canvas id="emotionImprovementChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Content Interaction</h3>
+                <canvas id="contentChart"></canvas>
+            </div>
+        </div>
+    </div>
 
+
+    <div class="charts-grid">
         <div class="history-section">
             <h3>Content History</h3>
             <div class="history-list">
@@ -102,15 +86,23 @@ function createCharts(data) {
     const contentCtx = document.getElementById('contentChart').getContext('2d');
 
     // Custom colors that match the Islamic-themed website
-    const emotionColors = [
-        'rgba(46, 125, 50, 0.8)',    // success (happy)
-        'rgba(25, 118, 210, 0.8)',    // info (sad)
-        'rgba(194, 24, 91, 0.8)',     // error (angry)
-        'rgba(115, 115, 115, 0.8)',   // neutral
-        'rgba(239, 108, 0, 0.8)',     // warning (surprise) 
-        'rgba(72, 201, 176, 0.8)',    // secondary (fear)
-        'rgba(64, 64, 64, 0.8)'       // neutral-700 (disgust)
-    ];
+    const emotionColors = 
+[
+    'rgba(46, 204, 113, 0.8)',    // Happy (vibrant green)
+    'rgba(149, 165, 166, 0.8)',   // Neutral (gray)
+    'rgba(88, 214, 141, 0.8)',    // Disgust (sickly green)
+    'rgba(241, 196, 15, 0.8)',    // Surprise (bright yellow)
+    'rgba(26, 188, 156, 0.8)',    // Fear (teal)
+    'rgba(52, 152, 219, 0.8)',    // Sad (blue)
+    'rgba(231, 76, 60, 0.8)',     // Angry (red)
+    'rgba(155, 89, 182, 0.8)',    // Pain (purple)
+    'rgba(245, 176, 65, 0.8)',    // Anxiety (orange)
+    'rgba(44, 62, 80, 0.8)',      // Depression (dark blue-gray)
+    'rgba(214, 48, 49, 0.8)',     // Stress (deep red)
+    'rgba(189, 195, 199, 0.8)',   // Cancer (silver)
+    'rgba(127, 140, 141, 0.8)'    // ICU (dark gray)
+]
+    ;
 
     emotionChart = new Chart(emotionCtx, {
         type: 'doughnut',
@@ -132,7 +124,7 @@ function createCharts(data) {
                     labels: {
                         font: {
                             family: 'Poppins, sans-serif',
-                            size: 12
+                            size: 9.5
                         },
                         padding: 15,
                         usePointStyle: true,

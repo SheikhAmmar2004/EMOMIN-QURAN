@@ -18,8 +18,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emomin.db'
@@ -159,6 +157,45 @@ def show_recommendations(emotion):
         source=source  # Pass source here
     )
 
+@app.route('/get_next_recommendation')
+def get_next_recommendation():
+    current_id = request.args.get('current_id')
+    emotion = request.args.get('emotion')
+    content_type = request.args.get('type')  # 'surah' or 'ayah'
+    
+    try:
+        if content_type == 'surah':
+            recommended_items = get_recommendations(emotion)
+        else:
+            recommended_items = get_ayah_recommendations(emotion)
+            
+        # Convert string IDs to integers for comparison
+        recommended_items = [str(item) for item in recommended_items]
+        
+        # Find current item in list
+        try:
+            current_index = recommended_items.index(str(current_id))
+            next_index = (current_index + 1) % len(recommended_items)
+            next_id = recommended_items[next_index]
+            
+            if content_type == 'ayah':
+                # For ayahs, the ID is in format "surah:ayah"
+                return jsonify({
+                    'next_id': next_id,
+                    'emotion': emotion,
+                    'type': content_type
+                })
+            else:
+                return jsonify({
+                    'next_id': next_id,
+                    'emotion': emotion,
+                    'type': content_type
+                })
+        except (ValueError, IndexError):
+            return jsonify({'error': 'No next item found'}), 404
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 # Add new route for juz display
 @app.route('/juz/<int:juz_number>')
 def show_juz(juz_number):
@@ -181,11 +218,25 @@ def show_juz(juz_number):
 @app.route('/surah/<int:surah_id>')
 def show_surah(surah_id):
     try:
+        # Get Surah details
         response = requests.get(f'https://quranapi.pages.dev/api/{surah_id}.json')
         response.raise_for_status()
         surah_data = response.json()
         surah_data['number'] = surah_id
 
+        # Use Quran.com API for audio (update reciter_id as needed)
+        reciter_id = request.args.get('reciter_id', '7')  # Default: Mishary Alafasy = 7
+        audio_api_url = f'https://api.quran.com/api/v4/chapter_recitations/{reciter_id}/{surah_id}'
+        audio_response = requests.get(audio_api_url)
+
+        if audio_response.status_code == 200:
+            audio_data = audio_response.json()
+            audio_url = audio_data.get('audio_file', {}).get('audio_url', '')
+            surah_data['audio_url'] = audio_url
+        else:
+            surah_data['audio_url'] = ''
+
+        # Save to content history if user is authenticated
         if current_user.is_authenticated:
             content_history = ContentHistory(
                 user_id=current_user.id,
@@ -196,15 +247,12 @@ def show_surah(surah_id):
             db.session.add(content_history)
             db.session.commit()
 
-        audio_response = requests.get(f'https://api.alquran.cloud/v1/surah/{surah_id}/ar.alafasy')
-        if audio_response.status_code == 200:
-            audio_data = audio_response.json()
-            surah_data['audio_url'] = audio_data.get('audio_file', {}).get('audio_url', '')
-
         return render_template('surah.html', surah=surah_data)
+
     except Exception as e:
         print("Error:", str(e))
         return f"Error loading surah: {str(e)}", 500
+
 
 @app.route('/ayah/<int:surah_number>/<int:ayah_number>')
 def show_ayah(surah_number, ayah_number):
@@ -212,6 +260,12 @@ def show_ayah(surah_number, ayah_number):
         response = requests.get(f'https://api.alquran.cloud/v1/ayah/{surah_number}:{ayah_number}')
         response.raise_for_status()
         ayah_data = response.json()['data']
+        
+        # Get default audio (Alafasy)
+        audio_response = requests.get(f'https://api.alquran.cloud/v1/ayah/{surah_number}:{ayah_number}/ar.alafasy')
+        if audio_response.status_code == 200:
+            audio_data = audio_response.json()
+            ayah_data['audio_url'] = audio_data['data']['audio']
         
         if current_user.is_authenticated:
             content_history = ContentHistory(
@@ -328,6 +382,10 @@ def get_feedback_data():
         print("Error:", str(e))
         return jsonify({"error": str(e)}), 500
 
+# Serve service worker from root path for proper scope
+@app.route('/service-worker.js')
+def service_worker():
+    return app.send_static_file('js/service-worker.js'), {'Content-Type': 'application/javascript'}
 @app.context_processor
 def inject_user_status():
     return {

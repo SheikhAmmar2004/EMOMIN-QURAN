@@ -81,6 +81,14 @@ async function getPrayerTimes(latitude, longitude) {
         if (data.code === 200) {
             const timings = data.data.timings;
             
+            // Store raw time and display formatted time
+            document.getElementById('fajr-time').setAttribute('data-raw-time', timings.Fajr);
+            document.getElementById('sunrise-time').setAttribute('data-raw-time', timings.Sunrise);
+            document.getElementById('dhuhr-time').setAttribute('data-raw-time', timings.Dhuhr);
+            document.getElementById('asr-time').setAttribute('data-raw-time', timings.Asr);
+            document.getElementById('maghrib-time').setAttribute('data-raw-time', timings.Maghrib);
+            document.getElementById('isha-time').setAttribute('data-raw-time', timings.Isha);
+            
             // Update prayer times with formatted time
             document.getElementById('fajr-time').textContent = formatTimeForDisplay(timings.Fajr);
             document.getElementById('sunrise-time').textContent = formatTimeForDisplay(timings.Sunrise);
@@ -114,10 +122,20 @@ async function getPrayerTimes(latitude, longitude) {
             const geocodeResponse = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`);
             const geocodeData = await geocodeResponse.json();
             document.getElementById('location-name').textContent = `${geocodeData.city}, ${geocodeData.countryName}`;
+            
+            // Dispatch event that prayer times are loaded
+            const prayerTimesLoadedEvent = new CustomEvent('prayerTimesLoaded', {
+                detail: { timings }
+            });
+            document.dispatchEvent(prayerTimesLoadedEvent);
+            
+            return timings;
         }
     } catch (error) {
         console.error('Error fetching prayer times:', error);
     }
+    
+    return null;
 }
 
 function getLocation() {

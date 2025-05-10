@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Navigation functionality
-    const navContainer = document.querySelector('.nav-container');
+    const navContainer = document.querySelector('.ayah-nav-container');
     const navButtons = document.querySelectorAll('.nav-button');
     const translationSelector = document.querySelector('.translation-selector');
     const tafsirSelector = document.querySelector('.tafsir-selector');
-    const audioTranslationSelector = document.querySelector('.audio-translation-selector');
     const verseTranslation = document.querySelector('.verse-translation');
     const verseTafsir = document.querySelector('.verse-tafsir');
 
@@ -13,13 +12,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const surahNumber = document.getElementById('surahNumber').textContent;
     const ayahNumber = verseElement.dataset.verseNumber;
 
-    // Audio Translation variables
-    const audioTranslationModal = document.getElementById('audioTranslationModal');
-    const changeAudioTranslationBtn = document.getElementById('changeAudioTranslation');
-    const closeAudioTranslationBtn = document.getElementById('closeAudioTranslationModal');
-    const audioTranslationsList = document.getElementById('audioTranslationsList');
-    const currentAudioLanguage = document.getElementById('currentAudioLanguage');
-    let currentAudioTranslationLang = localStorage.getItem('selectedAudioTranslationLang') || 'English';
+    // Audio player elements
+    const audio = document.getElementById('audioElement') || new Audio();
+    const playButton = document.getElementById('playButton');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const progressBar = document.getElementById('progressBar');
+    const progress = document.getElementById('progress');
+    const timeDisplay = document.getElementById('timeDisplay');
+    let isPlaying = false;
 
     // Function to toggle translation visibility
     function toggleTranslationVisibility(show) {
@@ -79,22 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Function to toggle audio translation selector visibility
-    function toggleAudioTranslationVisibility(show) {
-        if (show) {
-            audioTranslationSelector.style.display = 'flex';
-            audioTranslationSelector.style.opacity = '0';
-            setTimeout(() => {
-                audioTranslationSelector.style.opacity = '1';
-            }, 10);
-        } else {
-            audioTranslationSelector.style.opacity = '0';
-            setTimeout(() => {
-                audioTranslationSelector.style.display = 'none';
-            }, 300);
-        }
-    }
-
     // Qari Modal functionality
     const qariModal = document.getElementById('qariModal');
     const changeQariBtn = document.getElementById('changeQari');
@@ -130,14 +115,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const view = button.dataset.view;
             navContainer.dataset.active = view;
             
-            const showTranslation = view === 'translation' || view === 'audio';
+            const showTranslation = view === 'translation';
             const showQari = view === 'translation' || view === 'reading' || view === 'tafsir';
-            const showAudioTranslation = view === 'audio';
             const showTafsir = view === 'tafsir';
             
             toggleTranslationVisibility(showTranslation);
             toggleQariVisibility(showQari);
-            toggleAudioTranslationVisibility(showAudioTranslation);
             toggleTafsirVisibility(showTafsir);
             
             if (showTranslation && currentTranslationId) {
@@ -147,99 +130,100 @@ document.addEventListener('DOMContentLoaded', function() {
             if (showTafsir && currentTafsirId) {
                 fetchAndDisplayTafsir(currentTafsirId);
             }
-            
-            if (showAudioTranslation) {
-                updateAudioTranslationSource();
-            }
+
             if(showQari) {
-                updateAudioSource();
+                // Ensure audio is ready when switching to a view with audio
+                if (!audio.src) {
+                    updateAudioSource();
+                }
             }
         });
     });
 
-  // Load qaris from AlQuran Cloud API
-async function loadQaris() {
-    try {
-        qariList.innerHTML = '<div class="loading">Loading reciters...</div>';
-        const response = await fetch('https://api.alquran.cloud/v1/edition/format/audio');
+    // Load qaris from AlQuran Cloud API
+    async function loadQaris() {
+        try {
+            qariList.innerHTML = '<div class="loading">Loading reciters...</div>';
+            const response = await fetch('https://api.alquran.cloud/v1/edition/format/audio');
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-        const data = await response.json();
-        const qaris = data.data.filter(qari => qari.language === 'ar'); // Filter only Arabic reciters
-        qariList.innerHTML = '';
+            const data = await response.json();
+            const qaris = data.data.filter(qari => qari.language === 'ar'); // Filter only Arabic reciters
+            qariList.innerHTML = '';
 
-        qaris.forEach(qari => {
-            const qariDiv = document.createElement('div');
-            qariDiv.className = `qari-option ${currentQariId === qari.identifier ? 'selected' : ''}`;
-            qariDiv.innerHTML = `
-                <div class="qari-info">
-                    <div class="qari-name">${qari.englishName} (${qari.name})</div>
+            qaris.forEach(qari => {
+                const qariDiv = document.createElement('div');
+                qariDiv.className = `qari-option ${currentQariId === qari.identifier ? 'selected' : ''}`;
+                qariDiv.innerHTML = `
+                    <div class="qari-info">
+                        <div class="qari-name">${qari.englishName} (${qari.name})</div>
+                    </div>
+                `;
+
+                qariDiv.addEventListener('click', () => {
+                    document.querySelectorAll('.qari-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    qariDiv.classList.add('selected');
+
+                    currentQariId = qari.identifier;
+                    currentQariSpan.textContent = qari.englishName;
+                    localStorage.setItem('selectedQari', currentQariId);
+                    localStorage.setItem('selectedQariName', qari.englishName);
+
+                    updateAudioSource();
+                    qariModal.classList.remove('active');
+                });
+
+                qariList.appendChild(qariDiv);
+            });
+        } catch (error) {
+            console.error('Error loading qaris:', error);
+            qariList.innerHTML = `
+                <div class="error-message">
+                    <p>Error loading reciters. Please try again later.</p>
+                    <p>Error details: ${error.message}</p>
                 </div>
             `;
-
-            qariDiv.addEventListener('click', () => {
-                document.querySelectorAll('.qari-option').forEach(opt => {
-                    opt.classList.remove('selected');
-                });
-                qariDiv.classList.add('selected');
-
-                currentQariId = qari.identifier;
-                currentQariSpan.textContent = qari.englishName;
-                localStorage.setItem('selectedQari', currentQariId);
-                localStorage.setItem('selectedQariName', qari.englishName);
-
-                updateAudioSource();
-                qariModal.classList.remove('active');
-            });
-
-            qariList.appendChild(qariDiv);
-        });
-    } catch (error) {
-        console.error('Error loading qaris:', error);
-        qariList.innerHTML = `
-            <div class="error-message">
-                <p>Error loading reciters. Please try again later.</p>
-                <p>Error details: ${error.message}</p>
-            </div>
-        `;
-    }
-}
-
-
-   // Function to update audio source based on selected qari using AlQuran.cloud API
-async function updateAudioSource() {
-    try {
-        const response = await fetch(`https://api.alquran.cloud/v1/ayah/${surahNumber}:${ayahNumber}/${currentQariId}`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        const data = await response.json();
-
-        // Check if audio exists
-        if (data.data.audio) {
-            audio.src = data.data.audio;
-            isPlaying = false;
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-            progress.style.width = '0%';
-            timeDisplay.textContent = '0:00';
-        } else {
-            throw new Error('Audio URL not found in response');
-        }
-    } catch (error) {
-        console.error('Error updating audio source:', error);
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'translation-error';
-        errorDiv.textContent = 'Failed to load recitation. Please try again.';
-        document.querySelector('.ayah-container').prepend(errorDiv);
-        setTimeout(() => errorDiv.remove(), 3000);
     }
-}
+
+    // Function to update audio source based on selected qari using AlQuran.cloud API
+    async function updateAudioSource() {
+        try {
+            const response = await fetch(`https://api.alquran.cloud/v1/ayah/${surahNumber}:${ayahNumber}/${currentQariId}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Check if audio exists
+            if (data.data.audio) {
+                audio.src = data.data.audio;
+                // Preload the audio
+                audio.load();
+                isPlaying = false;
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                progress.style.width = '0%';
+                timeDisplay.textContent = '0:00';
+            } else {
+                throw new Error('Audio URL not found in response');
+            }
+        } catch (error) {
+            console.error('Error updating audio source:', error);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'translation-error';
+            errorDiv.textContent = 'Failed to load recitation. Please try again.';
+            document.querySelector('.ayah-container').prepend(errorDiv);
+            setTimeout(() => errorDiv.remove(), 3000);
+        }
+    }
 
     // Translation Modal functionality
     const translationModal = document.getElementById('translationModal');
@@ -391,6 +375,100 @@ async function updateAudioSource() {
         }
     }
 
+        // Load tafsirs from API
+async function loadTafsirs() {
+    try {
+        tafsirList.innerHTML = '<div class="loading">Loading tafsirs...</div>';
+
+        const response = await fetch('https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/editions.json');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const tafsirArray = await response.json();
+        
+        // Clear loading message
+        tafsirList.innerHTML = '';
+
+        // Create a map to categorize tafsirs by language
+        const languages = {};
+        
+        // Categorize tafsirs by language
+        tafsirArray.forEach(tafsir => {
+            const language = tafsir.language_name;
+            if (!languages[language]) {
+                languages[language] = [];
+            }
+            languages[language].push(tafsir);
+        });
+
+        // Sort languages alphabetically
+        const sortedLanguages = Object.keys(languages).sort();
+
+        // Add tafsirs to modal, grouped by language
+        sortedLanguages.forEach(language => {
+            const languageGroup = languages[language];
+            const categoryDiv = document.createElement('div');
+            categoryDiv.className = 'translation-category';
+            
+            categoryDiv.innerHTML = ` 
+                <div class="category-title">${language}</div>
+                ${languageGroup.map(tafsir => `
+                    <label class="translation-option">
+                        <input type="radio" name="tafsir" class="translation-checkbox" 
+                               value="${tafsir.slug}" 
+                               ${currentTafsirId === tafsir.slug ? 'checked' : ''}>
+                        <div class="translation-info">
+                            <div class="translator-name">${tafsir.name || 'Unknown author'}</div>
+                            <div class="translation-language">${tafsir.author_name}</div>
+                        </div>
+                    </label>
+                `).join('')}
+            `;
+
+            tafsirList.appendChild(categoryDiv);
+        });
+
+        // Add event listeners to radio buttons
+        document.querySelectorAll('input[name="tafsir"]').forEach(radio => {
+            radio.addEventListener('change', async function() {
+                const selectedSlug = this.value;
+                const selectedTafsir = tafsirArray.find(t => t.slug === selectedSlug);
+                
+                if (selectedTafsir) {
+                    // Update current tafsir display
+                    currentTafsirSpan.textContent = selectedTafsir.name;
+                    currentTafsirId = selectedTafsir.slug;
+                    localStorage.setItem('selectedTafsirId', currentTafsirId);
+                    
+                    // Clear existing tafsirs
+                    document.querySelectorAll('.verse-tafsir').forEach(el => {
+                        el.textContent = '';
+                        el.style.opacity = '0';
+                        el.style.display = 'none';
+                    });
+                    
+                    // Close the modal
+                    tafsirModal.classList.remove('active');
+                    
+                    // Fetch and display new tafsir
+                    await fetchAndDisplayTafsir(currentTafsirId);
+                }
+            });
+        });
+
+    } catch (error) {
+        console.error('Error loading tafsirs:', error);
+        tafsirList.innerHTML = `
+            <div class="error-message">
+                <p>Error loading tafsirs. Please try again later.</p>
+                <p>Error details: ${error.message}</p>
+            </div>
+        `;
+    }
+}
+
     // Event Listeners
     changeQariBtn.addEventListener('click', async () => {
         qariModal.classList.add('active');
@@ -426,46 +504,35 @@ async function updateAudioSource() {
     });
 
     // Audio player functionality
-    const playButton = document.getElementById('playButton');
-    const playIcon = document.getElementById('playIcon');
-    const pauseIcon = document.getElementById('pauseIcon');
-    const progressBar = document.getElementById('progressBar');
-    const progress = document.getElementById('progress');
-    const timeDisplay = document.getElementById('timeDisplay');
-    const audio = new Audio();
-    let isPlaying = false;
-
-    // Initial setup
-    updateAudioSource();
-    const currentView = navContainer.dataset.active;
-    if (currentView === 'translation' || currentView === 'audio') {
-        fetchAndDisplayTranslation(currentTranslationId);
-    }
-    if (currentView === 'tafsir') {
-        fetchAndDisplayTafsir(currentTafsirId);
-    }
-
-    // Play/Pause functionality
     playButton.addEventListener('click', () => {
         if (isPlaying) {
             audio.pause();
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
         } else {
-            audio.play();
-            playIcon.style.display = 'none';
-            pauseIcon.style.display = 'block';
+            audio.play()
+                .then(() => {
+                    playIcon.style.display = 'none';
+                    pauseIcon.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error playing audio:', error);
+                    // If there's an error, try updating the audio source
+                    updateAudioSource();
+                });
         }
         isPlaying = !isPlaying;
     });
 
     // Update progress bar and time display
     audio.addEventListener('timeupdate', () => {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progress.style.width = percent + '%';
-        const minutes = Math.floor(audio.currentTime / 60);
-        const seconds = Math.floor(audio.currentTime % 60);
-        timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        if (audio.duration) {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = percent + '%';
+            const minutes = Math.floor(audio.currentTime / 60);
+            const seconds = Math.floor(audio.currentTime % 60);
+            timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
     });
 
     // Update audio current time when clicking progress bar
@@ -483,4 +550,37 @@ async function updateAudioSource() {
         progress.style.width = '0%';
         timeDisplay.textContent = '0:00';
     });
+
+    // Initialize the page
+    function initializePage() {
+        // Set default qari name if not set
+        if (!localStorage.getItem('selectedQariName')) {
+            localStorage.setItem('selectedQari', 'ar.alafasy');
+            localStorage.setItem('selectedQariName', 'Mishary Rashid Alafasy');
+            currentQariSpan.textContent = 'Mishary Rashid Alafasy';
+        } else {
+            currentQariSpan.textContent = localStorage.getItem('selectedQariName');
+        }
+
+        // Set current view based on navigation
+        const currentView = navContainer.dataset.active;
+        const showQari = currentView === 'translation' || currentView === 'reading' || currentView === 'tafsir';
+        toggleQariVisibility(showQari);
+
+        // If we don't have an audio source (and we're in a view that needs it), fetch it
+        if (showQari && !audio.src) {
+            updateAudioSource();
+        }
+
+        // Load initial content based on view
+        if (currentView === 'translation') {
+            fetchAndDisplayTranslation(currentTranslationId);
+        }
+        if (currentView === 'tafsir') {
+            fetchAndDisplayTafsir(currentTafsirId);
+        }
+    }
+
+    // Initialize the page when DOM is loaded
+    initializePage();
 });

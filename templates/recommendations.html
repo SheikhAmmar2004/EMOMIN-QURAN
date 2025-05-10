@@ -142,12 +142,12 @@ function createHadithCard(hadith, index) {
 
     // Handle Ayah Selection
     function handleAyahSelection(surahNumber, ayahNumber) {
-        window.location.href = `/ayah/${surahNumber}/${ayahNumber}?source=recommendations&emotion={{ emotion }}`;
+        window.location.href = `/ayah/${surahNumber}/${ayahNumber}?from_detection=${fromDetection}&source=recommendations&emotion={{ emotion }}`;
     }
 
         // Handle Hadith Selection
         function handleHadithSelection(emotion, index) {
-        window.location.href = `/hadith/${emotion}/${index}?source=recommendations&emotion={{ emotion }}`;
+        window.location.href = `/hadith/${emotion}/${index}?from_detection=${fromDetection}&source=recommendations&emotion={{ emotion }}`;
     }
 
     // Initialize Recommended Ayahs

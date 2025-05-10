@@ -12,7 +12,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     </head>
-<body class="{% if is_guest and not is_authenticated %}is-guest{% endif %}">
+<body class="{% if is_guest and not is_authenticated %}is-guest{% endif %}" data-endpoint="{{ request.endpoint }}">
     <!-- Navigation -->
     <nav class="nav">
         <div class="nav-container2">
@@ -23,49 +23,65 @@
             </div>
             
             <div class="nav-menu">
-                <img src="{{ url_for('static', filename='images/ArabicCalligraphy.png') }}" alt="Quran" class="nav-logo">
+                <div class="nav-header">
+                    <img src="{{ url_for('static', filename='images/ArabicCalligraphy.png') }}" alt="Quran" class="nav-logo">
+                    <button class="menu-close" aria-label="Close menu">&times;</button>
+                </div>
                 
-                <a href="{{ url_for('index') }}" class="nav-link">
-                    <div class="nav-icon-wrapper">
-                        <img src="{{ url_for('static', filename='images/homeicon.png') }}" alt="Home" class="nav-icon">
-                    </div>
-                    <span>Home</span>
-                </a>
+                <div class="nav-section">
+                    <div class="section-title">Main Navigation</div>
+                    <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+                        <div class="nav-icon-wrapper">
+                            <img src="{{ url_for('static', filename='images/homeicon.png') }}" alt="Home" class="nav-icon">
+                        </div>
+                        <span>Home</span>
+                    </a>
 
-                <a href="{{ url_for('prayer_times') }}" class="nav-link">
-                    <div class="nav-icon-wrapper">
-                        <img src="{{ url_for('static', filename='images/prayer-icon.png') }}" alt="Prayer Times" class="nav-icon">
-                    </div>
-                    <span>Prayer Timings</span>
-                </a>
-                <a href="{{ url_for('qibla') }}" class="nav-link">
-                    <div class="nav-icon-wrapper">
-                        <img src="{{ url_for('static', filename='images/qibla-icon.png') }}" alt="Qibla Direction" class="nav-icon">
-                    </div>
-                    <span>Qibla Locator</span>
-                </a>
+                    <a href="{{ url_for('prayer_times') }}" class="nav-link {% if request.endpoint == 'prayer_times' %}active{% endif %}">
+                        <div class="nav-icon-wrapper">
+                            <img src="{{ url_for('static', filename='images/prayer-icon.png') }}" alt="Prayer Times" class="nav-icon">
+                        </div>
+                        <span>Prayer Timings</span>
+                    </a>
+                    <a href="{{ url_for('qibla') }}" class="nav-link {% if request.endpoint == 'qibla' %}active{% endif %}">
+                        <div class="nav-icon-wrapper">
+                            <img src="{{ url_for('static', filename='images/qibla-icon.png') }}" alt="Qibla Direction" class="nav-icon">
+                        </div>
+                        <span>Qibla Locator</span>
+                    </a>
+                </div>
 
-                <a href="{{ url_for('detect_emotion') }}" class="nav-link {% if is_guest and not is_authenticated %}restricted-feature{% endif %}" id="detectEmotionBtn">
-                    <div class="nav-icon-wrapper">
-                        <img src="{{ url_for('static', filename='images/faceidicon.png') }}" alt="Scan" class="nav-icon">
-                    </div>
-                    <span>Scan Emotion</span>
-                </a>
-                <a href="{{ url_for('select_emotion') }}" class="nav-link {% if is_guest and not is_authenticated %}restricted-feature{% endif %}">
-                    <div class="nav-icon-wrapper">
-                        <img src="{{ url_for('static', filename='images/chooseicon.png') }}" alt="Select Mood" class="nav-icon">
-                    </div>
-                    <span>Choose Emotion</span>
-                </a>
+                <div class="nav-section">
+                    <div class="section-title">Emotion Features</div>
+                    <a href="{{ url_for('detect_emotion') }}" class="nav-link {% if request.endpoint == 'detect_emotion' %}active{% endif %} {% if is_guest and not is_authenticated %}restricted-feature{% endif %}" id="detectEmotionBtn">
+                        <div class="nav-icon-wrapper">
+                            <img src="{{ url_for('static', filename='images/faceidicon.png') }}" alt="Scan" class="nav-icon">
+                        </div>
+                        <span>Scan Emotion</span>
+                    </a>
+                    <a href="{{ url_for('select_emotion') }}" class="nav-link {% if request.endpoint == 'select_emotion' %}active{% endif %} {% if is_guest and not is_authenticated %}restricted-feature{% endif %}">
+                        <div class="nav-icon-wrapper">
+                            <img src="{{ url_for('static', filename='images/chooseicon.png') }}" alt="Select Mood" class="nav-icon">
+                        </div>
+                        <span>Choose Emotion</span>
+                    </a>
+                </div>
                 
                 <!-- Auth Navigation Links -->
-                <div class="nav-auth">
+                <div class="nav-section">
+                    <div class="section-title">Account</div>
                     {% if is_authenticated %}
-                        <a href="{{ url_for('auth.history') }}" class="nav-link">
+                        <a href="{{ url_for('auth.history') }}" class="nav-link {% if request.endpoint == 'auth.history' %}active{% endif %}">
                             <div class="nav-icon-wrapper">
                                 <img src="{{ url_for('static', filename='images/history-icon.png') }}" alt="History" class="nav-icon">
                             </div>
                             <span>My History</span>
+                        </a>
+                        <a href="{{ url_for('auth.profile') }}" class="nav-link {% if request.endpoint == 'auth.profile' %}active{% endif %}">
+                            <div class="nav-icon-wrapper">
+                                <div class="user-avatar-small">{{ current_user.username[0].upper() }}</div>
+                            </div>
+                            <span>My Profile</span>
                         </a>
                         <a href="{{ url_for('auth.logout') }}" class="nav-link">
                             <div class="nav-icon-wrapper">
@@ -74,32 +90,32 @@
                             <span>Logout</span>
                         </a>
                     {% elif is_guest %}
-                        <a href="{{ url_for('auth.login') }}" class="nav-link">
+                        <a href="{{ url_for('auth.login') }}" class="nav-link {% if request.endpoint == 'auth.login' %}active{% endif %}">
                             <div class="nav-icon-wrapper">
                                 <img src="{{ url_for('static', filename='images/login-icon.png') }}" alt="Login" class="nav-icon">
                             </div>
                             <span>Login</span>
                         </a>
-                        <a href="{{ url_for('auth.signup') }}" class="nav-link">
+                        <a href="{{ url_for('auth.signup') }}" class="nav-link {% if request.endpoint == 'auth.signup' %}active{% endif %}">
                             <div class="nav-icon-wrapper">
                                 <img src="{{ url_for('static', filename='images/signup-icon.png') }}" alt="Sign Up" class="nav-icon">
                             </div>
                             <span>Join Now</span>
                         </a>
                     {% else %}
-                        <a href="{{ url_for('auth.login') }}" class="nav-link">
+                        <a href="{{ url_for('auth.login') }}" class="nav-link {% if request.endpoint == 'auth.login' %}active{% endif %}">
                             <div class="nav-icon-wrapper">
                                 <img src="{{ url_for('static', filename='images/login-icon.png') }}" alt="Login" class="nav-icon">
                             </div>
                             <span>Login</span>
                         </a>
-                        <a href="{{ url_for('auth.signup') }}" class="nav-link">
+                        <a href="{{ url_for('auth.signup') }}" class="nav-link {% if request.endpoint == 'auth.signup' %}active{% endif %}">
                             <div class="nav-icon-wrapper">
                                 <img src="{{ url_for('static', filename='images/signup-icon.png') }}" alt="Sign Up" class="nav-icon">
                             </div>
                             <span>Join Now</span>
                         </a>
-                        <a href="{{ url_for('auth.guest_login') }}" class="nav-link">
+                        <a href="{{ url_for('auth.guest_login') }}" class="nav-link {% if request.endpoint == 'auth.guest_login' %}active{% endif %}">
                             <div class="nav-icon-wrapper">
                                 <img src="{{ url_for('static', filename='images/guest-icon.png') }}" alt="Guest" class="nav-icon">
                             </div>
@@ -107,22 +123,80 @@
                         </a>
                     {% endif %}
                 </div>
+                
+                <div class="nav-footer">
+                    <div class="decorative-pattern"></div>
+                    <p>Emomin Quran &copy; 2024</p>
+                </div>
             </div>
         </div>
-        <div>
-        </div>
-            {% if is_authenticated %}
-            <a href="{{ url_for('auth.profile') }}" class="myprofile">
-                <div class="myprofile-icon">
-                    <div class="user-avatar">{{ current_user.username[0].upper() }}</div>
-                </div>
-                <span>My Profile</span>
-            </a>
-            {% endif %}
+        
+        {% if is_authenticated %}
+        <a href="{{ url_for('auth.profile') }}" class="myprofile">
+            <div class="myprofile-icon">
+                <div class="user-avatar">{{ current_user.username[0].upper() }}</div>
+            </div>
+            <span>My Profile</span>
+        </a>
+        {% endif %}
     </nav>
 
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay"></div>
+<!-- Add this code right after the mobile menu overlay and before the banner in base.html -->
+
+<!-- Breadcrumbs Navigation -->
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        {% if request.endpoint != 'index' %}
+            <li class="separator"></li>
+            {% if request.endpoint in ['detect_emotion', 'select_emotion'] %}
+                <li>
+                    {% if request.endpoint == 'detect_emotion' %}
+                        <a href="{{ url_for('detect_emotion') }}">Scan Emotion</a>
+                    {% else %}
+                        <a href="{{ url_for('select_emotion') }}">Choose Emotion</a>
+                    {% endif %}
+                </li>
+                <li class="separator"></li>
+                <li><a href="#">Recommendations</a></li>
+                {% if request.endpoint == 'surah' %}
+                    <li class="separator"></li>
+                    <li class="active">Surah</li>
+                {% elif request.endpoint == 'ayah' %}
+                    <li class="separator"></li>
+                    <li class="active">Ayah</li>
+                {% elif request.endpoint == 'hadith' %}
+                    <li class="separator"></li>
+                    <li class="active">Hadiths</li>
+                {% endif %}
+            {% else %}
+                <li class="active">
+                    {% if request.endpoint == 'prayer_times' %}
+                        Prayer Timings
+                    {% elif request.endpoint == 'qibla' %}
+                        Qibla Locator
+                    {% elif request.endpoint == 'auth.profile' %}
+                        My Profile
+                    {% elif request.endpoint == 'auth.history' %}
+                        My History
+                    {% elif request.endpoint == 'auth.login' %}
+                        Login
+                    {% elif request.endpoint == 'auth.signup' %}
+                        Sign Up
+                    {% elif request.endpoint == 'auth.reset_password_request' %}
+                        Reset Password
+                    {% elif request.endpoint == 'auth.reset_password' %}
+                        Set New Password
+                    {% else %}
+                        {{ request.endpoint|replace('_', ' ')|title }}
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endif %}
+    </ol>
+</nav>
 
     <!-- Banner -->
     <div class="banner {% block banner_class %}{% endblock %}">
@@ -131,6 +205,7 @@
         <img class="banner-image" src="{{ url_for('static', filename='images/quran-icon.png') }}" alt="Quran">
         {% endblock %}
     </div>
+    
 
     <!-- User Authentication Status -->
     {% if is_guest and not is_authenticated %}
@@ -192,6 +267,7 @@
 
     <!-- JavaScript -->
     <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

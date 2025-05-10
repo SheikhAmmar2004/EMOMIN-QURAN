@@ -30,6 +30,7 @@ function hideConfirmationDialog() {
 }
 
 function handleContinue() {
+    // Save the current autoplay state when proceeding
     localStorage.setItem('autoPlayEnabled', autoPlayEnabled);
     window.location.href = `/recommendations/${lastEmotion}?from_detection=true`;
 }
@@ -184,8 +185,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('manualBtn').addEventListener('click', handleManualSelection);
 
     const autoPlaySwitch = document.getElementById('autoPlaySwitch');
-    autoPlaySwitch.checked = autoPlayEnabled;
-    autoPlaySwitch.addEventListener('change', toggleAutoPlay);
+  
+    // Set initial state from localStorage
+    autoPlaySwitch.checked = localStorage.getItem('autoPlayEnabled') === 'true';
+    
+    // Save preference when changed
+    autoPlaySwitch.addEventListener('change', function() {
+      autoPlayEnabled = this.checked;
+      localStorage.setItem('autoPlayEnabled', this.checked);
+    });
 });
 
 // Clean up on page unload

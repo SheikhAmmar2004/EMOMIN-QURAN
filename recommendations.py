@@ -23,7 +23,9 @@ SURAH_RECOMMENDATIONS = {
     "depressed": [1, 55, 36, 112, 93, 112, 113, 114, 76, 18, 56], 
     "anxiety": [59, 67, 1, 24, 5, 9],  
     "stress": [76, 1, 36, 18, 59, 67, 56, 55, 3, 2, 112, 113, 114, 93], 
-    "pain": [19],  
+    "pain": [1,19,55],
+    "cancer":[1,36, 55],
+    'icu':[1,12]
 }
 
 # Dictionary mapping emotions to their recommended ayahs
@@ -105,6 +107,22 @@ AYAH_RECOMMENDATIONS = {
         {"surah": 2, "ayah": 216},
         {"surah": 2, "ayah": 155},
         {"surah": 24, "ayah": 21}
+    ],
+    "icu":[
+        {"surah": 2, "ayah": 255},
+        {"surah": 94, "ayah": 5},
+        {"surah": 2, "ayah": 286},
+        {"surah": 10, "ayah": 57},
+        {"surah": 17, "ayah": 82},
+        {"surah": 9, "ayah": 51}
+
+    ],
+        "cancer":[
+        {"surah": 2, "ayah": 255},
+        {"surah": 21, "ayah": 83},
+        {"surah": 39, "ayah": 53},
+        {"surah": 13, "ayah": 28},
+  
     ]
 }
 
@@ -330,5 +348,45 @@ HADITH_RECOMMENDATIONS = {
             "urdu": "مسلمان کو جو بھی تھکن، بیماری، غم، اداسی، تکلیف یا پریشانی پہنچتی ہے، یہاں تک کہ اگر کانٹا بھی چبھے، تو اللہ تعالیٰ اس کے گناہوں کو اس کے ذریعے مٹا دیتا ہے۔",
             "reference": "Sahih al-Bukhari 5641"
         }
+    ],
+    "cancer":[
+        {
+        "arabic": "ما يزال البلاء بالمؤمن والمؤمنة في نفسه وولده وماله حتى يلقى الله وما عليه خطيئة",
+        "english": "The believer is continually afflicted in his body, children, and wealth until he meets Allah without any sins remaining.",
+        "urdu": "مومن کو اس کی جان، اولاد اور مال میں مسلسل آزمائش ہوتی رہتی ہے، یہاں تک کہ وہ اللہ سے اس حال میں ملتا ہے کہ اس پر کوئی گناہ باقی نہیں ہوتا۔",
+        "reference": "Sunan Tirmidhi 2399"
+    },
+    {
+        "arabic": "إن الله أنزل الداء والدواء، وجعل لكل داء دواء، فتداووا ولا تتداووا بحرام",
+        "english": "Allah has sent down the disease and the cure, and He has made a cure for every disease. So seek treatment, but do not seek treatment with the unlawful.",
+        "urdu": "اللہ نے ہر بیماری اور اس کا علاج نازل فرمایا ہے۔ ہر بیماری کا علاج ہے، لہٰذا علاج کرو لیکن حرام چیزوں سے علاج مت کرو۔",
+        "reference": "Sunan Abu Dawud 3864"
+    },
+        {
+        "arabic": "من يرد الله به خيرا يصب منه",
+        "english": "If Allah intends good for someone, He afflicts them with trials.",
+        "urdu": "جس شخص کے ساتھ اللہ بھلائی کا ارادہ فرماتا ہے، اسے آزمائش میں ڈال دیتا ہے۔",
+        "reference": "Sahih al-Bukhari 5645"
+    }
+    ],
+    "icu":[
+        {
+            "arabic": "ما يصيب المسلم من نصب، ولا وصب، ولا هم، ولا حزن، ولا أذى، ولا غم، حتى الشوكة يشاكها، إلا كفر الله بها من خطاياه",
+            "english": "No fatigue, nor disease, nor sorrow, nor sadness, nor hurt, nor distress befalls a Muslim — even if it were the prick he receives from a thorn — but that Allah expiates some of his sins for that.",
+            "urdu": "مسلمان کو جو بھی تھکن، بیماری، غم، اداسی، تکلیف یا پریشانی پہنچتی ہے، یہاں تک کہ اگر کانٹا بھی چبھے، تو اللہ تعالیٰ اس کے گناہوں کو اس کے ذریعے مٹا دیتا ہے۔",
+            "reference": "Sahih al-Bukhari 5641"
+        },
+        {
+      "arabic": "دعوة ذي النون إذ دعا وهو في بطن الحوت: لا إله إلا أنت سبحانك إني كنت من الظالمين، فإنه لم يدع بها مسلم في شيء قط إلا استجاب الله له",
+      "english": "The supplication of Yunus AS when he called from the belly of the whale: There is no god but You, Glory to You; I was indeed wrong. No Muslim supplicates with this for anything, except that Allah answers him.",
+      "urdu": "یونس علیہ السلام کی دعا جب انہوں نے مچھلی کے پیٹ میں پکارا کہ تیرے سوا کوئی معبود نہیں، تو پاک ہے، بے شک میں ظالموں میں سے تھا۔ جو مسلمان بھی کسی چیز کے لیے یہ دعا کرے گا، اللہ ضرور اس کی دعا قبول کرے گا۔",
+      "reference": "Sunan Tirmidhi 3505"
+    },
+    {
+      "arabic": "ما يزال البلاء بالمؤمن والمؤمنة في نفسه وولده وماله حتى يلقى الله وما عليه خطيئة",
+      "english": "The believer is continually afflicted in his body, children, and wealth until he meets Allah without any sins remaining.",
+      "urdu": "مومن کو اس کی جان، اولاد اور مال میں مسلسل آزمائش ہوتی رہتی ہے، یہاں تک کہ وہ اللہ سے اس حال میں ملتا ہے کہ اس پر کوئی گناہ باقی نہیں ہوتا۔",
+      "reference": "Sunan Tirmidhi 2399"
+    }
     ]
 }

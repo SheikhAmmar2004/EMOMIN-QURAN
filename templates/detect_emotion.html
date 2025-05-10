@@ -7,8 +7,11 @@
 
 {% block content %}
 <div class="emotion-container">
-    <!-- Heading for the emotion detection section -->
-    <h2 class="detect_emotions-heading" id="detectEmotionHeading">Detecting Emotion</h2>
+    <!-- Heading for the emotion detection section with adjacent spinner -->
+    <div class="heading-container">
+        <h2 class="detect_emotions-heading" id="detectEmotionHeading">Detecting Emotion</h2>
+        <div class="heading-spinner" id="headingSpinner"></div>
+    </div>
 
     <!-- Area to display status messages -->
     <div id="statusMessage" class="status-message info"></div>
@@ -53,6 +56,7 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}

@@ -481,31 +481,31 @@ padding: 20px;
 }
 
 .recommendation-nav-container {
-  background: var(--neutral-100);
-  backdrop-filter: blur(10px);
-  border-radius: 50px;
-  padding: 3px;
-  display: flex;
-  gap: 3px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  max-width: 360px;
-  width: 100%;
-  margin: 0 auto;
-  position: relative;
+    background: var(--neutral-100);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    padding: 3px;
+    display: flex;
+    gap: 3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    max-width: 540px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
 }
 
 .recommendation-nav-container::before {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: calc(33.05%);
-  height: calc(100% - 6px);
-  background: var(--primary);
-  border-radius: 50px;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 2px 8px rgba(0, 107, 95, 0.2);
-  z-index: 0;
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: calc(33.33% - 2px);
+    height: calc(100% - 6px);
+    background: var(--primary);
+    border-radius: 50px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    z-index: 0;
 }
 
 .recommendation-nav-container[data-active="ayah"]::before {
@@ -517,24 +517,25 @@ padding: 20px;
 }
 
 .recommendation-nav-button {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 6px 8px;
-  border: none;
-  border-radius: 50px;
-  background: transparent;
-  color: var(--neutral-600);
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 1;
-  letter-spacing: 0.2px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 4px;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    color: var(--neutral-600);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.2px;
+    min-width: 0;
 }
 
 .recommendation-nav-button.active {

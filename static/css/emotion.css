@@ -14,14 +14,42 @@ body, html {
   background: var(--neutral-50);
 }
 
-.detect_emotions-heading {
-  color: var(--primary);
-  text-align: center;
+/* Heading container for title and spinner alignment */
+.heading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
   padding: 20px 0;
   margin: 0;
   border-bottom: 2px solid var(--neutral-300);
   margin-bottom: 30px;
 }
+
+.detect_emotions-heading {
+  color: var(--primary);
+  text-align: center;
+  margin: 0;
+}
+
+/* Styling for the heading spinner */
+.heading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--neutral-200);
+  border-top: 3px solid var(--secondary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Make spinner invisible by adding class */
+.heading-spinner.hidden {
+  display: none;
+}
+
 
 .status-message {
   padding: 10px 20px;
@@ -68,8 +96,8 @@ body, html {
 
 #loadingSpinner {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 42%;
+  left: 45%;
   transform: translate(-50%, -50%);
   width: 50px;
   height: 50px;
@@ -81,8 +109,12 @@ body, html {
 }
 
 @keyframes spin {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.heading-spinner {
+  transform-origin: center center;
 }
 
 #loadingSpinner.hidden {
@@ -225,9 +257,18 @@ body, html {
     gap: 15px;
   }
 
+  .heading-container {
+    padding: 15px 0;
+  }
+
   .detect_emotions-heading {
     font-size: 1.75rem;
-    padding: 15px 0;
+  }
+
+  .heading-spinner {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
   }
 
   #videoContainer {
@@ -251,8 +292,17 @@ body, html {
     gap: 10px;
   }
 
+  .heading-container {
+    padding: 10px 0;
+  }
+
   .detect_emotions-heading {
     font-size: 1.5rem;
+  }
+
+  .heading-spinner {
+    width: 18px;
+    height: 18px;
   }
 
   #popup {
