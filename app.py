@@ -12,7 +12,9 @@ from flask_login import LoginManager, current_user, login_required
 from models import db, User, EmotionHistory, ContentHistory, UserFeedback
 from auth import auth, init_login_manager, guest_user_required
 import os
-from datetime import datetime, timedelta, UTC
+from datetime import datetime, timedelta, timezone
+UTC = timezone.utc
+
 from dotenv import load_dotenv
 
 
